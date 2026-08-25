@@ -1980,16 +1980,13 @@
 
             } catch (error) {
 
-                console.error(
-                    "background removal failed:",
-                    error
-                );
+    console.error(
+        "background removal failed:",
+        error
+    );
 
-
-                throw new Error(
-                    "background removal failed"
-                );
-            }
+    throw error;
+}
 
 
             if (!transparentBlob) {

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -9,16 +12,21 @@
 
     <title>wardrobe</title>
 
+
     <style>
 
         * {
             box-sizing: border-box;
         }
 
+
         body {
             margin: 0;
-            background: #fff;
-            color: #111;
+
+            background: #ffffff;
+
+            color: #111111;
+
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -26,10 +34,12 @@
                 sans-serif;
         }
 
+
         button,
         select {
             font: inherit;
         }
+
 
         button {
             cursor: pointer;
@@ -37,9 +47,9 @@
         }
 
 
-        /* -----------------------------------------
+        /* =========================================
            navigation
-        ----------------------------------------- */
+        ========================================= */
 
         header {
             height: 70px;
@@ -47,38 +57,47 @@
             border-bottom: 1px solid #e5e5e5;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             padding: 0 30px;
 
             position: sticky;
+
             top: 0;
 
             z-index: 100;
 
-            background: rgba(255, 255, 255, .96);
+            background: rgba(255, 255, 255, 0.96);
 
             backdrop-filter: blur(10px);
         }
 
+
         .logo {
             font-size: 20px;
+
             font-weight: 600;
-            letter-spacing: -.5px;
+
+            letter-spacing: -0.5px;
         }
+
 
         nav {
             display: flex;
+
             gap: 8px;
         }
+
 
         nav button {
             border: none;
 
             background: transparent;
 
-            color: #777;
+            color: #777777;
 
             padding: 8px 12px;
 
@@ -87,40 +106,49 @@
             font-size: 14px;
         }
 
+
         nav button:hover {
             background: #f5f5f5;
-            color: #111;
+
+            color: #111111;
         }
+
 
         nav button.active {
-            background: #111;
-            color: #fff;
+            background: #111111;
+
+            color: #ffffff;
         }
 
 
-        /* -----------------------------------------
-           main
-        ----------------------------------------- */
+
+        /* =========================================
+           pages
+        ========================================= */
 
         main {
             width: min(1100px, 92%);
 
-            margin: auto;
+            margin: 0 auto;
 
             padding: 45px 0 80px;
         }
+
 
         .page {
             display: none;
         }
 
+
         .page.active {
             display: block;
         }
 
+
         .page-header {
             margin-bottom: 30px;
         }
+
 
         .page-header h1 {
             margin: 0 0 8px;
@@ -132,25 +160,27 @@
             letter-spacing: -1.5px;
         }
 
+
         .page-header p {
             margin: 0;
 
-            color: #777;
+            color: #777777;
 
             font-size: 15px;
         }
 
 
-        /* -----------------------------------------
+
+        /* =========================================
            buttons
-        ----------------------------------------- */
+        ========================================= */
 
         .primary-button {
             border: none;
 
-            background: #111;
+            background: #111111;
 
-            color: #fff;
+            color: #ffffff;
 
             padding: 11px 17px;
 
@@ -161,16 +191,18 @@
             font-weight: 500;
         }
 
+
         .primary-button:hover {
-            background: #333;
+            background: #333333;
         }
 
+
         .secondary-button {
-            border: 1px solid #ddd;
+            border: 1px solid #dddddd;
 
-            background: #fff;
+            background: #ffffff;
 
-            color: #111;
+            color: #111111;
 
             padding: 10px 16px;
 
@@ -179,14 +211,16 @@
             font-size: 14px;
         }
 
+
         .secondary-button:hover {
             background: #f7f7f7;
         }
 
+
         .danger-button {
             border: 1px solid #e5e5e5;
 
-            background: #fff;
+            background: #ffffff;
 
             color: #d11;
 
@@ -199,14 +233,16 @@
             touch-action: manipulation;
         }
 
+
         .danger-button:hover {
             background: #fff5f5;
         }
 
 
-        /* -----------------------------------------
-           wardrobe
-        ----------------------------------------- */
+
+        /* =========================================
+           wardrobe upload
+        ========================================= */
 
         .upload-area {
             border: 1px dashed #d5d5d5;
@@ -220,28 +256,38 @@
             margin-bottom: 35px;
         }
 
+
         .upload-area p {
-            color: #777;
+            color: #777777;
 
             margin: 0 0 18px;
         }
+
 
         #file-input {
             display: none;
         }
 
+
+
+        /* =========================================
+           wardrobe grid
+        ========================================= */
+
         .clothing-grid {
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fill, minmax(180px, 1fr));
+                repeat(
+                    auto-fill,
+                    minmax(180px, 1fr)
+                );
 
             gap: 20px;
 
             width: 100%;
-
-            min-width: 0;
         }
+
 
         .clothing-card {
             border: 1px solid #e5e5e5;
@@ -250,10 +296,11 @@
 
             overflow: hidden;
 
-            background: #fff;
+            background: #ffffff;
 
             min-width: 0;
         }
+
 
         .clothing-image {
             width: 100%;
@@ -267,23 +314,26 @@
             background: #f7f7f7;
         }
 
+
         .clothing-info {
             padding: 12px;
         }
 
+
         .clothing-info select {
             width: 100%;
 
-            border: 1px solid #ddd;
+            border: 1px solid #dddddd;
 
             border-radius: 7px;
 
             padding: 7px 9px;
 
-            background: #fff;
+            background: #ffffff;
 
             font-size: 13px;
         }
+
 
         .clothing-actions {
             display: flex;
@@ -292,6 +342,7 @@
 
             margin-top: 10px;
         }
+
 
         .empty-state {
             border: 1px solid #e5e5e5;
@@ -302,15 +353,16 @@
 
             text-align: center;
 
-            color: #777;
+            color: #777777;
 
             grid-column: 1 / -1;
         }
 
 
-        /* -----------------------------------------
+
+        /* =========================================
            fit builder
-        ----------------------------------------- */
+        ========================================= */
 
         .builder-layout {
             display: grid;
@@ -323,6 +375,7 @@
             align-items: start;
         }
 
+
         .fit-preview {
             border: 1px solid #e5e5e5;
 
@@ -333,13 +386,15 @@
             background: #fafafa;
         }
 
+
         .fit-preview-title {
             margin: 0 0 20px;
 
             font-size: 14px;
 
-            color: #777;
+            color: #777777;
         }
+
 
         .fit-stack {
             display: flex;
@@ -349,10 +404,11 @@
             gap: 12px;
         }
 
-        .fit-slot {
-            background: #fff;
 
-            border: 1px solid #ddd;
+        .fit-slot {
+            background: #ffffff;
+
+            border: 1px solid #dddddd;
 
             border-radius: 10px;
 
@@ -371,19 +427,22 @@
             cursor: pointer;
 
             transition:
-                border-color .15s,
-                box-shadow .15s,
-                transform .15s;
+                border-color 0.15s,
+                box-shadow 0.15s,
+                transform 0.15s;
         }
 
+
         .fit-slot:hover {
-            border-color: #111;
+            border-color: #111111;
 
             box-shadow:
-                0 3px 12px rgba(0, 0, 0, .07);
+                0 3px 12px
+                rgba(0, 0, 0, 0.07);
 
             transform: translateY(-1px);
         }
+
 
         .fit-slot img {
             width: 100%;
@@ -395,11 +454,13 @@
             display: block;
         }
 
+
         .fit-slot-empty {
-            color: #aaa;
+            color: #aaaaaa;
 
             font-size: 14px;
         }
+
 
         .fit-slot-label {
             position: absolute;
@@ -411,7 +472,7 @@
             padding: 5px 8px;
 
             background:
-                rgba(255, 255, 255, .92);
+                rgba(255, 255, 255, 0.92);
 
             border: 1px solid #e5e5e5;
 
@@ -419,10 +480,11 @@
 
             font-size: 11px;
 
-            color: #777;
+            color: #777777;
 
             z-index: 2;
         }
+
 
         .remove-piece {
             position: absolute;
@@ -435,13 +497,13 @@
 
             height: 26px;
 
-            border: 1px solid #ddd;
+            border: 1px solid #dddddd;
 
             border-radius: 50%;
 
-            background: #fff;
+            background: #ffffff;
 
-            color: #777;
+            color: #777777;
 
             z-index: 3;
 
@@ -454,11 +516,13 @@
             padding: 0;
         }
 
-        .remove-piece:hover {
-            color: #111;
 
-            border-color: #111;
+        .remove-piece:hover {
+            color: #111111;
+
+            border-color: #111111;
         }
+
 
         .builder-actions {
             border: 1px solid #e5e5e5;
@@ -472,6 +536,7 @@
             top: 95px;
         }
 
+
         .builder-actions h2 {
             margin: 0 0 8px;
 
@@ -480,15 +545,17 @@
             font-weight: 600;
         }
 
+
         .builder-actions p {
             margin: 0 0 20px;
 
-            color: #777;
+            color: #777777;
 
             font-size: 13px;
 
             line-height: 1.5;
         }
+
 
         .builder-buttons {
             display: flex;
@@ -496,14 +563,16 @@
             gap: 8px;
         }
 
+
         .builder-buttons button {
             flex: 1;
         }
 
 
-        /* -----------------------------------------
-           clothing picker
-        ----------------------------------------- */
+
+        /* =========================================
+           picker
+        ========================================= */
 
         .picker-overlay {
             position: fixed;
@@ -511,7 +580,7 @@
             inset: 0;
 
             background:
-                rgba(0, 0, 0, .35);
+                rgba(0, 0, 0, 0.35);
 
             display: none;
 
@@ -524,16 +593,18 @@
             z-index: 500;
         }
 
+
         .picker-overlay.open {
             display: flex;
         }
+
 
         .picker {
             width: min(700px, 100%);
 
             max-height: 85vh;
 
-            background: #fff;
+            background: #ffffff;
 
             border-radius: 16px;
 
@@ -541,13 +612,14 @@
 
             box-shadow:
                 0 20px 60px
-                rgba(0, 0, 0, .2);
+                rgba(0, 0, 0, 0.2);
         }
+
 
         .picker-header {
             padding: 18px 20px;
 
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #eeeeee;
 
             display: flex;
 
@@ -556,6 +628,7 @@
             justify-content: space-between;
         }
 
+
         .picker-header h2 {
             margin: 0;
 
@@ -563,6 +636,7 @@
 
             font-weight: 600;
         }
+
 
         .close-picker {
             width: 32px;
@@ -580,6 +654,7 @@
             padding: 0;
         }
 
+
         .picker-content {
             padding: 20px;
 
@@ -590,6 +665,7 @@
 
             -webkit-overflow-scrolling: touch;
         }
+
 
         .picker-grid {
             display: grid;
@@ -603,6 +679,7 @@
             gap: 12px;
         }
 
+
         .picker-item {
             border: 1px solid #e5e5e5;
 
@@ -610,18 +687,20 @@
 
             overflow: hidden;
 
-            background: #fff;
+            background: #ffffff;
 
             cursor: pointer;
 
-            transition: .15s;
+            transition: 0.15s;
         }
 
+
         .picker-item:hover {
-            border-color: #111;
+            border-color: #111111;
 
             transform: translateY(-2px);
         }
+
 
         .picker-item img {
             width: 100%;
@@ -635,28 +714,31 @@
             background: #f7f7f7;
         }
 
+
         .picker-item-name {
             padding: 8px;
 
             font-size: 12px;
 
-            color: #777;
+            color: #777777;
         }
+
 
         .picker-empty {
             padding: 40px 10px;
 
             text-align: center;
 
-            color: #777;
+            color: #777777;
 
             grid-column: 1 / -1;
         }
 
 
-        /* -----------------------------------------
+
+        /* =========================================
            saved fits
-        ----------------------------------------- */
+        ========================================= */
 
         .saved-fits {
             display: grid;
@@ -672,6 +754,7 @@
             align-items: start;
         }
 
+
         .saved-fit {
             border: 1px solid #e5e5e5;
 
@@ -679,8 +762,9 @@
 
             overflow: hidden;
 
-            background: #fff;
+            background: #ffffff;
         }
+
 
         .saved-fit-header {
             padding: 14px 15px;
@@ -691,20 +775,23 @@
 
             align-items: center;
 
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #eeeeee;
         }
 
+
         .saved-fit-date {
-            color: #777;
+            color: #777777;
 
             font-size: 12px;
         }
+
 
         .saved-fit-items {
             display: flex;
 
             flex-direction: column;
         }
+
 
         .saved-fit-item {
             width: 100%;
@@ -717,12 +804,14 @@
 
             background: #fafafa;
 
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #eeeeee;
         }
+
 
         .saved-fit-item:last-child {
             border-bottom: none;
         }
+
 
         .saved-fit-item img {
             width: 100%;
@@ -734,6 +823,7 @@
             display: block;
         }
 
+
         .saved-fit-empty {
             padding: 60px 20px;
 
@@ -743,15 +833,16 @@
 
             text-align: center;
 
-            color: #777;
+            color: #777777;
 
             grid-column: 1 / -1;
         }
 
 
-        /* -----------------------------------------
+
+        /* =========================================
            mobile
-        ----------------------------------------- */
+        ========================================= */
 
         @media (max-width: 750px) {
 
@@ -765,6 +856,7 @@
                 gap: 12px;
             }
 
+
             nav {
                 width: 100%;
 
@@ -773,9 +865,11 @@
                 overflow-x: auto;
             }
 
+
             nav button {
                 white-space: nowrap;
             }
+
 
             main {
                 width: 94%;
@@ -783,27 +877,29 @@
                 padding-top: 30px;
             }
 
+
             .page-header h1 {
                 font-size: 27px;
             }
+
 
             .builder-layout {
                 grid-template-columns: 1fr;
             }
 
+
             .builder-actions {
                 position: static;
             }
 
+
             .clothing-grid {
                 grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0, 1fr)
-                    );
+                    repeat(2, minmax(0, 1fr));
 
-                width: 100%;
+                gap: 12px;
             }
+
 
             .clothing-card {
                 width: 100%;
@@ -811,58 +907,27 @@
                 min-width: 0;
             }
 
-            .clothing-image {
-                width: 100%;
-
-                height: auto;
-            }
 
             .clothing-info {
-                position: relative;
-
-                z-index: 5;
+                padding: 9px;
             }
 
-            .clothing-info select,
-            .clothing-info button {
-                touch-action: manipulation;
+
+            .clothing-info select {
+                font-size: 12px;
             }
+
 
             .saved-fits {
                 grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0, 1fr)
-                    );
+                    repeat(2, minmax(0, 1fr));
 
                 gap: 12px;
             }
 
+
             .saved-fit-item img {
                 height: 180px;
-            }
-
-        }
-
-
-        @media (max-width: 420px) {
-
-            .clothing-grid {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0, 1fr)
-                    );
-
-                gap: 10px;
-            }
-
-            .clothing-info {
-                padding: 8px;
-            }
-
-            .clothing-info select {
-                font-size: 12px;
             }
 
         }
@@ -874,6 +939,7 @@
                 grid-template-columns: 1fr;
             }
 
+
             .saved-fit-item img {
                 height: 300px;
             }
@@ -883,6 +949,7 @@
     </style>
 
 </head>
+
 
 
 <body>
@@ -925,10 +992,13 @@
 </header>
 
 
+
 <main>
 
 
-    <!-- wardrobe -->
+    <!-- =========================================
+         wardrobe
+    ========================================== -->
 
     <section
         id="wardrobe"
@@ -940,6 +1010,7 @@
             <h1>
                 wardrobe
             </h1>
+
 
             <p>
                 add your clothes and build
@@ -983,7 +1054,9 @@
 
 
 
-    <!-- build a fit -->
+    <!-- =========================================
+         build a fit
+    ========================================== -->
 
     <section
         id="builder"
@@ -995,6 +1068,7 @@
             <h1>
                 build a fit
             </h1>
+
 
             <p>
                 click a piece to choose
@@ -1064,7 +1138,9 @@
 
 
 
-    <!-- my fits -->
+    <!-- =========================================
+         my fits
+    ========================================== -->
 
     <section
         id="fits"
@@ -1096,7 +1172,9 @@
 
 
 
-<!-- clothing picker -->
+<!-- =========================================
+     clothing picker
+========================================== -->
 
 <div
     id="picker-overlay"
@@ -1117,6 +1195,7 @@
             <button
                 id="close-picker"
                 class="close-picker"
+                type="button"
             >
                 ×
             </button>
@@ -1142,24 +1221,13 @@
 <script>
 
 
-    /* -----------------------------------------
-       data
-    ----------------------------------------- */
+    /* =========================================
+       settings
+    ========================================== */
 
-    let clothes =
-        JSON.parse(
-            localStorage.getItem(
-                "clothes"
-            )
-        ) || [];
+    const MAX_IMAGE_SIZE = 900;
 
-
-    let savedFits =
-        JSON.parse(
-            localStorage.getItem(
-                "savedFits"
-            )
-        ) || [];
+    const IMAGE_QUALITY = 0.72;
 
 
     const categories = [
@@ -1171,35 +1239,288 @@
     ];
 
 
-    let currentPickerCategory =
-        null;
+
+    /* =========================================
+       load data safely
+    ========================================== */
+
+    function loadJSON(
+        key,
+        fallback
+    ) {
+
+        try {
+
+            const value =
+                localStorage.getItem(key);
 
 
+            if (!value) {
 
-    /* -----------------------------------------
-       storage
-    ----------------------------------------- */
+                return fallback;
 
-    function saveData() {
+            }
 
-        localStorage.setItem(
+
+            return JSON.parse(value);
+
+        } catch (error) {
+
+            console.error(
+                `could not load ${key}:`,
+                error
+            );
+
+
+            return fallback;
+
+        }
+
+    }
+
+
+    let clothes =
+        loadJSON(
             "clothes",
-            JSON.stringify(clothes)
+            []
         );
 
 
-        localStorage.setItem(
+    let savedFits =
+        loadJSON(
             "savedFits",
-            JSON.stringify(savedFits)
+            []
+        );
+
+
+
+    /* =========================================
+       storage
+    ========================================== */
+
+    function saveData() {
+
+        try {
+
+            localStorage.setItem(
+                "clothes",
+                JSON.stringify(clothes)
+            );
+
+
+            localStorage.setItem(
+                "savedFits",
+                JSON.stringify(savedFits)
+            );
+
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "storage error:",
+                error
+            );
+
+
+            /*
+             * If the browser still says
+             * storage is full, tell the user
+             * instead of silently breaking.
+             */
+
+            alert(
+                "your browser storage is full. try using smaller photos or deleting some old clothing."
+            );
+
+
+            return false;
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       compress uploaded images
+    ========================================== */
+
+    function compressImage(
+        file
+    ) {
+
+        return new Promise(
+            (resolve, reject) => {
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    event => {
+
+                        const image =
+                            new Image();
+
+
+                        image.onload =
+                            () => {
+
+                                let width =
+                                    image.width;
+
+
+                                let height =
+                                    image.height;
+
+
+                                /*
+                                 * Keep the original
+                                 * aspect ratio while
+                                 * limiting the longest
+                                 * side.
+                                 */
+
+                                if (
+                                    width >
+                                    MAX_IMAGE_SIZE ||
+                                    height >
+                                    MAX_IMAGE_SIZE
+                                ) {
+
+                                    if (
+                                        width >
+                                        height
+                                    ) {
+
+                                        height =
+                                            Math.round(
+                                                height *
+                                                (
+                                                    MAX_IMAGE_SIZE /
+                                                    width
+                                                )
+                                            );
+
+
+                                        width =
+                                            MAX_IMAGE_SIZE;
+
+                                    } else {
+
+                                        width =
+                                            Math.round(
+                                                width *
+                                                (
+                                                    MAX_IMAGE_SIZE /
+                                                    height
+                                                )
+                                            );
+
+
+                                        height =
+                                            MAX_IMAGE_SIZE;
+
+                                    }
+
+                                }
+
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+
+                                canvas.width =
+                                    width;
+
+
+                                canvas.height =
+                                    height;
+
+
+                                const context =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                context.drawImage(
+                                    image,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                /*
+                                 * jpeg compression
+                                 * dramatically reduces
+                                 * localStorage usage.
+                                 */
+
+                                const compressed =
+                                    canvas.toDataURL(
+                                        "image/jpeg",
+                                        IMAGE_QUALITY
+                                    );
+
+
+                                resolve(
+                                    compressed
+                                );
+
+                            };
+
+
+                        image.onerror =
+                            () => {
+
+                                reject(
+                                    new Error(
+                                        "could not read image"
+                                    )
+                                );
+
+                            };
+
+
+                        image.src =
+                            event.target.result;
+
+                    };
+
+
+                reader.onerror =
+                    () => {
+
+                        reject(
+                            new Error(
+                                "could not read file"
+                            )
+                        );
+
+                    };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
         );
 
     }
 
 
 
-    /* -----------------------------------------
+    /* =========================================
        navigation
-    ----------------------------------------- */
+    ========================================== */
 
     const navButtons =
         document.querySelectorAll(
@@ -1213,77 +1534,81 @@
         );
 
 
-    navButtons.forEach(button => {
+    navButtons.forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                const page =
-                    button.dataset.page;
-
-
-                navButtons.forEach(
-                    btn => {
-
-                        btn.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
+                    const page =
+                        button.dataset.page;
 
 
-                button.classList.add(
-                    "active"
-                );
+                    navButtons.forEach(
+                        btn => {
+
+                            btn.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
 
 
-                pages.forEach(
-                    section => {
-
-                        section.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-
-                document
-                    .getElementById(page)
-                    .classList.add(
+                    button.classList.add(
                         "active"
                     );
 
 
-                if (
-                    page === "builder"
-                ) {
+                    pages.forEach(
+                        section => {
 
-                    renderFitPreview();
+                            section.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    document
+                        .getElementById(page)
+                        .classList.add(
+                            "active"
+                        );
+
+
+                    if (
+                        page ===
+                        "builder"
+                    ) {
+
+                        renderFitPreview();
+
+                    }
+
+
+                    if (
+                        page ===
+                        "fits"
+                    ) {
+
+                        renderSavedFits();
+
+                    }
 
                 }
+            );
 
-
-                if (
-                    page === "fits"
-                ) {
-
-                    renderSavedFits();
-
-                }
-
-            }
-        );
-
-    });
+        }
+    );
 
 
 
-    /* -----------------------------------------
+    /* =========================================
        upload clothing
-    ----------------------------------------- */
+    ========================================== */
 
     document
         .getElementById(
@@ -1308,77 +1633,126 @@
                 }
 
 
-                const newClothes =
-                    await Promise.all(
-
-                        files.map(
-                            file => {
-
-                                return new Promise(
-                                    resolve => {
-
-                                        const reader =
-                                            new FileReader();
-
-
-                                        reader.onload =
-                                            readerEvent => {
-
-                                                resolve({
-
-                                                    id:
-                                                        crypto.randomUUID(),
-
-                                                    image:
-                                                        readerEvent
-                                                            .target
-                                                            .result,
-
-                                                    category:
-                                                        "top"
-
-                                                });
-
-                                            };
-
-
-                                        reader.readAsDataURL(
-                                            file
-                                        );
-
-                                    }
-                                );
-
-                            }
-                        )
-
+                const addButton =
+                    document.querySelector(
+                        "label[for='file-input']"
                     );
 
 
-                clothes.push(
-                    ...newClothes
-                );
+                const originalText =
+                    addButton.textContent;
 
 
-                saveData();
+                addButton.textContent =
+                    "processing...";
 
 
-                renderWardrobe();
+                addButton.style.pointerEvents =
+                    "none";
 
 
-                renderFitPreview();
+                try {
+
+                    const newClothes =
+                        [];
 
 
-                event.target.value = "";
+                    /*
+                     * Compress each image before
+                     * adding it to localStorage.
+                     */
+
+                    for (
+                        const file of files
+                    ) {
+
+                        try {
+
+                            const compressedImage =
+                                await compressImage(
+                                    file
+                                );
+
+
+                            newClothes.push({
+
+                                id:
+                                    crypto.randomUUID(),
+
+                                image:
+                                    compressedImage,
+
+                                category:
+                                    "top"
+
+                            });
+
+                        } catch (
+                            imageError
+                        ) {
+
+                            console.error(
+                                imageError
+                            );
+
+                        }
+
+                    }
+
+
+                    if (
+                        newClothes.length === 0
+                    ) {
+
+                        alert(
+                            "none of the images could be added."
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    clothes.push(
+                        ...newClothes
+                    );
+
+
+                    const saved =
+                        saveData();
+
+
+                    if (saved) {
+
+                        renderWardrobe();
+
+                        renderFitPreview();
+
+                    }
+
+                } finally {
+
+                    addButton.textContent =
+                        originalText;
+
+
+                    addButton.style.pointerEvents =
+                        "";
+
+                    event.target.value =
+                        "";
+
+                }
 
             }
         );
 
 
 
-    /* -----------------------------------------
-       wardrobe
-    ----------------------------------------- */
+    /* =========================================
+       wardrobe rendering
+    ========================================== */
 
     function renderWardrobe() {
 
@@ -1402,7 +1776,6 @@
                     <p>
                         your wardrobe is empty.
                     </p>
-
 
                     <p>
                         add some clothing
@@ -1547,13 +1920,10 @@
 
 
 
-    /* -----------------------------------------
+    /* =========================================
        wardrobe controls
-       
-       event delegation makes these
-       reliable after re-rendering,
-       especially on mobile
-    ----------------------------------------- */
+       event delegation
+    ========================================== */
 
     document
         .getElementById(
@@ -1605,7 +1975,6 @@
         );
 
 
-
     document
         .getElementById(
             "clothing-grid"
@@ -1629,6 +1998,7 @@
 
                 event.preventDefault();
 
+
                 event.stopPropagation();
 
 
@@ -1636,14 +2006,14 @@
                     button.dataset.id;
 
 
-                const itemExists =
+                const exists =
                     clothes.some(
                         clothing =>
                             clothing.id === id
                     );
 
 
-                if (!itemExists) {
+                if (!exists) {
 
                     return;
 
@@ -1670,17 +2040,16 @@
 
 
 
-    /* -----------------------------------------
-       selected fit
-    ----------------------------------------- */
+    /* =========================================
+       current fit
+    ========================================== */
 
     function getCurrentFit() {
 
-        return JSON.parse(
-            localStorage.getItem(
-                "currentFit"
-            )
-        ) || {};
+        return loadJSON(
+            "currentFit",
+            {}
+        );
 
     }
 
@@ -1737,16 +2106,18 @@
 
         localStorage.setItem(
             "currentFit",
-            JSON.stringify(current)
+            JSON.stringify(
+                current
+            )
         );
 
     }
 
 
 
-    /* -----------------------------------------
+    /* =========================================
        fit preview
-    ----------------------------------------- */
+    ========================================== */
 
     function renderFitPreview() {
 
@@ -1905,9 +2276,9 @@
 
 
 
-    /* -----------------------------------------
-       clothing picker
-    ----------------------------------------- */
+    /* =========================================
+       picker
+    ========================================== */
 
     const pickerOverlay =
         document.getElementById(
@@ -1925,6 +2296,10 @@
         document.getElementById(
             "picker-title"
         );
+
+
+    let currentPickerCategory =
+        null;
 
 
     function openPicker(
@@ -1956,13 +2331,11 @@
 
             pickerGrid.innerHTML = `
 
-                <div
-                    class="picker-empty"
-                >
+                <div class="picker-empty">
 
                     <p>
-                        you don't have
-                        any ${category}s yet.
+                        you don't have any
+                        ${category}s yet.
                     </p>
 
 
@@ -2085,9 +2458,9 @@
 
 
 
-    /* -----------------------------------------
-       clear fit
-    ----------------------------------------- */
+    /* =========================================
+       clear current fit
+    ========================================== */
 
     document
         .getElementById(
@@ -2109,9 +2482,9 @@
 
 
 
-    /* -----------------------------------------
+    /* =========================================
        save fit
-    ----------------------------------------- */
+    ========================================== */
 
     document
         .getElementById(
@@ -2181,21 +2554,24 @@
                 });
 
 
-                saveData();
+                if (
+                    saveData()
+                ) {
 
+                    alert(
+                        "fit saved."
+                    );
 
-                alert(
-                    "fit saved."
-                );
+                }
 
             }
         );
 
 
 
-    /* -----------------------------------------
+    /* =========================================
        saved fits
-    ----------------------------------------- */
+    ========================================== */
 
     function renderSavedFits() {
 
@@ -2361,9 +2737,9 @@
 
 
 
-    /* -----------------------------------------
-       initial load
-    ----------------------------------------- */
+    /* =========================================
+       initial render
+    ========================================== */
 
     renderWardrobe();
 
@@ -2371,5 +2747,7 @@
 
 </script>
 
+
 </body>
+
 </html>

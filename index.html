@@ -1764,34 +1764,27 @@ async function uploadClothing(file) {
 
         if (!response.ok) {
 
-            let errorMessage =
-                "background removal failed";
+const responseText = await response.text();
 
+console.error(
+    "Edge Function error:",
+    response.status,
+    responseText
+);
 
-            try {
+let errorMessage = "background removal failed";
 
-                const errorData =
-                    await response.json();
+try {
+    const errorData = JSON.parse(responseText);
 
-
-                if (errorData.error) {
-
-                    errorMessage =
-                        errorData.error;
-
-                }
-
-            } catch {
-                /*
-                 * Edge Function did not return JSON.
-                 */
-            }
-
-
-            throw new Error(
-                errorMessage
-            );
-        }
+    if (errorData.error) {
+        errorMessage = errorData.error;
+    }
+} catch {
+    if (responseText) {
+        errorMessage = responseText;
+    }
+}
 
 
         /*

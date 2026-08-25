@@ -278,6 +278,7 @@
             color: #111;
             font-size: 17px;
             z-index: 3;
+            touch-action: manipulation;
         }
 
         .empty-message {
@@ -344,6 +345,7 @@
             width: 32px;
             height: 32px;
             z-index: 3;
+            touch-action: manipulation;
         }
 
         .builder-actions {
@@ -372,6 +374,7 @@
             border-radius: 12px;
             overflow: hidden;
             padding: 0;
+            touch-action: manipulation;
         }
 
         .picker-item:hover {
@@ -441,6 +444,7 @@
             padding: 8px 11px;
             border-radius: 8px;
             font-size: 12px;
+            touch-action: manipulation;
         }
 
         .empty-fits {
@@ -490,6 +494,59 @@
             width: 34px;
             height: 34px;
             border-radius: 50%;
+        }
+
+        /* =========================
+           processing modal
+        ========================= */
+
+        .processing-content {
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .processing-spinner {
+            width: 42px;
+            height: 42px;
+            border: 4px solid #eee;
+            border-top-color: #111;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .processing-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .processing-text {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .processing-progress {
+            margin-top: 18px;
+            height: 7px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .processing-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #111;
+            border-radius: 10px;
+            transition: width .2s ease;
         }
 
         /* =========================
@@ -719,9 +776,7 @@
 
         <main>
 
-            <!-- =========================
-                 wardrobe
-            ========================= -->
+            <!-- wardrobe -->
 
             <section
                 id="wardrobe-page"
@@ -769,9 +824,7 @@
             </section>
 
 
-            <!-- =========================
-                 build a fit
-            ========================= -->
+            <!-- build a fit -->
 
             <section
                 id="builder-page"
@@ -867,9 +920,7 @@
             </section>
 
 
-            <!-- =========================
-                 saved fits
-            ========================= -->
+            <!-- saved fits -->
 
             <section
                 id="fits-page"
@@ -902,9 +953,7 @@
     </div>
 
 
-    <!-- =========================
-         clothing picker
-    ========================= -->
+    <!-- clothing picker -->
 
     <div
         id="picker-modal"
@@ -935,25 +984,53 @@
     </div>
 
 
+    <!-- background removal processing -->
+
+    <div
+        id="processing-modal"
+        class="modal hidden"
+    >
+
+        <div class="modal-content">
+
+            <div class="processing-content">
+
+                <div class="processing-spinner"></div>
+
+                <div
+                    class="processing-title"
+                    id="processing-title"
+                >
+                    preparing photo...
+                </div>
+
+                <div
+                    class="processing-text"
+                    id="processing-text"
+                >
+                    this can take a little longer the first time.
+                </div>
+
+                <div class="processing-progress">
+
+                    <div
+                        class="processing-progress-bar"
+                        id="processing-progress-bar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
     <div
         id="toast"
         class="toast hidden"
     ></div>
-
-
-    <!-- =========================
-         background removal library
-    ========================= -->
-
-    <script type="module">
-
-        import removeBackground
-            from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
-
-        window.removeClothingBackground =
-            removeBackground;
-
-    </script>
 
 
     <script>
@@ -996,6 +1073,10 @@
         let currentSlot = null;
 
         let authMode = "login";
+
+        let backgroundRemovalFunction = null;
+
+        let backgroundRemovalLoading = null;
 
 
         /* =====================================================
@@ -1061,162 +1142,456 @@
 
 
         /* =====================================================
+           processing ui
+        ===================================================== */
+
+        function showProcessing(
+            title,
+            text,
+            progress = 0
+        ) {
+
+            document
+                .getElementById(
+                    "processing-title"
+                )
+                .textContent =
+                title;
+
+
+            document
+                .getElementById(
+                    "processing-text"
+                )
+                .textContent =
+                text;
+
+
+            document
+                .getElementById(
+                    "processing-progress-bar"
+                )
+                .style.width =
+                `${Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        progress
+                    )
+                )}%`;
+
+
+            document
+                .getElementById(
+                    "processing-modal"
+                )
+                .classList
+                .remove("hidden");
+        }
+
+
+        function updateProcessing(
+            title,
+            text,
+            progress
+        ) {
+
+            document
+                .getElementById(
+                    "processing-title"
+                )
+                .textContent =
+                title;
+
+
+            document
+                .getElementById(
+                    "processing-text"
+                )
+                .textContent =
+                text;
+
+
+            if (
+                typeof progress ===
+                "number"
+            ) {
+
+                document
+                    .getElementById(
+                        "processing-progress-bar"
+                    )
+                    .style.width =
+                    `${Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            progress
+                        )
+                    )}%`;
+            }
+        }
+
+
+        function hideProcessing() {
+
+            document
+                .getElementById(
+                    "processing-modal"
+                )
+                .classList
+                .add("hidden");
+        }
+
+
+        /* =====================================================
+           background removal
+        ===================================================== */
+
+        async function loadBackgroundRemoval() {
+
+            if (
+                backgroundRemovalFunction
+            ) {
+
+                return backgroundRemovalFunction;
+            }
+
+
+            if (
+                backgroundRemovalLoading
+            ) {
+
+                return backgroundRemovalLoading;
+            }
+
+
+            backgroundRemovalLoading =
+                (async () => {
+
+                    showProcessing(
+                        "loading background remover...",
+                        "the first photo takes longer because the ai model has to download.",
+                        5
+                    );
+
+
+                    try {
+
+                        const module =
+                            await import(
+                                "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm"
+                            );
+
+
+                        if (
+                            !module ||
+                            typeof module.default !==
+                            "function"
+                        ) {
+
+                            throw new Error(
+                                "background removal module did not load correctly"
+                            );
+                        }
+
+
+                        backgroundRemovalFunction =
+                            module.default;
+
+
+                        return backgroundRemovalFunction;
+
+                    } catch (error) {
+
+                        console.error(
+                            "background removal loading error:",
+                            error
+                        );
+
+                        throw error;
+
+                    }
+
+                })();
+
+
+            try {
+
+                return await backgroundRemovalLoading;
+
+            } finally {
+
+                backgroundRemovalLoading =
+                    null;
+            }
+        }
+
+
+        async function removePhotoBackground(
+            file
+        ) {
+
+            const removeBackground =
+                await loadBackgroundRemoval();
+
+
+            showProcessing(
+                "removing background...",
+                "your photo is being processed on your device.",
+                10
+            );
+
+
+            const result =
+                await removeBackground(
+                    file,
+                    {
+
+                        model:
+                            "isnet_quint8",
+
+                        device:
+                            "cpu",
+
+                        output: {
+
+                            format:
+                                "image/png",
+
+                            type:
+                                "foreground"
+
+                        },
+
+                        debug:
+                            true,
+
+                        progress:
+                            (
+                                key,
+                                current,
+                                total
+                            ) => {
+
+                                if (
+                                    total > 0
+                                ) {
+
+                                    const percentage =
+                                        Math.round(
+                                            (
+                                                current /
+                                                total
+                                            ) *
+                                            100
+                                        );
+
+
+                                    updateProcessing(
+                                        "removing background...",
+                                        "processing your clothing photo...",
+                                        Math.max(
+                                            10,
+                                            percentage
+                                        )
+                                    );
+                                }
+                            }
+
+                    }
+                );
+
+
+            if (
+                !result ||
+                !(result instanceof Blob)
+            ) {
+
+                throw new Error(
+                    "background removal returned an invalid image"
+                );
+            }
+
+
+            return result;
+        }
+
+
+        /* =====================================================
            transparent image compression
         ===================================================== */
 
-        async function compressImage(file) {
+        async function compressImage(
+            file
+        ) {
 
-            return new Promise((resolve, reject) => {
+            return new Promise(
+                (resolve, reject) => {
 
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    event => {
-
-                        const img =
-                            new Image();
+                    const reader =
+                        new FileReader();
 
 
-                        img.onload =
-                            () => {
+                    reader.onload =
+                        event => {
 
-                                const maxSize =
-                                    1400;
-
-
-                                let width =
-                                    img.width;
-
-                                let height =
-                                    img.height;
+                            const img =
+                                new Image();
 
 
-                                if (
-                                    width > maxSize ||
-                                    height > maxSize
-                                ) {
+                            img.onload =
+                                () => {
+
+                                    const maxSize =
+                                        1400;
+
+
+                                    let width =
+                                        img.width;
+
+                                    let height =
+                                        img.height;
+
 
                                     if (
-                                        width > height
+                                        width >
+                                        maxSize ||
+                                        height >
+                                        maxSize
                                     ) {
 
-                                        height =
-                                            Math.round(
-                                                height *
-                                                maxSize /
-                                                width
-                                            );
+                                        if (
+                                            width >
+                                            height
+                                        ) {
 
-                                        width =
-                                            maxSize;
+                                            height =
+                                                Math.round(
+                                                    height *
+                                                    maxSize /
+                                                    width
+                                                );
 
-                                    } else {
+                                            width =
+                                                maxSize;
 
-                                        width =
-                                            Math.round(
-                                                width *
-                                                maxSize /
-                                                height
-                                            );
+                                        } else {
 
-                                        height =
-                                            maxSize;
-                                    }
-                                }
+                                            width =
+                                                Math.round(
+                                                    width *
+                                                    maxSize /
+                                                    height
+                                                );
 
-
-                                const canvas =
-                                    document.createElement(
-                                        "canvas"
-                                    );
-
-
-                                canvas.width =
-                                    width;
-
-                                canvas.height =
-                                    height;
-
-
-                                const context =
-                                    canvas.getContext(
-                                        "2d"
-                                    );
-
-
-                                /*
-                                 * important:
-                                 *
-                                 * don't fill the canvas
-                                 * with white.
-                                 *
-                                 * leaving it empty
-                                 * preserves transparency.
-                                 */
-
-                                context.clearRect(
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                );
-
-
-                                context.drawImage(
-                                    img,
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                );
-
-
-                                canvas.toBlob(
-
-                                    blob => {
-
-                                        if (!blob) {
-
-                                            reject(
-                                                new Error(
-                                                    "image compression failed"
-                                                )
-                                            );
-
-                                            return;
+                                            height =
+                                                maxSize;
                                         }
+                                    }
 
 
-                                        resolve(blob);
-
-                                    },
-
-                                    "image/png"
-
-                                );
-
-                            };
+                                    const canvas =
+                                        document.createElement(
+                                            "canvas"
+                                        );
 
 
-                        img.onerror =
-                            reject;
+                                    canvas.width =
+                                        width;
+
+                                    canvas.height =
+                                        height;
 
 
-                        img.src =
-                            event.target.result;
-
-                    };
-
-
-                reader.onerror =
-                    reject;
+                                    const context =
+                                        canvas.getContext(
+                                            "2d"
+                                        );
 
 
-                reader.readAsDataURL(file);
+                                    context.clearRect(
+                                        0,
+                                        0,
+                                        width,
+                                        height
+                                    );
 
-            });
+
+                                    context.drawImage(
+                                        img,
+                                        0,
+                                        0,
+                                        width,
+                                        height
+                                    );
+
+
+                                    canvas.toBlob(
+
+                                        blob => {
+
+                                            if (!blob) {
+
+                                                reject(
+                                                    new Error(
+                                                        "image compression failed"
+                                                    )
+                                                );
+
+                                                return;
+                                            }
+
+
+                                            resolve(
+                                                blob
+                                            );
+
+                                        },
+
+                                        "image/png"
+
+                                    );
+
+                                };
+
+
+                            img.onerror =
+                                () => {
+
+                                    reject(
+                                        new Error(
+                                            "couldn't read processed image"
+                                        )
+                                    );
+
+                                };
+
+
+                            img.src =
+                                event.target.result;
+
+                        };
+
+
+                    reader.onerror =
+                        () => {
+
+                            reject(
+                                new Error(
+                                    "couldn't read image file"
+                                )
+                            );
+
+                        };
+
+
+                    reader.readAsDataURL(
+                        file
+                    );
+
+                }
+            );
         }
 
 
@@ -1648,31 +2023,50 @@
                     }
 
 
-                    for (
-                        const file of files
-                    ) {
+                    const input =
+                        event.target;
 
-                        try {
+
+                    input.disabled =
+                        true;
+
+
+                    try {
+
+                        for (
+                            const file of files
+                        ) {
 
                             await uploadClothing(
                                 file
                             );
 
-                        } catch (error) {
-
-                            console.error(
-                                error
-                            );
-
-                            showToast(
-                                "couldn't process this photo"
-                            );
                         }
+
+                    } catch (error) {
+
+                        console.error(
+                            "photo processing error:",
+                            error
+                        );
+
+
+                        hideProcessing();
+
+
+                        showToast(
+                            "couldn't process this photo"
+                        );
+
+                    } finally {
+
+                        input.disabled =
+                            false;
+
+                        input.value =
+                            "";
+
                     }
-
-
-                    event.target.value =
-                        "";
 
 
                     await loadClothes();
@@ -1687,155 +2081,155 @@
            upload clothing
         ===================================================== */
 
-        async function uploadClothing(file) {
-
-            if (
-                typeof window
-                    .removeClothingBackground
-                !== "function"
-            ) {
-
-                throw new Error(
-                    "background removal library hasn't loaded yet"
-                );
-            }
-
+        async function uploadClothing(
+            file
+        ) {
 
             const category =
                 await chooseCategory();
 
 
             if (!category) {
+
                 return;
             }
 
 
-            showToast(
-                "removing background..."
-            );
+            try {
 
+                /*
+                 * the actual ai processing happens here.
+                 */
 
-            /*
-             * ai background removal
-             *
-             * the first upload may take longer
-             * because the model has to download.
-             */
-
-            const transparentBlob =
-    await window.removeClothingBackground(
-        file,
-        {
-            model: "isnet_fp16",
-            output: {
-                format: "image/png"
-            },
-            debug: true
-        }
-    );
-
-
-            showToast(
-                "compressing image..."
-            );
-
-
-            const compressed =
-                await compressImage(
-                    transparentBlob
-                );
-
-
-            const filename =
-                `${Date.now()}-${Math.random()
-                    .toString(36)
-                    .slice(2)}.png`;
-
-
-            const path =
-                `${currentUser.id}/${filename}`;
-
-
-            showToast(
-                "uploading..."
-            );
-
-
-            const {
-                error: uploadError
-            } =
-                await supabaseClient
-                    .storage
-                    .from("clothes")
-                    .upload(
-                        path,
-                        compressed,
-                        {
-                            contentType:
-                                "image/png",
-
-                            upsert:
-                                false
-                        }
+                const transparentBlob =
+                    await removePhotoBackground(
+                        file
                     );
 
 
-            if (uploadError) {
-
-                console.error(
-                    uploadError
-                );
-
-                throw uploadError;
-            }
-
-
-            const imageUrl =
-                getImageUrl(path);
-
-
-            const {
-                error:
-                    databaseError
-            } =
-                await supabaseClient
-                    .from("clothes")
-                    .insert({
-
-                        user_id:
-                            currentUser.id,
-
-                        image_url:
-                            imageUrl,
-
-                        category:
-                            category
-
-                    });
-
-
-            if (databaseError) {
-
-                console.error(
-                    databaseError
+                updateProcessing(
+                    "finishing photo...",
+                    "preparing your transparent clothing image.",
+                    92
                 );
 
 
-                await supabaseClient
-                    .storage
-                    .from("clothes")
-                    .remove([
-                        path
-                    ]);
+                const compressed =
+                    await compressImage(
+                        transparentBlob
+                    );
 
 
-                throw databaseError;
+                updateProcessing(
+                    "uploading...",
+                    "saving your clothing to your wardrobe.",
+                    96
+                );
+
+
+                const filename =
+                    `${Date.now()}-${Math.random()
+                        .toString(36)
+                        .slice(2)}.png`;
+
+
+                const path =
+                    `${currentUser.id}/${filename}`;
+
+
+                const {
+                    error:
+                        uploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .upload(
+                            path,
+                            compressed,
+                            {
+                                contentType:
+                                    "image/png",
+
+                                upsert:
+                                    false
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    throw uploadError;
+                }
+
+
+                const imageUrl =
+                    getImageUrl(path);
+
+
+                const {
+                    error:
+                        databaseError
+                } =
+                    await supabaseClient
+                        .from("clothes")
+                        .insert({
+
+                            user_id:
+                                currentUser.id,
+
+                            image_url:
+                                imageUrl,
+
+                            category:
+                                category
+
+                        });
+
+
+                if (databaseError) {
+
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .remove([
+                            path
+                        ]);
+
+
+                    throw databaseError;
+                }
+
+
+                updateProcessing(
+                    "done!",
+                    "your clothing has been added.",
+                    100
+                );
+
+
+                await new Promise(
+                    resolve =>
+                        setTimeout(
+                            resolve,
+                            350
+                        )
+                );
+
+
+                hideProcessing();
+
+
+                showToast(
+                    "clothing added"
+                );
+
+            } catch (error) {
+
+                hideProcessing();
+
+                throw error;
             }
-
-
-            showToast(
-                "clothing added"
-            );
         }
 
 
@@ -2030,14 +2424,31 @@
                             "click",
                             async event => {
 
+                                event.preventDefault();
+
                                 event.stopPropagation();
+
 
                                 const id =
                                     button.dataset.id;
 
-                                await deleteClothing(
-                                    id
-                                );
+
+                                button.disabled =
+                                    true;
+
+
+                                try {
+
+                                    await deleteClothing(
+                                        id
+                                    );
+
+                                } finally {
+
+                                    button.disabled =
+                                        false;
+
+                                }
 
                             }
                         );
@@ -2120,12 +2531,24 @@
 
             if (imagePath) {
 
-                await supabaseClient
-                    .storage
-                    .from("clothes")
-                    .remove([
-                        imagePath
-                    ]);
+                const {
+                    error:
+                        storageError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .remove([
+                            imagePath
+                        ]);
+
+
+                if (storageError) {
+
+                    console.error(
+                        storageError
+                    );
+                }
             }
 
 
@@ -2591,6 +3014,8 @@
                                 "click",
                                 event => {
 
+                                    event.preventDefault();
+
                                     event.stopPropagation();
 
 
@@ -2929,9 +3354,22 @@
                             "click",
                             async () => {
 
-                                await deleteFit(
-                                    button.dataset.fitId
-                                );
+                                button.disabled =
+                                    true;
+
+
+                                try {
+
+                                    await deleteFit(
+                                        button.dataset.fitId
+                                    );
+
+                                } finally {
+
+                                    button.disabled =
+                                        false;
+
+                                }
 
                             }
                         );

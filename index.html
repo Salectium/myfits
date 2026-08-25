@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>wardrobe</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -15,7 +19,11 @@
             margin: 0;
             background: #fff;
             color: #111;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
         }
 
         button,
@@ -25,12 +33,17 @@
 
         button {
             cursor: pointer;
+            touch-action: manipulation;
         }
 
-        /* navigation */
+
+        /* -----------------------------------------
+           navigation
+        ----------------------------------------- */
 
         header {
             height: 70px;
+
             border-bottom: 1px solid #e5e5e5;
 
             display: flex;
@@ -41,9 +54,11 @@
 
             position: sticky;
             top: 0;
+
             z-index: 100;
 
             background: rgba(255, 255, 255, .96);
+
             backdrop-filter: blur(10px);
         }
 
@@ -60,10 +75,13 @@
 
         nav button {
             border: none;
+
             background: transparent;
+
             color: #777;
 
             padding: 8px 12px;
+
             border-radius: 8px;
 
             font-size: 14px;
@@ -79,11 +97,16 @@
             color: #fff;
         }
 
-        /* main */
+
+        /* -----------------------------------------
+           main
+        ----------------------------------------- */
 
         main {
             width: min(1100px, 92%);
+
             margin: auto;
+
             padding: 45px 0 80px;
         }
 
@@ -103,27 +126,38 @@
             margin: 0 0 8px;
 
             font-size: 32px;
+
             font-weight: 600;
+
             letter-spacing: -1.5px;
         }
 
         .page-header p {
             margin: 0;
+
             color: #777;
+
             font-size: 15px;
         }
 
-        /* buttons */
+
+        /* -----------------------------------------
+           buttons
+        ----------------------------------------- */
 
         .primary-button {
             border: none;
+
             background: #111;
+
             color: #fff;
 
             padding: 11px 17px;
+
             border-radius: 9px;
 
             font-size: 14px;
+
             font-weight: 500;
         }
 
@@ -133,10 +167,13 @@
 
         .secondary-button {
             border: 1px solid #ddd;
+
             background: #fff;
+
             color: #111;
 
             padding: 10px 16px;
+
             border-radius: 9px;
 
             font-size: 14px;
@@ -148,22 +185,36 @@
 
         .danger-button {
             border: 1px solid #e5e5e5;
+
             background: #fff;
+
             color: #d11;
 
             padding: 8px 12px;
+
             border-radius: 8px;
 
             font-size: 13px;
+
+            touch-action: manipulation;
         }
 
-        /* wardrobe */
+        .danger-button:hover {
+            background: #fff5f5;
+        }
+
+
+        /* -----------------------------------------
+           wardrobe
+        ----------------------------------------- */
 
         .upload-area {
             border: 1px dashed #d5d5d5;
+
             border-radius: 14px;
 
             padding: 45px 20px;
+
             text-align: center;
 
             margin-bottom: 35px;
@@ -171,6 +222,7 @@
 
         .upload-area p {
             color: #777;
+
             margin: 0 0 18px;
         }
 
@@ -180,22 +232,38 @@
 
         .clothing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+            grid-template-columns:
+                repeat(auto-fill, minmax(180px, 1fr));
+
             gap: 20px;
+
+            width: 100%;
+
+            min-width: 0;
         }
 
         .clothing-card {
             border: 1px solid #e5e5e5;
+
             border-radius: 12px;
+
             overflow: hidden;
+
             background: #fff;
+
+            min-width: 0;
         }
 
         .clothing-image {
             width: 100%;
+
             aspect-ratio: 1;
+
             object-fit: contain;
+
             display: block;
+
             background: #f7f7f7;
         }
 
@@ -207,9 +275,11 @@
             width: 100%;
 
             border: 1px solid #ddd;
+
             border-radius: 7px;
 
             padding: 7px 9px;
+
             background: #fff;
 
             font-size: 13px;
@@ -217,15 +287,19 @@
 
         .clothing-actions {
             display: flex;
+
             justify-content: flex-end;
+
             margin-top: 10px;
         }
 
         .empty-state {
             border: 1px solid #e5e5e5;
+
             border-radius: 12px;
 
             padding: 60px 20px;
+
             text-align: center;
 
             color: #777;
@@ -233,43 +307,53 @@
             grid-column: 1 / -1;
         }
 
-        /* fit builder */
+
+        /* -----------------------------------------
+           fit builder
+        ----------------------------------------- */
 
         .builder-layout {
             display: grid;
-            grid-template-columns: 1fr 300px;
+
+            grid-template-columns:
+                1fr 300px;
+
             gap: 35px;
+
             align-items: start;
         }
 
         .fit-preview {
             border: 1px solid #e5e5e5;
+
             border-radius: 14px;
 
             padding: 20px;
+
             background: #fafafa;
         }
 
         .fit-preview-title {
             margin: 0 0 20px;
+
             font-size: 14px;
+
             color: #777;
         }
 
         .fit-stack {
             display: flex;
+
             flex-direction: column;
+
             gap: 12px;
         }
-
-        /*
-            these are now clickable
-        */
 
         .fit-slot {
             background: #fff;
 
             border: 1px solid #ddd;
+
             border-radius: 10px;
 
             overflow: hidden;
@@ -277,7 +361,9 @@
             min-height: 180px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
             position: relative;
@@ -292,20 +378,26 @@
 
         .fit-slot:hover {
             border-color: #111;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, .07);
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, .07);
+
             transform: translateY(-1px);
         }
 
         .fit-slot img {
             width: 100%;
+
             max-height: 350px;
 
             object-fit: contain;
+
             display: block;
         }
 
         .fit-slot-empty {
             color: #aaa;
+
             font-size: 14px;
         }
 
@@ -313,16 +405,20 @@
             position: absolute;
 
             top: 10px;
+
             left: 10px;
 
             padding: 5px 8px;
 
-            background: rgba(255, 255, 255, .92);
+            background:
+                rgba(255, 255, 255, .92);
 
             border: 1px solid #e5e5e5;
+
             border-radius: 6px;
 
             font-size: 11px;
+
             color: #777;
 
             z-index: 2;
@@ -332,12 +428,15 @@
             position: absolute;
 
             top: 9px;
+
             right: 9px;
 
             width: 26px;
+
             height: 26px;
 
             border: 1px solid #ddd;
+
             border-radius: 50%;
 
             background: #fff;
@@ -347,22 +446,29 @@
             z-index: 3;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
+            padding: 0;
         }
 
         .remove-piece:hover {
             color: #111;
+
             border-color: #111;
         }
 
         .builder-actions {
             border: 1px solid #e5e5e5;
+
             border-radius: 14px;
 
             padding: 20px;
 
             position: sticky;
+
             top: 95px;
         }
 
@@ -370,6 +476,7 @@
             margin: 0 0 8px;
 
             font-size: 18px;
+
             font-weight: 600;
         }
 
@@ -377,12 +484,15 @@
             margin: 0 0 20px;
 
             color: #777;
+
             font-size: 13px;
+
             line-height: 1.5;
         }
 
         .builder-buttons {
             display: flex;
+
             gap: 8px;
         }
 
@@ -390,18 +500,23 @@
             flex: 1;
         }
 
-        /* picker */
+
+        /* -----------------------------------------
+           clothing picker
+        ----------------------------------------- */
 
         .picker-overlay {
             position: fixed;
 
             inset: 0;
 
-            background: rgba(0, 0, 0, .35);
+            background:
+                rgba(0, 0, 0, .35);
 
             display: none;
 
             align-items: center;
+
             justify-content: center;
 
             padding: 20px;
@@ -415,6 +530,7 @@
 
         .picker {
             width: min(700px, 100%);
+
             max-height: 85vh;
 
             background: #fff;
@@ -423,7 +539,9 @@
 
             overflow: hidden;
 
-            box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, .2);
         }
 
         .picker-header {
@@ -432,7 +550,9 @@
             border-bottom: 1px solid #eee;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
         }
 
@@ -440,19 +560,24 @@
             margin: 0;
 
             font-size: 17px;
+
             font-weight: 600;
         }
 
         .close-picker {
             width: 32px;
+
             height: 32px;
 
             border: none;
+
             border-radius: 50%;
 
             background: #f5f5f5;
 
             font-size: 18px;
+
+            padding: 0;
         }
 
         .picker-content {
@@ -460,20 +585,27 @@
 
             overflow-y: auto;
 
-            max-height: calc(85vh - 70px);
+            max-height:
+                calc(85vh - 70px);
+
+            -webkit-overflow-scrolling: touch;
         }
 
         .picker-grid {
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fill, minmax(130px, 1fr));
+                repeat(
+                    auto-fill,
+                    minmax(130px, 1fr)
+                );
 
             gap: 12px;
         }
 
         .picker-item {
             border: 1px solid #e5e5e5;
+
             border-radius: 10px;
 
             overflow: hidden;
@@ -487,11 +619,13 @@
 
         .picker-item:hover {
             border-color: #111;
+
             transform: translateY(-2px);
         }
 
         .picker-item img {
             width: 100%;
+
             aspect-ratio: 1;
 
             object-fit: contain;
@@ -505,6 +639,7 @@
             padding: 8px;
 
             font-size: 12px;
+
             color: #777;
         }
 
@@ -514,15 +649,23 @@
             text-align: center;
 
             color: #777;
+
+            grid-column: 1 / -1;
         }
 
-        /* saved fits */
+
+        /* -----------------------------------------
+           saved fits
+        ----------------------------------------- */
 
         .saved-fits {
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fill, minmax(260px, 1fr));
+                repeat(
+                    auto-fill,
+                    minmax(260px, 1fr)
+                );
 
             gap: 25px;
 
@@ -531,6 +674,7 @@
 
         .saved-fit {
             border: 1px solid #e5e5e5;
+
             border-radius: 14px;
 
             overflow: hidden;
@@ -542,7 +686,9 @@
             padding: 14px 15px;
 
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
 
             border-bottom: 1px solid #eee;
@@ -550,11 +696,13 @@
 
         .saved-fit-date {
             color: #777;
+
             font-size: 12px;
         }
 
         .saved-fit-items {
             display: flex;
+
             flex-direction: column;
         }
 
@@ -562,7 +710,9 @@
             width: 100%;
 
             display: flex;
+
             justify-content: center;
+
             align-items: center;
 
             background: #fafafa;
@@ -576,9 +726,11 @@
 
         .saved-fit-item img {
             width: 100%;
+
             height: 240px;
 
             object-fit: contain;
+
             display: block;
         }
 
@@ -586,6 +738,7 @@
             padding: 60px 20px;
 
             border: 1px solid #e5e5e5;
+
             border-radius: 14px;
 
             text-align: center;
@@ -595,7 +748,10 @@
             grid-column: 1 / -1;
         }
 
-        /* mobile */
+
+        /* -----------------------------------------
+           mobile
+        ----------------------------------------- */
 
         @media (max-width: 750px) {
 
@@ -605,12 +761,15 @@
                 padding: 15px 18px;
 
                 flex-direction: column;
+
                 gap: 12px;
             }
 
             nav {
                 width: 100%;
+
                 justify-content: center;
+
                 overflow-x: auto;
             }
 
@@ -620,6 +779,7 @@
 
             main {
                 width: 94%;
+
                 padding-top: 30px;
             }
 
@@ -635,15 +795,78 @@
                 position: static;
             }
 
+            .clothing-grid {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+
+                width: 100%;
+            }
+
+            .clothing-card {
+                width: 100%;
+
+                min-width: 0;
+            }
+
+            .clothing-image {
+                width: 100%;
+
+                height: auto;
+            }
+
+            .clothing-info {
+                position: relative;
+
+                z-index: 5;
+            }
+
+            .clothing-info select,
+            .clothing-info button {
+                touch-action: manipulation;
+            }
+
             .saved-fits {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+
                 gap: 12px;
             }
 
             .saved-fit-item img {
                 height: 180px;
             }
+
         }
+
+
+        @media (max-width: 420px) {
+
+            .clothing-grid {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+
+                gap: 10px;
+            }
+
+            .clothing-info {
+                padding: 8px;
+            }
+
+            .clothing-info select {
+                font-size: 12px;
+            }
+
+        }
+
 
         @media (max-width: 450px) {
 
@@ -654,18 +877,23 @@
             .saved-fit-item img {
                 height: 300px;
             }
+
         }
+
     </style>
+
 </head>
 
 
 <body>
+
 
 <header>
 
     <div class="logo">
         wardrobe
     </div>
+
 
     <nav>
 
@@ -676,12 +904,14 @@
             wardrobe
         </button>
 
+
         <button
             class="nav-button"
             data-page="builder"
         >
             build a fit
         </button>
+
 
         <button
             class="nav-button"
@@ -697,6 +927,7 @@
 
 <main>
 
+
     <!-- wardrobe -->
 
     <section
@@ -706,10 +937,13 @@
 
         <div class="page-header">
 
-            <h1>wardrobe</h1>
+            <h1>
+                wardrobe
+            </h1>
 
             <p>
-                add your clothes and build your digital closet.
+                add your clothes and build
+                your digital closet.
             </p>
 
         </div>
@@ -721,12 +955,14 @@
                 add photos of your clothes
             </p>
 
+
             <label
                 for="file-input"
                 class="primary-button"
             >
                 add clothing
             </label>
+
 
             <input
                 id="file-input"
@@ -746,6 +982,7 @@
     </section>
 
 
+
     <!-- build a fit -->
 
     <section
@@ -755,10 +992,13 @@
 
         <div class="page-header">
 
-            <h1>build a fit</h1>
+            <h1>
+                build a fit
+            </h1>
 
             <p>
-                click a piece to choose what you want to wear.
+                click a piece to choose
+                what you want to wear.
             </p>
 
         </div>
@@ -766,11 +1006,13 @@
 
         <div class="builder-layout">
 
+
             <div class="fit-preview">
 
                 <p class="fit-preview-title">
                     fit preview
                 </p>
+
 
                 <div
                     id="fit-stack"
@@ -780,14 +1022,20 @@
             </div>
 
 
+
             <div class="builder-actions">
 
-                <h2>save your fit</h2>
+                <h2>
+                    save your fit
+                </h2>
+
 
                 <p>
-                    click any section of your fit to choose
-                    something from your wardrobe.
+                    click any section of your
+                    fit to choose something
+                    from your wardrobe.
                 </p>
+
 
                 <div class="builder-buttons">
 
@@ -797,6 +1045,7 @@
                     >
                         clear
                     </button>
+
 
                     <button
                         id="save-fit"
@@ -814,7 +1063,8 @@
     </section>
 
 
-    <!-- saved fits -->
+
+    <!-- my fits -->
 
     <section
         id="fits"
@@ -823,7 +1073,10 @@
 
         <div class="page-header">
 
-            <h1>my fits</h1>
+            <h1>
+                my fits
+            </h1>
+
 
             <p>
                 your saved outfits.
@@ -842,6 +1095,7 @@
 </main>
 
 
+
 <!-- clothing picker -->
 
 <div
@@ -849,13 +1103,16 @@
     class="picker-overlay"
 >
 
+
     <div class="picker">
+
 
         <div class="picker-header">
 
             <h2 id="picker-title">
                 choose a top
             </h2>
+
 
             <button
                 id="close-picker"
@@ -881,7 +1138,9 @@
 </div>
 
 
+
 <script>
+
 
     /* -----------------------------------------
        data
@@ -889,12 +1148,17 @@
 
     let clothes =
         JSON.parse(
-            localStorage.getItem("clothes")
+            localStorage.getItem(
+                "clothes"
+            )
         ) || [];
+
 
     let savedFits =
         JSON.parse(
-            localStorage.getItem("savedFits")
+            localStorage.getItem(
+                "savedFits"
+            )
         ) || [];
 
 
@@ -907,7 +1171,9 @@
     ];
 
 
-    let currentPickerCategory = null;
+    let currentPickerCategory =
+        null;
+
 
 
     /* -----------------------------------------
@@ -921,6 +1187,7 @@
             JSON.stringify(clothes)
         );
 
+
         localStorage.setItem(
             "savedFits",
             JSON.stringify(savedFits)
@@ -929,15 +1196,21 @@
     }
 
 
+
     /* -----------------------------------------
        navigation
     ----------------------------------------- */
 
     const navButtons =
-        document.querySelectorAll(".nav-button");
+        document.querySelectorAll(
+            ".nav-button"
+        );
+
 
     const pages =
-        document.querySelectorAll(".page");
+        document.querySelectorAll(
+            ".page"
+        );
 
 
     navButtons.forEach(button => {
@@ -950,28 +1223,55 @@
                     button.dataset.page;
 
 
-                navButtons.forEach(btn => {
-                    btn.classList.remove("active");
-                });
+                navButtons.forEach(
+                    btn => {
 
-                button.classList.add("active");
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
 
 
-                pages.forEach(section => {
-                    section.classList.remove("active");
-                });
+                button.classList.add(
+                    "active"
+                );
+
+
+                pages.forEach(
+                    section => {
+
+                        section.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
 
                 document
                     .getElementById(page)
-                    .classList.add("active");
+                    .classList.add(
+                        "active"
+                    );
 
 
-                if (page === "builder") {
+                if (
+                    page === "builder"
+                ) {
+
                     renderFitPreview();
+
                 }
 
-                if (page === "fits") {
+
+                if (
+                    page === "fits"
+                ) {
+
                     renderSavedFits();
+
                 }
 
             }
@@ -980,15 +1280,18 @@
     });
 
 
+
     /* -----------------------------------------
-       upload
+       upload clothing
     ----------------------------------------- */
 
     document
-        .getElementById("file-input")
+        .getElementById(
+            "file-input"
+        )
         .addEventListener(
             "change",
-            event => {
+            async event => {
 
                 const files =
                     Array.from(
@@ -996,47 +1299,81 @@
                     );
 
 
-                files.forEach(file => {
+                if (
+                    files.length === 0
+                ) {
 
-                    const reader =
-                        new FileReader();
+                    return;
 
-
-                    reader.onload =
-                        event => {
-
-                            clothes.push({
-
-                                id:
-                                    crypto.randomUUID(),
-
-                                image:
-                                    event.target.result,
-
-                                category:
-                                    "top"
-
-                            });
+                }
 
 
-                            saveData();
+                const newClothes =
+                    await Promise.all(
 
-                            renderWardrobe();
+                        files.map(
+                            file => {
 
-                            renderFitPreview();
+                                return new Promise(
+                                    resolve => {
 
-                        };
+                                        const reader =
+                                            new FileReader();
 
 
-                    reader.readAsDataURL(file);
+                                        reader.onload =
+                                            readerEvent => {
 
-                });
+                                                resolve({
+
+                                                    id:
+                                                        crypto.randomUUID(),
+
+                                                    image:
+                                                        readerEvent
+                                                            .target
+                                                            .result,
+
+                                                    category:
+                                                        "top"
+
+                                                });
+
+                                            };
+
+
+                                        reader.readAsDataURL(
+                                            file
+                                        );
+
+                                    }
+                                );
+
+                            }
+                        )
+
+                    );
+
+
+                clothes.push(
+                    ...newClothes
+                );
+
+
+                saveData();
+
+
+                renderWardrobe();
+
+
+                renderFitPreview();
 
 
                 event.target.value = "";
 
             }
         );
+
 
 
     /* -----------------------------------------
@@ -1054,7 +1391,9 @@
         grid.innerHTML = "";
 
 
-        if (clothes.length === 0) {
+        if (
+            clothes.length === 0
+        ) {
 
             grid.innerHTML = `
 
@@ -1064,211 +1403,335 @@
                         your wardrobe is empty.
                     </p>
 
+
                     <p>
-                        add some clothing to get started.
+                        add some clothing
+                        to get started.
                     </p>
 
                 </div>
 
             `;
 
+
             return;
 
         }
 
 
-        clothes.forEach(item => {
+        clothes.forEach(
+            item => {
 
-            const card =
-                document.createElement("div");
+                const card =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            card.className =
-                "clothing-card";
+                card.className =
+                    "clothing-card";
 
 
-            card.innerHTML = `
+                card.innerHTML = `
 
-                <img
-                    class="clothing-image"
-                    src="${item.image}"
-                    alt="${item.category}"
-                >
-
-                <div class="clothing-info">
-
-                    <select
-                        class="category-select"
-                        data-id="${item.id}"
+                    <img
+                        class="clothing-image"
+                        src="${item.image}"
+                        alt="${item.category}"
                     >
 
-                        <option
-                            value="top"
-                            ${item.category === "top" ? "selected" : ""}
-                        >
-                            top
-                        </option>
 
-                        <option
-                            value="bottom"
-                            ${item.category === "bottom" ? "selected" : ""}
-                        >
-                            bottom
-                        </option>
+                    <div
+                        class="clothing-info"
+                    >
 
-                        <option
-                            value="shoes"
-                            ${item.category === "shoes" ? "selected" : ""}
-                        >
-                            shoes
-                        </option>
-
-                        <option
-                            value="outerwear"
-                            ${item.category === "outerwear" ? "selected" : ""}
-                        >
-                            outerwear
-                        </option>
-
-                        <option
-                            value="accessory"
-                            ${item.category === "accessory" ? "selected" : ""}
-                        >
-                            accessory
-                        </option>
-
-                    </select>
-
-
-                    <div class="clothing-actions">
-
-                        <button
-                            class="danger-button delete-clothing"
+                        <select
+                            class="category-select"
                             data-id="${item.id}"
                         >
-                            delete
-                        </button>
+
+                            <option
+                                value="top"
+                                ${
+                                    item.category ===
+                                    "top"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                top
+                            </option>
+
+
+                            <option
+                                value="bottom"
+                                ${
+                                    item.category ===
+                                    "bottom"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                bottom
+                            </option>
+
+
+                            <option
+                                value="shoes"
+                                ${
+                                    item.category ===
+                                    "shoes"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                shoes
+                            </option>
+
+
+                            <option
+                                value="outerwear"
+                                ${
+                                    item.category ===
+                                    "outerwear"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                outerwear
+                            </option>
+
+
+                            <option
+                                value="accessory"
+                                ${
+                                    item.category ===
+                                    "accessory"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                accessory
+                            </option>
+
+                        </select>
+
+
+                        <div
+                            class="clothing-actions"
+                        >
+
+                            <button
+                                type="button"
+                                class="danger-button delete-clothing"
+                                data-id="${item.id}"
+                            >
+                                delete
+                            </button>
+
+                        </div>
 
                     </div>
 
-                </div>
-
-            `;
+                `;
 
 
-            grid.appendChild(card);
-
-        });
-
-
-        document
-            .querySelectorAll(".category-select")
-            .forEach(select => {
-
-                select.addEventListener(
-                    "change",
-                    () => {
-
-                        const item =
-                            clothes.find(
-                                clothing =>
-                                    clothing.id ===
-                                    select.dataset.id
-                            );
-
-
-                        if (item) {
-
-                            item.category =
-                                select.value;
-
-                            saveData();
-
-                            renderFitPreview();
-
-                        }
-
-                    }
+                grid.appendChild(
+                    card
                 );
 
-            });
-
-
-        document
-            .querySelectorAll(".delete-clothing")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const id =
-                            button.dataset.id;
-
-
-                        clothes =
-                            clothes.filter(
-                                item =>
-                                    item.id !== id
-                            );
-
-
-                        saveData();
-
-                        renderWardrobe();
-
-                        renderFitPreview();
-
-                    }
-                );
-
-            });
+            }
+        );
 
     }
 
 
+
     /* -----------------------------------------
-       fit preview
+       wardrobe controls
+       
+       event delegation makes these
+       reliable after re-rendering,
+       especially on mobile
     ----------------------------------------- */
 
-    function getSelectedItem(category) {
+    document
+        .getElementById(
+            "clothing-grid"
+        )
+        .addEventListener(
+            "change",
+            event => {
 
-        const stored =
-            JSON.parse(
-                localStorage.getItem(
-                    "currentFit"
-                )
-            ) || {};
+                if (
+                    !event.target.classList.contains(
+                        "category-select"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                const id =
+                    event.target.dataset.id;
+
+
+                const item =
+                    clothes.find(
+                        clothing =>
+                            clothing.id === id
+                    );
+
+
+                if (!item) {
+
+                    return;
+
+                }
+
+
+                item.category =
+                    event.target.value;
+
+
+                saveData();
+
+
+                renderFitPreview();
+
+            }
+        );
+
+
+
+    document
+        .getElementById(
+            "clothing-grid"
+        )
+        .addEventListener(
+            "click",
+            event => {
+
+                const button =
+                    event.target.closest(
+                        ".delete-clothing"
+                    );
+
+
+                if (!button) {
+
+                    return;
+
+                }
+
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                const id =
+                    button.dataset.id;
+
+
+                const itemExists =
+                    clothes.some(
+                        clothing =>
+                            clothing.id === id
+                    );
+
+
+                if (!itemExists) {
+
+                    return;
+
+                }
+
+
+                clothes =
+                    clothes.filter(
+                        clothing =>
+                            clothing.id !== id
+                    );
+
+
+                saveData();
+
+
+                renderWardrobe();
+
+
+                renderFitPreview();
+
+            }
+        );
+
+
+
+    /* -----------------------------------------
+       selected fit
+    ----------------------------------------- */
+
+    function getCurrentFit() {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "currentFit"
+            )
+        ) || {};
+
+    }
+
+
+    function getSelectedItem(
+        category
+    ) {
+
+        const current =
+            getCurrentFit();
 
 
         const id =
-            stored[category];
+            current[category];
 
 
-        if (!id) return null;
+        if (!id) {
+
+            return null;
+
+        }
 
 
         return clothes.find(
-            item => item.id === id
+            item =>
+                item.id === id
         ) || null;
 
     }
 
 
-    function setSelectedItem(category, id) {
+    function setSelectedItem(
+        category,
+        id
+    ) {
 
         const current =
-            JSON.parse(
-                localStorage.getItem(
-                    "currentFit"
-                )
-            ) || {};
+            getCurrentFit();
 
 
         if (id) {
-            current[category] = id;
+
+            current[category] =
+                id;
+
         } else {
-            delete current[category];
+
+            delete current[
+                category
+            ];
+
         }
 
 
@@ -1279,6 +1742,11 @@
 
     }
 
+
+
+    /* -----------------------------------------
+       fit preview
+    ----------------------------------------- */
 
     function renderFitPreview() {
 
@@ -1291,131 +1759,154 @@
         stack.innerHTML = "";
 
 
-        categories.forEach(category => {
+        categories.forEach(
+            category => {
 
-            const slot =
-                document.createElement(
-                    "div"
-                );
-
-
-            slot.className =
-                "fit-slot";
-
-
-            const item =
-                getSelectedItem(category);
-
-
-            const label =
-                document.createElement(
-                    "div"
-                );
-
-
-            label.className =
-                "fit-slot-label";
-
-
-            label.textContent =
-                category;
-
-
-            slot.appendChild(label);
-
-
-            if (item) {
-
-                const image =
-                    document.createElement(
-                        "img"
-                    );
-
-
-                image.src =
-                    item.image;
-
-
-                image.alt =
-                    category;
-
-
-                slot.appendChild(image);
-
-
-                const remove =
-                    document.createElement(
-                        "button"
-                    );
-
-
-                remove.className =
-                    "remove-piece";
-
-
-                remove.textContent =
-                    "×";
-
-
-                remove.addEventListener(
-                    "click",
-                    event => {
-
-                        event.stopPropagation();
-
-                        setSelectedItem(
-                            category,
-                            null
-                        );
-
-                        renderFitPreview();
-
-                    }
-                );
-
-
-                slot.appendChild(remove);
-
-            } else {
-
-                const empty =
+                const slot =
                     document.createElement(
                         "div"
                     );
 
 
-                empty.className =
-                    "fit-slot-empty";
+                slot.className =
+                    "fit-slot";
 
 
-                empty.textContent =
-                    `choose a ${category}`;
+                const item =
+                    getSelectedItem(
+                        category
+                    );
 
 
-                slot.appendChild(empty);
+                const label =
+                    document.createElement(
+                        "div"
+                    );
 
-            }
+
+                label.className =
+                    "fit-slot-label";
 
 
-            slot.addEventListener(
-                "click",
-                () => {
+                label.textContent =
+                    category;
 
-                    openPicker(category);
+
+                slot.appendChild(
+                    label
+                );
+
+
+                if (item) {
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    image.src =
+                        item.image;
+
+
+                    image.alt =
+                        category;
+
+
+                    slot.appendChild(
+                        image
+                    );
+
+
+                    const remove =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    remove.className =
+                        "remove-piece";
+
+
+                    remove.type =
+                        "button";
+
+
+                    remove.textContent =
+                        "×";
+
+
+                    remove.addEventListener(
+                        "click",
+                        event => {
+
+                            event.stopPropagation();
+
+
+                            setSelectedItem(
+                                category,
+                                null
+                            );
+
+
+                            renderFitPreview();
+
+                        }
+                    );
+
+
+                    slot.appendChild(
+                        remove
+                    );
+
+                } else {
+
+                    const empty =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    empty.className =
+                        "fit-slot-empty";
+
+
+                    empty.textContent =
+                        `choose a ${category}`;
+
+
+                    slot.appendChild(
+                        empty
+                    );
 
                 }
-            );
 
 
-            stack.appendChild(slot);
+                slot.addEventListener(
+                    "click",
+                    () => {
 
-        });
+                        openPicker(
+                            category
+                        );
+
+                    }
+                );
+
+
+                stack.appendChild(
+                    slot
+                );
+
+            }
+        );
 
     }
 
 
+
     /* -----------------------------------------
-       picker
+       clothing picker
     ----------------------------------------- */
 
     const pickerOverlay =
@@ -1436,7 +1927,9 @@
         );
 
 
-    function openPicker(category) {
+    function openPicker(
+        category
+    ) {
 
         currentPickerCategory =
             category;
@@ -1457,19 +1950,25 @@
             );
 
 
-        if (options.length === 0) {
+        if (
+            options.length === 0
+        ) {
 
             pickerGrid.innerHTML = `
 
-                <div class="picker-empty">
+                <div
+                    class="picker-empty"
+                >
 
                     <p>
-                        you don't have any
-                        ${category}s yet.
+                        you don't have
+                        any ${category}s yet.
                     </p>
 
+
                     <p>
-                        add one to your wardrobe first.
+                        add one to your
+                        wardrobe first.
                     </p>
 
                 </div>
@@ -1478,55 +1977,62 @@
 
         } else {
 
-            options.forEach(item => {
+            options.forEach(
+                item => {
 
-                const option =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                option.className =
-                    "picker-item";
-
-
-                option.innerHTML = `
-
-                    <img
-                        src="${item.image}"
-                        alt="${category}"
-                    >
-
-                    <div class="picker-item-name">
-                        choose this ${category}
-                    </div>
-
-                `;
-
-
-                option.addEventListener(
-                    "click",
-                    () => {
-
-                        setSelectedItem(
-                            currentPickerCategory,
-                            item.id
+                    const option =
+                        document.createElement(
+                            "div"
                         );
 
 
-                        closePicker();
-
-                        renderFitPreview();
-
-                    }
-                );
+                    option.className =
+                        "picker-item";
 
 
-                pickerGrid.appendChild(
-                    option
-                );
+                    option.innerHTML = `
 
-            });
+                        <img
+                            src="${item.image}"
+                            alt="${category}"
+                        >
+
+
+                        <div
+                            class="picker-item-name"
+                        >
+                            choose this
+                            ${category}
+                        </div>
+
+                    `;
+
+
+                    option.addEventListener(
+                        "click",
+                        () => {
+
+                            setSelectedItem(
+                                currentPickerCategory,
+                                item.id
+                            );
+
+
+                            closePicker();
+
+
+                            renderFitPreview();
+
+                        }
+                    );
+
+
+                    pickerGrid.appendChild(
+                        option
+                    );
+
+                }
+            );
 
         }
 
@@ -1544,6 +2050,7 @@
             "open"
         );
 
+
         currentPickerCategory =
             null;
 
@@ -1551,7 +2058,9 @@
 
 
     document
-        .getElementById("close-picker")
+        .getElementById(
+            "close-picker"
+        )
         .addEventListener(
             "click",
             closePicker
@@ -1575,12 +2084,15 @@
     );
 
 
+
     /* -----------------------------------------
        clear fit
     ----------------------------------------- */
 
     document
-        .getElementById("clear-fit")
+        .getElementById(
+            "clear-fit"
+        )
         .addEventListener(
             "click",
             () => {
@@ -1589,10 +2101,12 @@
                     "currentFit"
                 );
 
+
                 renderFitPreview();
 
             }
         );
+
 
 
     /* -----------------------------------------
@@ -1600,17 +2114,15 @@
     ----------------------------------------- */
 
     document
-        .getElementById("save-fit")
+        .getElementById(
+            "save-fit"
+        )
         .addEventListener(
             "click",
             () => {
 
                 const current =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "currentFit"
-                        )
-                    ) || {};
+                    getCurrentFit();
 
 
                 const items =
@@ -1620,17 +2132,22 @@
                                 clothes.find(
                                     item =>
                                         item.id ===
-                                        current[category]
+                                        current[
+                                            category
+                                        ]
                                 )
                         )
                         .filter(Boolean);
 
 
-                if (items.length === 0) {
+                if (
+                    items.length === 0
+                ) {
 
                     alert(
                         "choose at least one piece first."
                     );
+
 
                     return;
 
@@ -1646,16 +2163,26 @@
                         new Date().toISOString(),
 
                     items:
-                        items.map(item => ({
-                            id: item.id,
-                            image: item.image,
-                            category: item.category
-                        }))
+                        items.map(
+                            item => ({
+
+                                id:
+                                    item.id,
+
+                                image:
+                                    item.image,
+
+                                category:
+                                    item.category
+
+                            })
+                        )
 
                 });
 
 
                 saveData();
+
 
                 alert(
                     "fit saved."
@@ -1663,6 +2190,7 @@
 
             }
         );
+
 
 
     /* -----------------------------------------
@@ -1680,124 +2208,157 @@
         container.innerHTML = "";
 
 
-        if (savedFits.length === 0) {
+        if (
+            savedFits.length === 0
+        ) {
 
             container.innerHTML = `
 
-                <div class="saved-fit-empty">
+                <div
+                    class="saved-fit-empty"
+                >
 
                     <p>
-                        you haven't saved any fits yet.
+                        you haven't saved
+                        any fits yet.
                     </p>
 
+
                     <p>
-                        build a fit and save it here.
+                        build a fit and
+                        save it here.
                     </p>
 
                 </div>
 
             `;
+
 
             return;
 
         }
 
 
-        savedFits.forEach(fit => {
+        savedFits.forEach(
+            fit => {
 
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "saved-fit";
+                const card =
+                    document.createElement(
+                        "article"
+                    );
 
 
-            const date =
-                new Date(
-                    fit.createdAt
-                );
+                card.className =
+                    "saved-fit";
 
 
-            const formattedDate =
-                date.toLocaleDateString(
-                    undefined,
-                    {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric"
-                    }
-                );
+                const date =
+                    new Date(
+                        fit.createdAt
+                    );
 
 
-            card.innerHTML = `
+                const formattedDate =
+                    date.toLocaleDateString(
+                        undefined,
+                        {
+                            year:
+                                "numeric",
 
-                <div class="saved-fit-header">
+                            month:
+                                "short",
 
-                    <span class="saved-fit-date">
-                        ${formattedDate}
-                    </span>
+                            day:
+                                "numeric"
+                        }
+                    );
 
-                    <button
-                        class="danger-button delete-fit"
+
+                card.innerHTML = `
+
+                    <div
+                        class="saved-fit-header"
                     >
-                        delete
-                    </button>
 
-                </div>
-
-
-                <div class="saved-fit-items">
-
-                    ${fit.items.map(item => `
-
-                        <div
-                            class="saved-fit-item"
+                        <span
+                            class="saved-fit-date"
                         >
+                            ${formattedDate}
+                        </span>
 
-                            <img
-                                src="${item.image}"
-                                alt="${item.category}"
+
+                        <button
+                            type="button"
+                            class="danger-button delete-fit"
+                        >
+                            delete
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="saved-fit-items"
+                    >
+
+                        ${fit.items.map(
+                            item => `
+
+                            <div
+                                class="saved-fit-item"
                             >
 
-                        </div>
+                                <img
+                                    src="${item.image}"
+                                    alt="${item.category}"
+                                >
 
-                    `).join("")}
+                            </div>
 
-                </div>
+                        `).join("")}
 
-            `;
+                    </div>
 
-
-            card
-                .querySelector(".delete-fit")
-                .addEventListener(
-                    "click",
-                    () => {
-
-                        savedFits =
-                            savedFits.filter(
-                                saved =>
-                                    saved.id !==
-                                    fit.id
-                            );
+                `;
 
 
-                        saveData();
+                card
+                    .querySelector(
+                        ".delete-fit"
+                    )
+                    .addEventListener(
+                        "click",
+                        event => {
 
-                        renderSavedFits();
+                            event.preventDefault();
 
-                    }
+
+                            savedFits =
+                                savedFits.filter(
+                                    saved =>
+                                        saved.id !==
+                                        fit.id
+                                );
+
+
+                            saveData();
+
+
+                            renderSavedFits();
+
+                        }
+                    );
+
+
+                container.appendChild(
+                    card
                 );
 
-
-            container.appendChild(card);
-
-        });
+            }
+        );
 
     }
+
 
 
     /* -----------------------------------------

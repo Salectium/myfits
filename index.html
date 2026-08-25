@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
+
     <title>wardrobe</title>
 
+    <!-- supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -16,7 +18,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "segoe ui", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background: #ffffff;
             color: #111111;
             min-height: 100vh;
@@ -36,7 +38,9 @@
             display: none !important;
         }
 
-        /* auth */
+        /* =========================
+           auth
+        ========================= */
 
         #auth-screen {
             min-height: 100vh;
@@ -123,7 +127,9 @@
             line-height: 1.5;
         }
 
-        /* app */
+        /* =========================
+           app
+        ========================= */
 
         #app {
             min-height: 100vh;
@@ -196,7 +202,9 @@
             margin-bottom: 30px;
         }
 
-        /* wardrobe */
+        /* =========================
+           upload
+        ========================= */
 
         .upload-area {
             border: 2px dashed #ddd;
@@ -223,6 +231,10 @@
             border-radius: 10px;
             cursor: pointer;
         }
+
+        /* =========================
+           wardrobe
+        ========================= */
 
         .category-section {
             margin-bottom: 38px;
@@ -274,7 +286,9 @@
             padding: 15px 0;
         }
 
-        /* builder */
+        /* =========================
+           builder
+        ========================= */
 
         .fit-builder {
             display: grid;
@@ -338,22 +352,12 @@
             gap: 10px;
         }
 
+        /* =========================
+           picker
+        ========================= */
+
         .piece-picker {
             margin-top: 30px;
-        }
-
-        .picker-title {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        .picker-section {
-            margin-bottom: 30px;
-        }
-
-        .picker-section h3 {
-            font-size: 17px;
-            margin-bottom: 12px;
         }
 
         .picker-grid {
@@ -381,7 +385,9 @@
             display: block;
         }
 
-        /* fits */
+        /* =========================
+           saved fits
+        ========================= */
 
         .saved-fits {
             display: grid;
@@ -442,7 +448,9 @@
             padding: 25px 0;
         }
 
-        /* modal */
+        /* =========================
+           modal
+        ========================= */
 
         .modal {
             position: fixed;
@@ -484,11 +492,19 @@
             border-radius: 50%;
         }
 
+        /* =========================
+           loading
+        ========================= */
+
         .loading {
             text-align: center;
             padding: 60px 20px;
             color: #888;
         }
+
+        /* =========================
+           toast
+        ========================= */
 
         .toast {
             position: fixed;
@@ -501,9 +517,16 @@
             border-radius: 10px;
             z-index: 200;
             font-size: 14px;
+            max-width: calc(100vw - 30px);
+            text-align: center;
         }
 
+        /* =========================
+           mobile
+        ========================= */
+
         @media (max-width: 750px) {
+
             .header-inner {
                 padding: 14px 16px;
                 flex-wrap: wrap;
@@ -551,6 +574,7 @@
         }
 
         @media (max-width: 420px) {
+
             .saved-fits {
                 grid-template-columns: 1fr;
             }
@@ -564,19 +588,45 @@
 
 <body>
 
-    <!-- login -->
+    <!-- =========================
+         login
+    ========================= -->
 
     <section id="auth-screen">
+
         <div class="auth-box">
-            <h1 class="auth-title">wardrobe</h1>
-            <p class="auth-subtitle">your clothes, everywhere.</p>
+
+            <h1 class="auth-title">
+                wardrobe
+            </h1>
+
+            <p class="auth-subtitle">
+                your clothes, everywhere.
+            </p>
 
             <div class="auth-tabs">
-                <button class="auth-tab active" id="login-tab">log in</button>
-                <button class="auth-tab" id="signup-tab">sign up</button>
+
+                <button
+                    class="auth-tab active"
+                    id="login-tab"
+                >
+                    log in
+                </button>
+
+                <button
+                    class="auth-tab"
+                    id="signup-tab"
+                >
+                    sign up
+                </button>
+
             </div>
 
-            <form class="auth-form" id="auth-form">
+            <form
+                class="auth-form"
+                id="auth-form"
+            >
+
                 <input
                     type="email"
                     id="email"
@@ -593,61 +643,109 @@
                     required
                 >
 
-                <button class="primary-button" type="submit" id="auth-submit">
+                <button
+                    class="primary-button"
+                    type="submit"
+                    id="auth-submit"
+                >
                     log in
                 </button>
+
             </form>
 
-            <p class="auth-message" id="auth-message"></p>
+            <p
+                class="auth-message"
+                id="auth-message"
+            ></p>
+
         </div>
+
     </section>
 
 
-    <!-- main app -->
+    <!-- =========================
+         app
+    ========================= -->
 
-    <div id="app" class="hidden">
+    <div
+        id="app"
+        class="hidden"
+    >
 
         <header>
+
             <div class="header-inner">
-                <div class="logo">wardrobe</div>
+
+                <div class="logo">
+                    wardrobe
+                </div>
 
                 <nav>
-                    <button class="nav-button active" data-page="wardrobe-page">
+
+                    <button
+                        class="nav-button active"
+                        data-page="wardrobe-page"
+                    >
                         wardrobe
                     </button>
 
-                    <button class="nav-button" data-page="builder-page">
+                    <button
+                        class="nav-button"
+                        data-page="builder-page"
+                    >
                         build a fit
                     </button>
 
-                    <button class="nav-button" data-page="fits-page">
+                    <button
+                        class="nav-button"
+                        data-page="fits-page"
+                    >
                         my fits
                     </button>
+
                 </nav>
 
-                <button class="logout-button" id="logout-button">
+                <button
+                    class="logout-button"
+                    id="logout-button"
+                >
                     log out
                 </button>
+
             </div>
+
         </header>
 
 
         <main>
 
-            <!-- wardrobe -->
+            <!-- =========================
+                 wardrobe
+            ========================= -->
 
-            <section id="wardrobe-page" class="page">
+            <section
+                id="wardrobe-page"
+                class="page"
+            >
 
-                <h1 class="page-title">my wardrobe</h1>
+                <h1 class="page-title">
+                    my wardrobe
+                </h1>
 
                 <p class="page-description">
                     add your clothes and build outfits from them.
                 </p>
 
                 <div class="upload-area">
-                    <p>add photos of your clothes</p>
 
-                    <label class="upload-button" for="photo-input">
+                    <p>
+                        add photos of your clothes
+                    </p>
+
+                    <label
+                        class="upload-button"
+                        for="photo-input"
+                    >
                         add clothes
                     </label>
 
@@ -657,22 +755,32 @@
                         accept="image/*"
                         multiple
                     >
+
                 </div>
 
                 <div id="wardrobe-container">
+
                     <div class="loading">
                         loading your wardrobe...
                     </div>
+
                 </div>
 
             </section>
 
 
-            <!-- build fit -->
+            <!-- =========================
+                 build a fit
+            ========================= -->
 
-            <section id="builder-page" class="page hidden">
+            <section
+                id="builder-page"
+                class="page hidden"
+            >
 
-                <h1 class="page-title">build a fit</h1>
+                <h1 class="page-title">
+                    build a fit
+                </h1>
 
                 <p class="page-description">
                     tap a piece to choose what you want to wear.
@@ -680,55 +788,111 @@
 
                 <div class="fit-builder">
 
-                    <button class="fit-slot" data-slot="top">
-                        <span class="slot-label">choose a top</span>
-                        <span class="slot-subtitle">tap to choose</span>
+                    <button
+                        class="fit-slot"
+                        data-slot="top"
+                    >
+                        <span class="slot-label">
+                            choose a top
+                        </span>
+
+                        <span class="slot-subtitle">
+                            tap to choose
+                        </span>
                     </button>
 
-                    <button class="fit-slot" data-slot="bottom">
-                        <span class="slot-label">choose bottoms</span>
-                        <span class="slot-subtitle">tap to choose</span>
+
+                    <button
+                        class="fit-slot"
+                        data-slot="bottom"
+                    >
+                        <span class="slot-label">
+                            choose bottoms
+                        </span>
+
+                        <span class="slot-subtitle">
+                            tap to choose
+                        </span>
                     </button>
 
-                    <button class="fit-slot" data-slot="shoes">
-                        <span class="slot-label">choose shoes</span>
-                        <span class="slot-subtitle">tap to choose</span>
+
+                    <button
+                        class="fit-slot"
+                        data-slot="shoes"
+                    >
+                        <span class="slot-label">
+                            choose shoes
+                        </span>
+
+                        <span class="slot-subtitle">
+                            tap to choose
+                        </span>
                     </button>
 
-                    <button class="fit-slot" data-slot="outer">
-                        <span class="slot-label">choose an outer layer</span>
-                        <span class="slot-subtitle">optional</span>
+
+                    <button
+                        class="fit-slot"
+                        data-slot="outer"
+                    >
+                        <span class="slot-label">
+                            choose an outer layer
+                        </span>
+
+                        <span class="slot-subtitle">
+                            optional
+                        </span>
                     </button>
 
                 </div>
 
+
                 <div class="builder-actions">
-                    <button class="primary-button" id="save-fit-button">
+
+                    <button
+                        class="primary-button"
+                        id="save-fit-button"
+                    >
                         save fit
                     </button>
 
-                    <button class="secondary-button" id="clear-fit-button">
+                    <button
+                        class="secondary-button"
+                        id="clear-fit-button"
+                    >
                         clear
                     </button>
+
                 </div>
 
             </section>
 
 
-            <!-- saved fits -->
+            <!-- =========================
+                 saved fits
+            ========================= -->
 
-            <section id="fits-page" class="page hidden">
+            <section
+                id="fits-page"
+                class="page hidden"
+            >
 
-                <h1 class="page-title">my fits</h1>
+                <h1 class="page-title">
+                    my fits
+                </h1>
 
                 <p class="page-description">
                     all your saved outfits.
                 </p>
 
-                <div id="saved-fits" class="saved-fits">
+                <div
+                    id="saved-fits"
+                    class="saved-fits"
+                >
+
                     <div class="empty-fits">
                         no saved fits yet.
                     </div>
+
                 </div>
 
             </section>
@@ -738,18 +902,30 @@
     </div>
 
 
-    <!-- clothing picker -->
+    <!-- =========================
+         clothing picker
+    ========================= -->
 
-    <div id="picker-modal" class="modal hidden">
+    <div
+        id="picker-modal"
+        class="modal hidden"
+    >
 
         <div class="modal-content">
 
             <div class="modal-header">
-                <h2 id="picker-title">choose a top</h2>
 
-                <button class="close-modal" id="close-picker">
+                <h2 id="picker-title">
+                    choose a top
+                </h2>
+
+                <button
+                    class="close-modal"
+                    id="close-picker"
+                >
                     ×
                 </button>
+
             </div>
 
             <div id="picker-content"></div>
@@ -759,1200 +935,2118 @@
     </div>
 
 
-    <div id="toast" class="toast hidden"></div>
+    <div
+        id="toast"
+        class="toast hidden"
+    ></div>
 
 
-<script>
-/* =========================================================
-   supabase setup
-   ========================================================= */
+    <!-- =========================
+         background removal library
+    ========================= -->
 
-const SUPABASE_URL = "https://laachzywslywffmkpeul.supabase.co";
-const SUPABASE_KEY = "sb_publishable_2cBGYqLVM5KucnD8mi1kdA_A1kjsxpn";
+    <script type="module">
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+        import removeBackground
+            from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
 
+        window.removeClothingBackground =
+            removeBackground;
 
-/* =========================================================
-   app state
-   ========================================================= */
-
-let currentUser = null;
-let clothes = [];
-let savedFits = [];
-
-let currentFit = {
-    top: null,
-    bottom: null,
-    shoes: null,
-    outer: null
-};
-
-let currentSlot = null;
-let authMode = "login";
+    </script>
 
 
-/* =========================================================
-   helpers
-   ========================================================= */
+    <script>
 
-function showToast(message) {
-    const toast = document.getElementById("toast");
+        /* =====================================================
+           supabase setup
+        ===================================================== */
 
-    toast.textContent = message;
-    toast.classList.remove("hidden");
+        const SUPABASE_URL =
+            "https://laachzywslywffmkpeul.supabase.co";
 
-    clearTimeout(window.toastTimeout);
-
-    window.toastTimeout = setTimeout(() => {
-        toast.classList.add("hidden");
-    }, 2500);
-}
+        const SUPABASE_KEY =
+            "sb_publishable_2cBGYqLVM5KucnD8mi1kdA_A1kjsxpn";
 
 
-function escapeHtml(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
 
 
-function getCategoryName(category) {
-    const names = {
-        top: "tops",
-        bottom: "bottoms",
-        shoes: "shoes",
-        outer: "outer layers"
-    };
+        /* =====================================================
+           app state
+        ===================================================== */
 
-    return names[category] || category;
-}
+        let currentUser = null;
 
+        let clothes = [];
 
-function getImageUrl(path) {
-    const { data } = supabaseClient
-        .storage
-        .from("clothes")
-        .getPublicUrl(path);
+        let savedFits = [];
 
-    return data.publicUrl;
-}
-
-
-/* =========================================================
-   image compression
-   ========================================================= */
-
-async function compressImage(file) {
-    return new Promise((resolve, reject) => {
-
-        const reader = new FileReader();
-
-        reader.onload = event => {
-
-            const img = new Image();
-
-            img.onload = () => {
-
-                const maxSize = 1200;
-
-                let width = img.width;
-                let height = img.height;
-
-                if (width > maxSize || height > maxSize) {
-
-                    if (width > height) {
-                        height = Math.round(height * maxSize / width);
-                        width = maxSize;
-                    } else {
-                        width = Math.round(width * maxSize / height);
-                        height = maxSize;
-                    }
-                }
-
-                const canvas = document.createElement("canvas");
-
-                canvas.width = width;
-                canvas.height = height;
-
-                const context = canvas.getContext("2d");
-
-                context.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-                canvas.toBlob(
-                    blob => {
-                        if (!blob) {
-                            reject(new Error("image compression failed"));
-                            return;
-                        }
-
-                        resolve(blob);
-                    },
-                    "image/jpeg",
-                    0.82
-                );
-            };
-
-            img.onerror = reject;
-
-            img.src = event.target.result;
+        let currentFit = {
+            top: null,
+            bottom: null,
+            shoes: null,
+            outer: null
         };
 
-        reader.onerror = reject;
+        let currentSlot = null;
 
-        reader.readAsDataURL(file);
-    });
-}
+        let authMode = "login";
 
 
-/* =========================================================
-   auth
-   ========================================================= */
+        /* =====================================================
+           helpers
+        ===================================================== */
 
-document.getElementById("login-tab").addEventListener("click", () => {
+        function showToast(message) {
 
-    authMode = "login";
+            const toast =
+                document.getElementById("toast");
 
-    document
-        .getElementById("login-tab")
-        .classList.add("active");
+            toast.textContent = message;
 
-    document
-        .getElementById("signup-tab")
-        .classList.remove("active");
+            toast.classList.remove("hidden");
 
-    document.getElementById("auth-submit").textContent = "log in";
-});
+            clearTimeout(
+                window.toastTimeout
+            );
 
+            window.toastTimeout =
+                setTimeout(() => {
 
-document.getElementById("signup-tab").addEventListener("click", () => {
+                    toast.classList.add("hidden");
 
-    authMode = "signup";
-
-    document
-        .getElementById("signup-tab")
-        .classList.add("active");
-
-    document
-        .getElementById("login-tab")
-        .classList.remove("active");
-
-    document.getElementById("auth-submit").textContent = "sign up";
-});
+                }, 3000);
+        }
 
 
-document
-    .getElementById("auth-form")
-    .addEventListener("submit", async event => {
+        function escapeHtml(value) {
 
-        event.preventDefault();
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
 
-        const email = document
-            .getElementById("email")
-            .value
-            .trim();
 
-        const password = document
-            .getElementById("password")
-            .value;
+        function getCategoryName(category) {
 
-        const message = document.getElementById("auth-message");
+            const names = {
+                top: "tops",
+                bottom: "bottoms",
+                shoes: "shoes",
+                outer: "outer layers"
+            };
 
-        message.textContent = "loading...";
+            return names[category] || category;
+        }
 
-        let result;
 
-        if (authMode === "login") {
+        function getImageUrl(path) {
 
-            result = await supabaseClient.auth.signInWithPassword({
-                email,
-                password
+            const { data } =
+                supabaseClient
+                    .storage
+                    .from("clothes")
+                    .getPublicUrl(path);
+
+            return data.publicUrl;
+        }
+
+
+        /* =====================================================
+           transparent image compression
+        ===================================================== */
+
+        async function compressImage(file) {
+
+            return new Promise((resolve, reject) => {
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    event => {
+
+                        const img =
+                            new Image();
+
+
+                        img.onload =
+                            () => {
+
+                                const maxSize =
+                                    1400;
+
+
+                                let width =
+                                    img.width;
+
+                                let height =
+                                    img.height;
+
+
+                                if (
+                                    width > maxSize ||
+                                    height > maxSize
+                                ) {
+
+                                    if (
+                                        width > height
+                                    ) {
+
+                                        height =
+                                            Math.round(
+                                                height *
+                                                maxSize /
+                                                width
+                                            );
+
+                                        width =
+                                            maxSize;
+
+                                    } else {
+
+                                        width =
+                                            Math.round(
+                                                width *
+                                                maxSize /
+                                                height
+                                            );
+
+                                        height =
+                                            maxSize;
+                                    }
+                                }
+
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+
+                                canvas.width =
+                                    width;
+
+                                canvas.height =
+                                    height;
+
+
+                                const context =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                /*
+                                 * important:
+                                 *
+                                 * don't fill the canvas
+                                 * with white.
+                                 *
+                                 * leaving it empty
+                                 * preserves transparency.
+                                 */
+
+                                context.clearRect(
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                context.drawImage(
+                                    img,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                canvas.toBlob(
+
+                                    blob => {
+
+                                        if (!blob) {
+
+                                            reject(
+                                                new Error(
+                                                    "image compression failed"
+                                                )
+                                            );
+
+                                            return;
+                                        }
+
+
+                                        resolve(blob);
+
+                                    },
+
+                                    "image/png"
+
+                                );
+
+                            };
+
+
+                        img.onerror =
+                            reject;
+
+
+                        img.src =
+                            event.target.result;
+
+                    };
+
+
+                reader.onerror =
+                    reject;
+
+
+                reader.readAsDataURL(file);
+
             });
-
-        } else {
-
-            result = await supabaseClient.auth.signUp({
-                email,
-                password
-            });
         }
 
-        if (result.error) {
 
-            message.textContent = result.error.message;
-            return;
-        }
-
-        if (authMode === "signup") {
-
-            if (!result.data.session) {
-
-                message.textContent =
-                    "account created. check your email to confirm your account.";
-
-            } else {
-
-                message.textContent = "";
-            }
-
-        } else {
-
-            message.textContent = "";
-        }
-    });
-
-
-document
-    .getElementById("logout-button")
-    .addEventListener("click", async () => {
-
-        await supabaseClient.auth.signOut();
-
-        currentUser = null;
+        /* =====================================================
+           auth
+        ===================================================== */
 
         document
-            .getElementById("app")
-            .classList.add("hidden");
+            .getElementById("login-tab")
+            .addEventListener(
+                "click",
+                () => {
+
+                    authMode =
+                        "login";
+
+
+                    document
+                        .getElementById(
+                            "login-tab"
+                        )
+                        .classList
+                        .add("active");
+
+
+                    document
+                        .getElementById(
+                            "signup-tab"
+                        )
+                        .classList
+                        .remove("active");
+
+
+                    document
+                        .getElementById(
+                            "auth-submit"
+                        )
+                        .textContent =
+                        "log in";
+
+                }
+            );
+
 
         document
-            .getElementById("auth-screen")
-            .classList.remove("hidden");
-    });
+            .getElementById("signup-tab")
+            .addEventListener(
+                "click",
+                () => {
+
+                    authMode =
+                        "signup";
 
 
-/* =========================================================
-   auth state
-   ========================================================= */
+                    document
+                        .getElementById(
+                            "signup-tab"
+                        )
+                        .classList
+                        .add("active");
 
-async function checkAuth() {
 
-    const { data, error } =
-        await supabaseClient.auth.getSession();
+                    document
+                        .getElementById(
+                            "login-tab"
+                        )
+                        .classList
+                        .remove("active");
 
-    if (error) {
-        console.error(error);
-        return;
-    }
 
-    if (data.session) {
+                    document
+                        .getElementById(
+                            "auth-submit"
+                        )
+                        .textContent =
+                        "sign up";
 
-        currentUser = data.session.user;
+                }
+            );
 
-        await startApp();
-
-    } else {
 
         document
-            .getElementById("auth-screen")
-            .classList.remove("hidden");
+            .getElementById("auth-form")
+            .addEventListener(
+                "submit",
+                async event => {
+
+                    event.preventDefault();
+
+
+                    const email =
+                        document
+                            .getElementById(
+                                "email"
+                            )
+                            .value
+                            .trim();
+
+
+                    const password =
+                        document
+                            .getElementById(
+                                "password"
+                            )
+                            .value;
+
+
+                    const message =
+                        document
+                            .getElementById(
+                                "auth-message"
+                            );
+
+
+                    message.textContent =
+                        "loading...";
+
+
+                    let result;
+
+
+                    if (
+                        authMode ===
+                        "login"
+                    ) {
+
+                        result =
+                            await supabaseClient
+                                .auth
+                                .signInWithPassword({
+
+                                    email,
+                                    password
+
+                                });
+
+                    } else {
+
+                        result =
+                            await supabaseClient
+                                .auth
+                                .signUp({
+
+                                    email,
+                                    password
+
+                                });
+                    }
+
+
+                    if (result.error) {
+
+                        message.textContent =
+                            result.error.message;
+
+                        return;
+                    }
+
+
+                    if (
+                        authMode ===
+                        "signup"
+                    ) {
+
+                        if (
+                            !result.data.session
+                        ) {
+
+                            message.textContent =
+                                "account created. check your email to confirm your account.";
+
+                        } else {
+
+                            message.textContent =
+                                "";
+                        }
+
+                    } else {
+
+                        message.textContent =
+                            "";
+                    }
+
+                }
+            );
+
 
         document
-            .getElementById("app")
-            .classList.add("hidden");
-    }
-}
+            .getElementById("logout-button")
+            .addEventListener(
+                "click",
+                async () => {
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+                }
+            );
 
 
-supabaseClient.auth.onAuthStateChange(
-    async (event, session) => {
+        /* =====================================================
+           auth state
+        ===================================================== */
 
-        if (session) {
+        async function checkAuth() {
 
-            currentUser = session.user;
-
-            await startApp();
-
-        } else {
-
-            currentUser = null;
-
-            document
-                .getElementById("app")
-                .classList.add("hidden");
-
-            document
-                .getElementById("auth-screen")
-                .classList.remove("hidden");
-        }
-    }
-);
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
 
 
-/* =========================================================
-   start app
-   ========================================================= */
-
-async function startApp() {
-
-    document
-        .getElementById("auth-screen")
-        .classList.add("hidden");
-
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-    await loadClothes();
-    await loadFits();
-
-    renderWardrobe();
-    renderSavedFits();
-    renderCurrentFit();
-}
-
-
-/* =========================================================
-   load clothes
-   ========================================================= */
-
-async function loadClothes() {
-
-    const { data, error } = await supabaseClient
-        .from("clothes")
-        .select("*")
-        .eq("user_id", currentUser.id)
-        .order("created_at", {
-            ascending: false
-        });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast("couldn't load your wardrobe");
-
-        return;
-    }
-
-    clothes = data || [];
-}
-
-
-/* =========================================================
-   load fits
-   ========================================================= */
-
-async function loadFits() {
-
-    const { data, error } = await supabaseClient
-        .from("fits")
-        .select("*")
-        .eq("user_id", currentUser.id)
-        .order("created_at", {
-            ascending: false
-        });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast("couldn't load your fits");
-
-        return;
-    }
-
-    savedFits = data || [];
-}
-
-
-/* =========================================================
-   upload clothes
-   ========================================================= */
-
-document
-    .getElementById("photo-input")
-    .addEventListener("change", async event => {
-
-        const files = Array.from(event.target.files);
-
-        if (!files.length) {
-            return;
-        }
-
-        for (const file of files) {
-
-            try {
-
-                await uploadClothing(file);
-
-            } catch (error) {
+            if (error) {
 
                 console.error(error);
 
-                showToast("couldn't upload one of your photos");
+                return;
+            }
+
+
+            if (data.session) {
+
+                currentUser =
+                    data.session.user;
+
+                await startApp();
+
+            } else {
+
+                document
+                    .getElementById(
+                        "auth-screen"
+                    )
+                    .classList
+                    .remove("hidden");
+
+                document
+                    .getElementById(
+                        "app"
+                    )
+                    .classList
+                    .add("hidden");
             }
         }
 
-        event.target.value = "";
 
-        await loadClothes();
+        supabaseClient
+            .auth
+            .onAuthStateChange(
+                async (
+                    event,
+                    session
+                ) => {
 
-        renderWardrobe();
-    });
+                    if (session) {
 
+                        currentUser =
+                            session.user;
 
-async function uploadClothing(file) {
+                        await startApp();
 
-    const category = await chooseCategory();
+                    } else {
 
-    if (!category) {
-        return;
-    }
+                        currentUser =
+                            null;
 
-    showToast("uploading...");
+                        document
+                            .getElementById(
+                                "app"
+                            )
+                            .classList
+                            .add("hidden");
 
-    const compressed = await compressImage(file);
+                        document
+                            .getElementById(
+                                "auth-screen"
+                            )
+                            .classList
+                            .remove(
+                                "hidden"
+                            );
+                    }
 
-    const filename =
-        `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-
-    const path =
-        `${currentUser.id}/${filename}`;
-
-    const { error: uploadError } =
-        await supabaseClient
-            .storage
-            .from("clothes")
-            .upload(path, compressed, {
-                contentType: "image/jpeg",
-                upsert: false
-            });
-
-    if (uploadError) {
-
-        console.error(uploadError);
-
-        throw uploadError;
-    }
-
-    const imageUrl = getImageUrl(path);
-
-    const { error: databaseError } =
-        await supabaseClient
-            .from("clothes")
-            .insert({
-                user_id: currentUser.id,
-                image_url: imageUrl,
-                category: category
-            });
-
-    if (databaseError) {
-
-        console.error(databaseError);
-
-        await supabaseClient
-            .storage
-            .from("clothes")
-            .remove([path]);
-
-        throw databaseError;
-    }
-
-    showToast("clothing added");
-}
-
-
-/* =========================================================
-   category chooser
-   ========================================================= */
-
-function chooseCategory() {
-
-    return new Promise(resolve => {
-
-        const answer = prompt(
-            "what kind of clothing is this?\n\n" +
-            "type: top, bottom, shoes, or outer"
-        );
-
-        if (!answer) {
-            resolve(null);
-            return;
-        }
-
-        const category = answer
-            .trim()
-            .toLowerCase();
-
-        const valid = [
-            "top",
-            "bottom",
-            "shoes",
-            "outer"
-        ];
-
-        if (!valid.includes(category)) {
-
-            showToast(
-                "please enter top, bottom, shoes, or outer"
+                }
             );
 
-            resolve(null);
 
-            return;
+        /* =====================================================
+           start app
+        ===================================================== */
+
+        async function startApp() {
+
+            document
+                .getElementById(
+                    "auth-screen"
+                )
+                .classList
+                .add("hidden");
+
+
+            document
+                .getElementById(
+                    "app"
+                )
+                .classList
+                .remove("hidden");
+
+
+            await loadClothes();
+
+            await loadFits();
+
+
+            renderWardrobe();
+
+            renderSavedFits();
+
+            renderCurrentFit();
         }
 
-        resolve(category);
-    });
-}
 
-
-/* =========================================================
-   render wardrobe
-   ========================================================= */
-
-function renderWardrobe() {
-
-    const container =
-        document.getElementById("wardrobe-container");
-
-    const categories = [
-        "top",
-        "bottom",
-        "shoes",
-        "outer"
-    ];
-
-    container.innerHTML = "";
-
-    categories.forEach(category => {
-
-        const items = clothes.filter(
-            item => item.category === category
-        );
-
-        const section =
-            document.createElement("div");
-
-        section.className = "category-section";
-
-        section.innerHTML = `
-            <h2 class="category-title">
-                ${getCategoryName(category)}
-            </h2>
-
-            ${
-                items.length
-                    ? `
-                        <div class="clothes-grid">
-                            ${items.map(item => `
-                                <div class="clothing-card">
-                                    <img
-                                        src="${escapeHtml(item.image_url)}"
-                                        alt="${category}"
-                                        loading="lazy"
-                                    >
-
-                                    <button
-                                        class="delete-clothing"
-                                        data-id="${item.id}"
-                                        aria-label="delete clothing"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                            `).join("")}
-                        </div>
-                    `
-                    : `
-                        <p class="empty-message">
-                            nothing here yet.
-                        </p>
-                    `
-            }
-        `;
-
-        container.appendChild(section);
-    });
-
-    container
-        .querySelectorAll(".delete-clothing")
-        .forEach(button => {
-
-            button.addEventListener("click", async event => {
-
-                event.stopPropagation();
-
-                const id = button.dataset.id;
-
-                await deleteClothing(id);
-            });
-        });
-}
-
-
-/* =========================================================
-   delete clothing
-   ========================================================= */
-
-async function deleteClothing(id) {
-
-    const item = clothes.find(
-        clothing => clothing.id === id
-    );
-
-    if (!item) {
-        return;
-    }
-
-    const confirmed = confirm(
-        "delete this clothing item?"
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    const imagePath = getStoragePathFromUrl(
-        item.image_url
-    );
-
-    const { error: databaseError } =
-        await supabaseClient
-            .from("clothes")
-            .delete()
-            .eq("id", id)
-            .eq("user_id", currentUser.id);
-
-    if (databaseError) {
-
-        console.error(databaseError);
-
-        showToast("couldn't delete item");
-
-        return;
-    }
-
-    if (imagePath) {
-
-        await supabaseClient
-            .storage
-            .from("clothes")
-            .remove([imagePath]);
-    }
-
-    clothes = clothes.filter(
-        clothing => clothing.id !== id
-    );
-
-    renderWardrobe();
-
-    renderCurrentFit();
-
-    showToast("clothing deleted");
-}
-
-
-function getStoragePathFromUrl(url) {
-
-    try {
-
-        const marker =
-            "/storage/v1/object/public/clothes/";
-
-        const index = url.indexOf(marker);
-
-        if (index === -1) {
-            return null;
-        }
-
-        return decodeURIComponent(
-            url.substring(index + marker.length)
-        );
-
-    } catch {
-
-        return null;
-    }
-}
-
-
-/* =========================================================
-   navigation
-   ========================================================= */
-
-document
-    .querySelectorAll(".nav-button")
-    .forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            const pageId = button.dataset.page;
-
-            document
-                .querySelectorAll(".page")
-                .forEach(page => {
-                    page.classList.add("hidden");
-                });
-
-            document
-                .getElementById(pageId)
-                .classList.remove("hidden");
-
-            document
-                .querySelectorAll(".nav-button")
-                .forEach(navButton => {
-                    navButton.classList.remove("active");
-                });
-
-            button.classList.add("active");
-
-            if (pageId === "fits-page") {
-                renderSavedFits();
-            }
-        });
-    });
-
-
-/* =========================================================
-   fit builder
-   ========================================================= */
-
-document
-    .querySelectorAll(".fit-slot")
-    .forEach(slot => {
-
-        slot.addEventListener("click", () => {
-
-            const type = slot.dataset.slot;
-
-            openPicker(type);
-        });
-    });
-
-
-function openPicker(type) {
-
-    currentSlot = type;
-
-    const modal =
-        document.getElementById("picker-modal");
-
-    const title =
-        document.getElementById("picker-title");
-
-    const content =
-        document.getElementById("picker-content");
-
-    title.textContent =
-        `choose ${getCategoryName(type)}`;
-
-    const items = clothes.filter(
-        item => item.category === type
-    );
-
-    if (!items.length) {
-
-        content.innerHTML = `
-            <p class="empty-message">
-                you don't have any ${getCategoryName(type)} yet.
-            </p>
-        `;
-
-    } else {
-
-        content.innerHTML = `
-            <div class="picker-grid">
-                ${items.map(item => `
-                    <button
-                        class="picker-item"
-                        data-id="${item.id}"
-                    >
-                        <img
-                            src="${escapeHtml(item.image_url)}"
-                            alt="${type}"
-                        >
-                    </button>
-                `).join("")}
-            </div>
-        `;
-    }
-
-    content
-        .querySelectorAll(".picker-item")
-        .forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                const item = clothes.find(
-                    clothing =>
-                        clothing.id === button.dataset.id
+        /* =====================================================
+           load clothes
+        ===================================================== */
+
+        async function loadClothes() {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("clothes")
+                    .select("*")
+                    .eq(
+                        "user_id",
+                        currentUser.id
+                    )
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+
+            if (error) {
+
+                console.error(error);
+
+                showToast(
+                    "couldn't load your wardrobe"
                 );
 
-                if (!item) {
-                    return;
-                }
-
-                currentFit[currentSlot] = item;
-
-                closePicker();
-
-                renderCurrentFit();
-            });
-        });
-
-    modal.classList.remove("hidden");
-}
+                return;
+            }
 
 
-function closePicker() {
-
-    document
-        .getElementById("picker-modal")
-        .classList.add("hidden");
-
-    currentSlot = null;
-}
-
-
-document
-    .getElementById("close-picker")
-    .addEventListener("click", closePicker);
-
-
-document
-    .getElementById("picker-modal")
-    .addEventListener("click", event => {
-
-        if (event.target.id === "picker-modal") {
-            closePicker();
+            clothes =
+                data || [];
         }
-    });
 
 
-/* =========================================================
-   render current fit
-   ========================================================= */
+        /* =====================================================
+           load fits
+        ===================================================== */
 
-function renderCurrentFit() {
+        async function loadFits() {
 
-    document
-        .querySelectorAll(".fit-slot")
-        .forEach(slot => {
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("fits")
+                    .select("*")
+                    .eq(
+                        "user_id",
+                        currentUser.id
+                    )
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
 
-            const type = slot.dataset.slot;
 
-            const item = currentFit[type];
+            if (error) {
+
+                console.error(error);
+
+                showToast(
+                    "couldn't load your fits"
+                );
+
+                return;
+            }
+
+
+            savedFits =
+                data || [];
+        }
+
+
+        /* =====================================================
+           upload input
+        ===================================================== */
+
+        document
+            .getElementById("photo-input")
+            .addEventListener(
+                "change",
+                async event => {
+
+                    const files =
+                        Array.from(
+                            event.target.files
+                        );
+
+
+                    if (!files.length) {
+                        return;
+                    }
+
+
+                    for (
+                        const file of files
+                    ) {
+
+                        try {
+
+                            await uploadClothing(
+                                file
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                error
+                            );
+
+                            showToast(
+                                "couldn't process this photo"
+                            );
+                        }
+                    }
+
+
+                    event.target.value =
+                        "";
+
+
+                    await loadClothes();
+
+                    renderWardrobe();
+
+                }
+            );
+
+
+        /* =====================================================
+           upload clothing
+        ===================================================== */
+
+        async function uploadClothing(file) {
+
+            if (
+                typeof window
+                    .removeClothingBackground
+                !== "function"
+            ) {
+
+                throw new Error(
+                    "background removal library hasn't loaded yet"
+                );
+            }
+
+
+            const category =
+                await chooseCategory();
+
+
+            if (!category) {
+                return;
+            }
+
+
+            showToast(
+                "removing background..."
+            );
+
+
+            /*
+             * ai background removal
+             *
+             * the first upload may take longer
+             * because the model has to download.
+             */
+
+            const transparentBlob =
+                await window
+                    .removeClothingBackground(
+                        file,
+                        {
+                            model:
+                                "isnet_fp16",
+
+                            output:
+                            {
+                                format:
+                                    "image/png",
+
+                                type:
+                                    "foreground"
+                            }
+                        }
+                    );
+
+
+            showToast(
+                "compressing image..."
+            );
+
+
+            const compressed =
+                await compressImage(
+                    transparentBlob
+                );
+
+
+            const filename =
+                `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(2)}.png`;
+
+
+            const path =
+                `${currentUser.id}/${filename}`;
+
+
+            showToast(
+                "uploading..."
+            );
+
+
+            const {
+                error: uploadError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("clothes")
+                    .upload(
+                        path,
+                        compressed,
+                        {
+                            contentType:
+                                "image/png",
+
+                            upsert:
+                                false
+                        }
+                    );
+
+
+            if (uploadError) {
+
+                console.error(
+                    uploadError
+                );
+
+                throw uploadError;
+            }
+
+
+            const imageUrl =
+                getImageUrl(path);
+
+
+            const {
+                error:
+                    databaseError
+            } =
+                await supabaseClient
+                    .from("clothes")
+                    .insert({
+
+                        user_id:
+                            currentUser.id,
+
+                        image_url:
+                            imageUrl,
+
+                        category:
+                            category
+
+                    });
+
+
+            if (databaseError) {
+
+                console.error(
+                    databaseError
+                );
+
+
+                await supabaseClient
+                    .storage
+                    .from("clothes")
+                    .remove([
+                        path
+                    ]);
+
+
+                throw databaseError;
+            }
+
+
+            showToast(
+                "clothing added"
+            );
+        }
+
+
+        /* =====================================================
+           category chooser
+        ===================================================== */
+
+        function chooseCategory() {
+
+            return new Promise(
+                resolve => {
+
+                    const answer =
+                        prompt(
+                            "what kind of clothing is this?\n\n" +
+                            "type: top, bottom, shoes, or outer"
+                        );
+
+
+                    if (!answer) {
+
+                        resolve(null);
+
+                        return;
+                    }
+
+
+                    const category =
+                        answer
+                            .trim()
+                            .toLowerCase();
+
+
+                    const valid = [
+                        "top",
+                        "bottom",
+                        "shoes",
+                        "outer"
+                    ];
+
+
+                    if (
+                        !valid.includes(
+                            category
+                        )
+                    ) {
+
+                        showToast(
+                            "please enter top, bottom, shoes, or outer"
+                        );
+
+                        resolve(null);
+
+                        return;
+                    }
+
+
+                    resolve(
+                        category
+                    );
+                }
+            );
+        }
+
+
+        /* =====================================================
+           render wardrobe
+        ===================================================== */
+
+        function renderWardrobe() {
+
+            const container =
+                document
+                    .getElementById(
+                        "wardrobe-container"
+                    );
+
+
+            const categories = [
+                "top",
+                "bottom",
+                "shoes",
+                "outer"
+            ];
+
+
+            container.innerHTML =
+                "";
+
+
+            categories.forEach(
+                category => {
+
+                    const items =
+                        clothes.filter(
+                            item =>
+                                item.category ===
+                                category
+                        );
+
+
+                    const section =
+                        document
+                            .createElement(
+                                "div"
+                            );
+
+
+                    section.className =
+                        "category-section";
+
+
+                    section.innerHTML = `
+
+                        <h2 class="category-title">
+                            ${getCategoryName(
+                                category
+                            )}
+                        </h2>
+
+                        ${
+                            items.length
+
+                            ?
+
+                            `
+                            <div class="clothes-grid">
+
+                                ${
+                                    items
+                                        .map(
+                                            item => `
+
+                                            <div
+                                                class="clothing-card"
+                                            >
+
+                                                <img
+                                                    src="${escapeHtml(
+                                                        item.image_url
+                                                    )}"
+                                                    alt="${category}"
+                                                    loading="lazy"
+                                                >
+
+                                                <button
+                                                    class="delete-clothing"
+                                                    data-id="${item.id}"
+                                                    aria-label="delete clothing"
+                                                >
+                                                    ×
+                                                </button>
+
+                                            </div>
+
+                                        `
+                                        )
+                                        .join("")
+                                }
+
+                            </div>
+                            `
+
+                            :
+
+                            `
+                            <p class="empty-message">
+                                nothing here yet.
+                            </p>
+                            `
+                        }
+
+                    `;
+
+
+                    container.appendChild(
+                        section
+                    );
+
+                }
+            );
+
+
+            container
+                .querySelectorAll(
+                    ".delete-clothing"
+                )
+                .forEach(
+                    button => {
+
+                        button.addEventListener(
+                            "click",
+                            async event => {
+
+                                event.stopPropagation();
+
+                                const id =
+                                    button.dataset.id;
+
+                                await deleteClothing(
+                                    id
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+        }
+
+
+        /* =====================================================
+           delete clothing
+        ===================================================== */
+
+        async function deleteClothing(
+            id
+        ) {
+
+            const item =
+                clothes.find(
+                    clothing =>
+                        String(
+                            clothing.id
+                        ) ===
+                        String(id)
+                );
+
 
             if (!item) {
+                return;
+            }
 
-                slot.innerHTML = `
-                    <span class="slot-label">
-                        ${
-                            type === "top"
-                                ? "choose a top"
-                                : type === "bottom"
-                                    ? "choose bottoms"
-                                    : type === "shoes"
-                                        ? "choose shoes"
-                                        : "choose an outer layer"
-                        }
-                    </span>
 
-                    <span class="slot-subtitle">
-                        ${
-                            type === "outer"
-                                ? "optional"
-                                : "tap to choose"
+            const confirmed =
+                confirm(
+                    "delete this clothing item?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            const imagePath =
+                getStoragePathFromUrl(
+                    item.image_url
+                );
+
+
+            const {
+                error:
+                    databaseError
+            } =
+                await supabaseClient
+                    .from("clothes")
+                    .delete()
+                    .eq(
+                        "id",
+                        id
+                    )
+                    .eq(
+                        "user_id",
+                        currentUser.id
+                    );
+
+
+            if (databaseError) {
+
+                console.error(
+                    databaseError
+                );
+
+                showToast(
+                    "couldn't delete item"
+                );
+
+                return;
+            }
+
+
+            if (imagePath) {
+
+                await supabaseClient
+                    .storage
+                    .from("clothes")
+                    .remove([
+                        imagePath
+                    ]);
+            }
+
+
+            clothes =
+                clothes.filter(
+                    clothing =>
+                        String(
+                            clothing.id
+                        ) !==
+                        String(id)
+                );
+
+
+            renderWardrobe();
+
+            renderCurrentFit();
+
+            renderSavedFits();
+
+
+            showToast(
+                "clothing deleted"
+            );
+        }
+
+
+        function getStoragePathFromUrl(
+            url
+        ) {
+
+            try {
+
+                const marker =
+                    "/storage/v1/object/public/clothes/";
+
+
+                const index =
+                    url.indexOf(
+                        marker
+                    );
+
+
+                if (
+                    index ===
+                    -1
+                ) {
+
+                    return null;
+                }
+
+
+                return decodeURIComponent(
+                    url.substring(
+                        index +
+                        marker.length
+                    )
+                );
+
+            } catch {
+
+                return null;
+            }
+        }
+
+
+        /* =====================================================
+           navigation
+        ===================================================== */
+
+        document
+            .querySelectorAll(
+                ".nav-button"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const pageId =
+                                button.dataset.page;
+
+
+                            document
+                                .querySelectorAll(
+                                    ".page"
+                                )
+                                .forEach(
+                                    page => {
+
+                                        page.classList
+                                            .add(
+                                                "hidden"
+                                            );
+
+                                    }
+                                );
+
+
+                            document
+                                .getElementById(
+                                    pageId
+                                )
+                                .classList
+                                .remove(
+                                    "hidden"
+                                );
+
+
+                            document
+                                .querySelectorAll(
+                                    ".nav-button"
+                                )
+                                .forEach(
+                                    navButton => {
+
+                                        navButton
+                                            .classList
+                                            .remove(
+                                                "active"
+                                            );
+
+                                    }
+                                );
+
+
+                            button
+                                .classList
+                                .add(
+                                    "active"
+                                );
+
+
+                            if (
+                                pageId ===
+                                "fits-page"
+                            ) {
+
+                                renderSavedFits();
+                            }
+
                         }
-                    </span>
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           fit builder
+        ===================================================== */
+
+        document
+            .querySelectorAll(
+                ".fit-slot"
+            )
+            .forEach(
+                slot => {
+
+                    slot.addEventListener(
+                        "click",
+                        () => {
+
+                            const type =
+                                slot.dataset.slot;
+
+                            openPicker(
+                                type
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        function openPicker(
+            type
+        ) {
+
+            currentSlot =
+                type;
+
+
+            const modal =
+                document
+                    .getElementById(
+                        "picker-modal"
+                    );
+
+
+            const title =
+                document
+                    .getElementById(
+                        "picker-title"
+                    );
+
+
+            const content =
+                document
+                    .getElementById(
+                        "picker-content"
+                    );
+
+
+            title.textContent =
+                `choose ${getCategoryName(
+                    type
+                )}`;
+
+
+            const items =
+                clothes.filter(
+                    item =>
+                        item.category ===
+                        type
+                );
+
+
+            if (!items.length) {
+
+                content.innerHTML = `
+
+                    <p class="empty-message">
+                        you don't have any
+                        ${getCategoryName(
+                            type
+                        )}
+                        yet.
+                    </p>
+
+                `;
+
+            } else {
+
+                content.innerHTML = `
+
+                    <div class="picker-grid">
+
+                        ${
+                            items
+                                .map(
+                                    item => `
+
+                                    <button
+                                        class="picker-item"
+                                        data-id="${item.id}"
+                                    >
+
+                                        <img
+                                            src="${escapeHtml(
+                                                item.image_url
+                                            )}"
+                                            alt="${type}"
+                                        >
+
+                                    </button>
+
+                                `
+                                )
+                                .join("")
+                        }
+
+                    </div>
+
+                `;
+            }
+
+
+            content
+                .querySelectorAll(
+                    ".picker-item"
+                )
+                .forEach(
+                    button => {
+
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                const item =
+                                    clothes.find(
+                                        clothing =>
+                                            String(
+                                                clothing.id
+                                            ) ===
+                                            String(
+                                                button.dataset.id
+                                            )
+                                    );
+
+
+                                if (!item) {
+                                    return;
+                                }
+
+
+                                currentFit[
+                                    currentSlot
+                                ] =
+                                    item;
+
+
+                                closePicker();
+
+                                renderCurrentFit();
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            modal
+                .classList
+                .remove(
+                    "hidden"
+                );
+        }
+
+
+        function closePicker() {
+
+            document
+                .getElementById(
+                    "picker-modal"
+                )
+                .classList
+                .add(
+                    "hidden"
+                );
+
+
+            currentSlot =
+                null;
+        }
+
+
+        document
+            .getElementById(
+                "close-picker"
+            )
+            .addEventListener(
+                "click",
+                closePicker
+            );
+
+
+        document
+            .getElementById(
+                "picker-modal"
+            )
+            .addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target.id ===
+                        "picker-modal"
+                    ) {
+
+                        closePicker();
+                    }
+
+                }
+            );
+
+
+        /* =====================================================
+           current fit
+        ===================================================== */
+
+        function renderCurrentFit() {
+
+            document
+                .querySelectorAll(
+                    ".fit-slot"
+                )
+                .forEach(
+                    slot => {
+
+                        const type =
+                            slot.dataset.slot;
+
+
+                        const item =
+                            currentFit[type];
+
+
+                        if (!item) {
+
+                            slot.innerHTML = `
+
+                                <span class="slot-label">
+
+                                    ${
+                                        type ===
+                                        "top"
+
+                                            ? "choose a top"
+
+                                            : type ===
+                                              "bottom"
+
+                                                ? "choose bottoms"
+
+                                                : type ===
+                                                  "shoes"
+
+                                                    ? "choose shoes"
+
+                                                    : "choose an outer layer"
+                                    }
+
+                                </span>
+
+                                <span class="slot-subtitle">
+
+                                    ${
+                                        type ===
+                                        "outer"
+
+                                            ? "optional"
+
+                                            : "tap to choose"
+                                    }
+
+                                </span>
+
+                            `;
+
+                            return;
+                        }
+
+
+                        slot.innerHTML = `
+
+                            <img
+                                src="${escapeHtml(
+                                    item.image_url
+                                )}"
+                                alt="${type}"
+                            >
+
+                            <button
+                                class="remove-slot"
+                                data-remove-slot="${type}"
+                            >
+                                ×
+                            </button>
+
+                        `;
+
+
+                        slot
+                            .querySelector(
+                                ".remove-slot"
+                            )
+                            .addEventListener(
+                                "click",
+                                event => {
+
+                                    event.stopPropagation();
+
+
+                                    currentFit[
+                                        type
+                                    ] =
+                                        null;
+
+
+                                    renderCurrentFit();
+
+                                }
+                            );
+
+                    }
+                );
+        }
+
+
+        /* =====================================================
+           clear fit
+        ===================================================== */
+
+        document
+            .getElementById(
+                "clear-fit-button"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    currentFit = {
+
+                        top:
+                            null,
+
+                        bottom:
+                            null,
+
+                        shoes:
+                            null,
+
+                        outer:
+                            null
+
+                    };
+
+
+                    renderCurrentFit();
+
+                }
+            );
+
+
+        /* =====================================================
+           save fit
+        ===================================================== */
+
+        document
+            .getElementById(
+                "save-fit-button"
+            )
+            .addEventListener(
+                "click",
+                async () => {
+
+                    const hasSomething =
+                        currentFit.top ||
+                        currentFit.bottom ||
+                        currentFit.shoes ||
+                        currentFit.outer;
+
+
+                    if (!hasSomething) {
+
+                        showToast(
+                            "choose something first"
+                        );
+
+                        return;
+                    }
+
+
+                    const fitData = {
+
+                        top:
+                            currentFit.top
+                                ? currentFit.top.id
+                                : null,
+
+                        bottom:
+                            currentFit.bottom
+                                ? currentFit.bottom.id
+                                : null,
+
+                        shoes:
+                            currentFit.shoes
+                                ? currentFit.shoes.id
+                                : null,
+
+                        outer:
+                            currentFit.outer
+                                ? currentFit.outer.id
+                                : null
+
+                    };
+
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("fits")
+                            .insert({
+
+                                user_id:
+                                    currentUser.id,
+
+                                fit_data:
+                                    fitData
+
+                            })
+                            .select()
+                            .single();
+
+
+                    if (error) {
+
+                        console.error(
+                            error
+                        );
+
+                        showToast(
+                            "couldn't save fit"
+                        );
+
+                        return;
+                    }
+
+
+                    savedFits.unshift(
+                        data
+                    );
+
+
+                    showToast(
+                        "fit saved"
+                    );
+
+
+                    currentFit = {
+
+                        top:
+                            null,
+
+                        bottom:
+                            null,
+
+                        shoes:
+                            null,
+
+                        outer:
+                            null
+
+                    };
+
+
+                    renderCurrentFit();
+
+                }
+            );
+
+
+        /* =====================================================
+           saved fits
+        ===================================================== */
+
+        function renderSavedFits() {
+
+            const container =
+                document
+                    .getElementById(
+                        "saved-fits"
+                    );
+
+
+            if (!savedFits.length) {
+
+                container.innerHTML = `
+
+                    <div class="empty-fits">
+                        no saved fits yet.
+                    </div>
+
                 `;
 
                 return;
             }
 
-            slot.innerHTML = `
-                <img
-                    src="${escapeHtml(item.image_url)}"
-                    alt="${type}"
-                >
 
-                <button
-                    class="remove-slot"
-                    data-remove-slot="${type}"
-                >
-                    ×
-                </button>
-            `;
+            container.innerHTML =
+                savedFits
+                    .map(
+                        fit => {
 
-            slot
-                .querySelector(".remove-slot")
-                .addEventListener("click", event => {
-
-                    event.stopPropagation();
-
-                    currentFit[type] = null;
-
-                    renderCurrentFit();
-                });
-        });
-}
+                            const data =
+                                fit.fit_data ||
+                                {};
 
 
-/* =========================================================
-   clear fit
-   ========================================================= */
+                            const pieces = [
 
-document
-    .getElementById("clear-fit-button")
-    .addEventListener("click", () => {
+                                data.top,
 
-        currentFit = {
-            top: null,
-            bottom: null,
-            shoes: null,
-            outer: null
-        };
+                                data.bottom,
 
-        renderCurrentFit();
-    });
+                                data.shoes,
 
+                                data.outer
 
-/* =========================================================
-   save fit
-   ========================================================= */
+                            ]
 
-document
-    .getElementById("save-fit-button")
-    .addEventListener("click", async () => {
+                                .filter(
+                                    Boolean
+                                )
 
-        const hasSomething =
-            currentFit.top ||
-            currentFit.bottom ||
-            currentFit.shoes ||
-            currentFit.outer;
+                                .map(
+                                    id =>
+                                        clothes.find(
+                                            item =>
+                                                String(
+                                                    item.id
+                                                ) ===
+                                                String(
+                                                    id
+                                                )
+                                        )
+                                )
 
-        if (!hasSomething) {
-
-            showToast("choose something first");
-
-            return;
-        }
-
-        const fitData = {
-            top: currentFit.top
-                ? currentFit.top.id
-                : null,
-
-            bottom: currentFit.bottom
-                ? currentFit.bottom.id
-                : null,
-
-            shoes: currentFit.shoes
-                ? currentFit.shoes.id
-                : null,
-
-            outer: currentFit.outer
-                ? currentFit.outer.id
-                : null
-        };
-
-        const { data, error } =
-            await supabaseClient
-                .from("fits")
-                .insert({
-                    user_id: currentUser.id,
-                    fit_data: fitData
-                })
-                .select()
-                .single();
-
-        if (error) {
-
-            console.error(error);
-
-            showToast("couldn't save fit");
-
-            return;
-        }
-
-        savedFits.unshift(data);
-
-        showToast("fit saved");
-
-        currentFit = {
-            top: null,
-            bottom: null,
-            shoes: null,
-            outer: null
-        };
-
-        renderCurrentFit();
-    });
+                                .filter(
+                                    Boolean
+                                );
 
 
-/* =========================================================
-   saved fits
-   ========================================================= */
+                            return `
 
-function renderSavedFits() {
+                                <article
+                                    class="saved-fit"
+                                >
 
-    const container =
-        document.getElementById("saved-fits");
+                                    <div
+                                        class="saved-fit-images"
+                                    >
 
-    if (!savedFits.length) {
+                                        ${
+                                            pieces.length
 
-        container.innerHTML = `
-            <div class="empty-fits">
-                no saved fits yet.
-            </div>
-        `;
+                                                ?
 
-        return;
-    }
+                                                pieces
+                                                    .map(
+                                                        piece => `
 
-    container.innerHTML = savedFits
-        .map(fit => {
+                                                        <div
+                                                            class="saved-fit-image"
+                                                        >
 
-            const data =
-                fit.fit_data || {};
+                                                            <img
+                                                                src="${escapeHtml(
+                                                                    piece.image_url
+                                                                )}"
+                                                                alt="${piece.category}"
+                                                                loading="lazy"
+                                                            >
 
-            const pieces = [
-                data.top,
-                data.bottom,
-                data.shoes,
-                data.outer
-            ]
-                .filter(Boolean)
-                .map(id =>
-                    clothes.find(
-                        item => item.id === id
-                    )
-                )
-                .filter(Boolean);
+                                                        </div>
 
-            return `
-                <article class="saved-fit">
+                                                    `
+                                                    )
+                                                    .join("")
 
-                    <div class="saved-fit-images">
+                                                :
 
-                        ${
-                            pieces.length
-                                ? pieces.map(piece => `
-                                    <div class="saved-fit-image">
-                                        <img
-                                            src="${escapeHtml(piece.image_url)}"
-                                            alt="${piece.category}"
-                                            loading="lazy"
+                                                `
+                                                <div class="empty-message">
+                                                    some items from this
+                                                    fit are no longer
+                                                    in your wardrobe.
+                                                </div>
+                                                `
+                                        }
+
+                                    </div>
+
+
+                                    <div
+                                        class="saved-fit-footer"
+                                    >
+
+                                        <span
+                                            class="fit-date"
                                         >
+                                            ${formatDate(
+                                                fit.created_at
+                                            )}
+                                        </span>
+
+
+                                        <button
+                                            class="delete-fit"
+                                            data-fit-id="${fit.id}"
+                                        >
+                                            delete
+                                        </button>
+
                                     </div>
-                                `).join("")
-                                : `
-                                    <div class="empty-message">
-                                        some items from this fit
-                                        are no longer in your wardrobe.
-                                    </div>
-                                `
+
+                                </article>
+
+                            `;
+
                         }
+                    )
+                    .join("");
 
-                    </div>
 
-                    <div class="saved-fit-footer">
+            container
+                .querySelectorAll(
+                    ".delete-fit"
+                )
+                .forEach(
+                    button => {
 
-                        <span class="fit-date">
-                            ${formatDate(fit.created_at)}
-                        </span>
+                        button.addEventListener(
+                            "click",
+                            async () => {
 
-                        <button
-                            class="delete-fit"
-                            data-fit-id="${fit.id}"
-                        >
-                            delete
-                        </button>
+                                await deleteFit(
+                                    button.dataset.fitId
+                                );
 
-                    </div>
+                            }
+                        );
 
-                </article>
-            `;
-        })
-        .join("");
-
-    container
-        .querySelectorAll(".delete-fit")
-        .forEach(button => {
-
-            button.addEventListener("click", async () => {
-
-                await deleteFit(
-                    button.dataset.fitId
+                    }
                 );
-            });
-        });
-}
-
-
-function formatDate(date) {
-
-    return new Date(date).toLocaleDateString(
-        undefined,
-        {
-            month: "short",
-            day: "numeric",
-            year: "numeric"
         }
-    );
-}
 
 
-/* =========================================================
-   delete fit
-   ========================================================= */
+        function formatDate(
+            date
+        ) {
 
-async function deleteFit(id) {
+            return new Date(
+                date
+            ).toLocaleDateString(
+                undefined,
+                {
 
-    const confirmed = confirm(
-        "delete this saved fit?"
-    );
+                    month:
+                        "short",
 
-    if (!confirmed) {
-        return;
-    }
+                    day:
+                        "numeric",
 
-    const { error } =
-        await supabaseClient
-            .from("fits")
-            .delete()
-            .eq("id", id)
-            .eq("user_id", currentUser.id);
+                    year:
+                        "numeric"
 
-    if (error) {
-
-        console.error(error);
-
-        showToast("couldn't delete fit");
-
-        return;
-    }
-
-    savedFits = savedFits.filter(
-        fit => fit.id !== id
-    );
-
-    renderSavedFits();
-
-    showToast("fit deleted");
-}
+                }
+            );
+        }
 
 
-/* =========================================================
-   start
-   ========================================================= */
+        /* =====================================================
+           delete fit
+        ===================================================== */
 
-checkAuth();
+        async function deleteFit(
+            id
+        ) {
 
-</script>
+            const confirmed =
+                confirm(
+                    "delete this saved fit?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("fits")
+                    .delete()
+                    .eq(
+                        "id",
+                        id
+                    )
+                    .eq(
+                        "user_id",
+                        currentUser.id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                showToast(
+                    "couldn't delete fit"
+                );
+
+                return;
+            }
+
+
+            savedFits =
+                savedFits.filter(
+                    fit =>
+                        String(
+                            fit.id
+                        ) !==
+                        String(id)
+                );
+
+
+            renderSavedFits();
+
+
+            showToast(
+                "fit deleted"
+            );
+        }
+
+
+        /* =====================================================
+           start
+        ===================================================== */
+
+        checkAuth();
+
+    </script>
 
 </body>
 </html>

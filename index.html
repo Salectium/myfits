@@ -1,2753 +1,1958 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
     <title>wardrobe</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-
 
         body {
-            margin: 0;
-
+            font-family: -apple-system, BlinkMacSystemFont, "segoe ui", sans-serif;
             background: #ffffff;
-
             color: #111111;
-
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+            min-height: 100vh;
         }
 
-
         button,
+        input,
         select {
             font: inherit;
         }
 
-
         button {
             cursor: pointer;
-            touch-action: manipulation;
         }
 
+        .hidden {
+            display: none !important;
+        }
 
-        /* =========================================
-           navigation
-        ========================================= */
+        /* auth */
 
-        header {
-            height: 70px;
-
-            border-bottom: 1px solid #e5e5e5;
-
+        #auth-screen {
+            min-height: 100vh;
             display: flex;
-
             align-items: center;
-
-            justify-content: space-between;
-
-            padding: 0 30px;
-
-            position: sticky;
-
-            top: 0;
-
-            z-index: 100;
-
-            background: rgba(255, 255, 255, 0.96);
-
-            backdrop-filter: blur(10px);
+            justify-content: center;
+            padding: 24px;
         }
 
-
-        .logo {
-            font-size: 20px;
-
-            font-weight: 600;
-
-            letter-spacing: -0.5px;
+        .auth-box {
+            width: 100%;
+            max-width: 400px;
         }
 
+        .auth-title {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+        }
 
-        nav {
+        .auth-subtitle {
+            color: #777;
+            margin-bottom: 32px;
+        }
+
+        .auth-tabs {
             display: flex;
-
             gap: 8px;
+            margin-bottom: 20px;
         }
 
-
-        nav button {
-            border: none;
-
-            background: transparent;
-
-            color: #777777;
-
-            padding: 8px 12px;
-
-            border-radius: 8px;
-
-            font-size: 14px;
+        .auth-tab {
+            border: 0;
+            background: #f3f3f3;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #777;
         }
 
-
-        nav button:hover {
-            background: #f5f5f5;
-
-            color: #111111;
+        .auth-tab.active {
+            background: #111;
+            color: white;
         }
 
-
-        nav button.active {
-            background: #111111;
-
-            color: #ffffff;
-        }
-
-
-
-        /* =========================================
-           pages
-        ========================================= */
-
-        main {
-            width: min(1100px, 92%);
-
-            margin: 0 auto;
-
-            padding: 45px 0 80px;
-        }
-
-
-        .page {
-            display: none;
-        }
-
-
-        .page.active {
-            display: block;
-        }
-
-
-        .page-header {
-            margin-bottom: 30px;
-        }
-
-
-        .page-header h1 {
-            margin: 0 0 8px;
-
-            font-size: 32px;
-
-            font-weight: 600;
-
-            letter-spacing: -1.5px;
-        }
-
-
-        .page-header p {
-            margin: 0;
-
-            color: #777777;
-
-            font-size: 15px;
-        }
-
-
-
-        /* =========================================
-           buttons
-        ========================================= */
-
-        .primary-button {
-            border: none;
-
-            background: #111111;
-
-            color: #ffffff;
-
-            padding: 11px 17px;
-
-            border-radius: 9px;
-
-            font-size: 14px;
-
-            font-weight: 500;
-        }
-
-
-        .primary-button:hover {
-            background: #333333;
-        }
-
-
-        .secondary-button {
-            border: 1px solid #dddddd;
-
-            background: #ffffff;
-
-            color: #111111;
-
-            padding: 10px 16px;
-
-            border-radius: 9px;
-
-            font-size: 14px;
-        }
-
-
-        .secondary-button:hover {
-            background: #f7f7f7;
-        }
-
-
-        .danger-button {
-            border: 1px solid #e5e5e5;
-
-            background: #ffffff;
-
-            color: #d11;
-
-            padding: 8px 12px;
-
-            border-radius: 8px;
-
-            font-size: 13px;
-
-            touch-action: manipulation;
-        }
-
-
-        .danger-button:hover {
-            background: #fff5f5;
-        }
-
-
-
-        /* =========================================
-           wardrobe upload
-        ========================================= */
-
-        .upload-area {
-            border: 1px dashed #d5d5d5;
-
-            border-radius: 14px;
-
-            padding: 45px 20px;
-
-            text-align: center;
-
-            margin-bottom: 35px;
-        }
-
-
-        .upload-area p {
-            color: #777777;
-
-            margin: 0 0 18px;
-        }
-
-
-        #file-input {
-            display: none;
-        }
-
-
-
-        /* =========================================
-           wardrobe grid
-        ========================================= */
-
-        .clothing-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(180px, 1fr)
-                );
-
-            gap: 20px;
-
-            width: 100%;
-        }
-
-
-        .clothing-card {
-            border: 1px solid #e5e5e5;
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            background: #ffffff;
-
-            min-width: 0;
-        }
-
-
-        .clothing-image {
-            width: 100%;
-
-            aspect-ratio: 1;
-
-            object-fit: contain;
-
-            display: block;
-
-            background: #f7f7f7;
-        }
-
-
-        .clothing-info {
-            padding: 12px;
-        }
-
-
-        .clothing-info select {
-            width: 100%;
-
-            border: 1px solid #dddddd;
-
-            border-radius: 7px;
-
-            padding: 7px 9px;
-
-            background: #ffffff;
-
-            font-size: 13px;
-        }
-
-
-        .clothing-actions {
+        .auth-form {
             display: flex;
-
-            justify-content: flex-end;
-
-            margin-top: 10px;
-        }
-
-
-        .empty-state {
-            border: 1px solid #e5e5e5;
-
-            border-radius: 12px;
-
-            padding: 60px 20px;
-
-            text-align: center;
-
-            color: #777777;
-
-            grid-column: 1 / -1;
-        }
-
-
-
-        /* =========================================
-           fit builder
-        ========================================= */
-
-        .builder-layout {
-            display: grid;
-
-            grid-template-columns:
-                1fr 300px;
-
-            gap: 35px;
-
-            align-items: start;
-        }
-
-
-        .fit-preview {
-            border: 1px solid #e5e5e5;
-
-            border-radius: 14px;
-
-            padding: 20px;
-
-            background: #fafafa;
-        }
-
-
-        .fit-preview-title {
-            margin: 0 0 20px;
-
-            font-size: 14px;
-
-            color: #777777;
-        }
-
-
-        .fit-stack {
-            display: flex;
-
             flex-direction: column;
-
             gap: 12px;
         }
 
-
-        .fit-slot {
-            background: #ffffff;
-
-            border: 1px solid #dddddd;
-
-            border-radius: 10px;
-
-            overflow: hidden;
-
-            min-height: 180px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            position: relative;
-
-            cursor: pointer;
-
-            transition:
-                border-color 0.15s,
-                box-shadow 0.15s,
-                transform 0.15s;
+        .auth-form input {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 14px;
+            outline: none;
         }
 
-
-        .fit-slot:hover {
-            border-color: #111111;
-
-            box-shadow:
-                0 3px 12px
-                rgba(0, 0, 0, 0.07);
-
-            transform: translateY(-1px);
+        .auth-form input:focus {
+            border-color: #111;
         }
 
-
-        .fit-slot img {
-            width: 100%;
-
-            max-height: 350px;
-
-            object-fit: contain;
-
-            display: block;
-        }
-
-
-        .fit-slot-empty {
-            color: #aaaaaa;
-
-            font-size: 14px;
-        }
-
-
-        .fit-slot-label {
-            position: absolute;
-
-            top: 10px;
-
-            left: 10px;
-
-            padding: 5px 8px;
-
-            background:
-                rgba(255, 255, 255, 0.92);
-
-            border: 1px solid #e5e5e5;
-
-            border-radius: 6px;
-
-            font-size: 11px;
-
-            color: #777777;
-
-            z-index: 2;
-        }
-
-
-        .remove-piece {
-            position: absolute;
-
-            top: 9px;
-
-            right: 9px;
-
-            width: 26px;
-
-            height: 26px;
-
-            border: 1px solid #dddddd;
-
-            border-radius: 50%;
-
-            background: #ffffff;
-
-            color: #777777;
-
-            z-index: 3;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 0;
-        }
-
-
-        .remove-piece:hover {
-            color: #111111;
-
-            border-color: #111111;
-        }
-
-
-        .builder-actions {
-            border: 1px solid #e5e5e5;
-
-            border-radius: 14px;
-
-            padding: 20px;
-
-            position: sticky;
-
-            top: 95px;
-        }
-
-
-        .builder-actions h2 {
-            margin: 0 0 8px;
-
-            font-size: 18px;
-
+        .primary-button {
+            border: 0;
+            background: #111;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
             font-weight: 600;
         }
 
+        .secondary-button {
+            border: 1px solid #ddd;
+            background: white;
+            color: #111;
+            padding: 12px 18px;
+            border-radius: 10px;
+        }
 
-        .builder-actions p {
-            margin: 0 0 20px;
-
-            color: #777777;
-
-            font-size: 13px;
-
+        .auth-message {
+            margin-top: 16px;
+            font-size: 14px;
+            color: #777;
             line-height: 1.5;
         }
 
+        /* app */
 
-        .builder-buttons {
+        #app {
+            min-height: 100vh;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255,255,255,.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 24px;
             display: flex;
-
-            gap: 8px;
-        }
-
-
-        .builder-buttons button {
-            flex: 1;
-        }
-
-
-
-        /* =========================================
-           picker
-        ========================================= */
-
-        .picker-overlay {
-            position: fixed;
-
-            inset: 0;
-
-            background:
-                rgba(0, 0, 0, 0.35);
-
-            display: none;
-
             align-items: center;
-
-            justify-content: center;
-
-            padding: 20px;
-
-            z-index: 500;
-        }
-
-
-        .picker-overlay.open {
-            display: flex;
-        }
-
-
-        .picker {
-            width: min(700px, 100%);
-
-            max-height: 85vh;
-
-            background: #ffffff;
-
-            border-radius: 16px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 20px 60px
-                rgba(0, 0, 0, 0.2);
-        }
-
-
-        .picker-header {
-            padding: 18px 20px;
-
-            border-bottom: 1px solid #eeeeee;
-
-            display: flex;
-
-            align-items: center;
-
             justify-content: space-between;
+            gap: 20px;
         }
 
-
-        .picker-header h2 {
-            margin: 0;
-
-            font-size: 17px;
-
-            font-weight: 600;
+        .logo {
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: -1px;
         }
 
-
-        .close-picker {
-            width: 32px;
-
-            height: 32px;
-
-            border: none;
-
-            border-radius: 50%;
-
-            background: #f5f5f5;
-
-            font-size: 18px;
-
-            padding: 0;
+        nav {
+            display: flex;
+            gap: 6px;
         }
 
-
-        .picker-content {
-            padding: 20px;
-
-            overflow-y: auto;
-
-            max-height:
-                calc(85vh - 70px);
-
-            -webkit-overflow-scrolling: touch;
+        nav button {
+            border: 0;
+            background: transparent;
+            padding: 9px 13px;
+            border-radius: 9px;
+            color: #777;
         }
 
-
-        .picker-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(130px, 1fr)
-                );
-
-            gap: 12px;
+        nav button.active {
+            background: #f1f1f1;
+            color: #111;
         }
 
+        .logout-button {
+            border: 0;
+            background: transparent;
+            color: #999;
+            font-size: 13px;
+        }
 
-        .picker-item {
-            border: 1px solid #e5e5e5;
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 24px 80px;
+        }
 
+        .page-title {
+            font-size: 34px;
+            letter-spacing: -1.5px;
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        /* wardrobe */
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 18px;
+            padding: 28px;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .upload-area p {
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        #photo-input {
+            display: none;
+        }
+
+        .upload-button {
+            display: inline-block;
+            background: #111;
+            color: white;
+            padding: 12px 18px;
             border-radius: 10px;
-
-            overflow: hidden;
-
-            background: #ffffff;
-
             cursor: pointer;
-
-            transition: 0.15s;
         }
 
-
-        .picker-item:hover {
-            border-color: #111111;
-
-            transform: translateY(-2px);
+        .category-section {
+            margin-bottom: 38px;
         }
 
+        .category-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
 
-        .picker-item img {
+        .clothes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 15px;
+        }
+
+        .clothing-card {
+            position: relative;
+            background: #f7f7f7;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1.2;
+        }
+
+        .clothing-card img {
             width: 100%;
-
-            aspect-ratio: 1;
-
+            height: 100%;
             object-fit: contain;
-
             display: block;
+        }
 
+        .delete-clothing {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            width: 32px;
+            height: 32px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,.95);
+            color: #111;
+            font-size: 17px;
+            z-index: 3;
+        }
+
+        .empty-message {
+            color: #999;
+            font-size: 14px;
+            padding: 15px 0;
+        }
+
+        /* builder */
+
+        .fit-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto 35px;
+        }
+
+        .fit-slot {
+            border: 2px dashed #ddd;
+            background: #fafafa;
+            border-radius: 18px;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: .15s;
+        }
+
+        .fit-slot:hover {
+            border-color: #aaa;
             background: #f7f7f7;
         }
 
-
-        .picker-item-name {
-            padding: 8px;
-
-            font-size: 12px;
-
-            color: #777777;
-        }
-
-
-        .picker-empty {
-            padding: 40px 10px;
-
-            text-align: center;
-
-            color: #777777;
-
-            grid-column: 1 / -1;
-        }
-
-
-
-        /* =========================================
-           saved fits
-        ========================================= */
-
-        .saved-fits {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(260px, 1fr)
-                );
-
-            gap: 25px;
-
-            align-items: start;
-        }
-
-
-        .saved-fit {
-            border: 1px solid #e5e5e5;
-
-            border-radius: 14px;
-
-            overflow: hidden;
-
-            background: #ffffff;
-        }
-
-
-        .saved-fit-header {
-            padding: 14px 15px;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            border-bottom: 1px solid #eeeeee;
-        }
-
-
-        .saved-fit-date {
-            color: #777777;
-
-            font-size: 12px;
-        }
-
-
-        .saved-fit-items {
-            display: flex;
-
-            flex-direction: column;
-        }
-
-
-        .saved-fit-item {
+        .fit-slot img {
             width: 100%;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            background: #fafafa;
-
-            border-bottom: 1px solid #eeeeee;
-        }
-
-
-        .saved-fit-item:last-child {
-            border-bottom: none;
-        }
-
-
-        .saved-fit-item img {
-            width: 100%;
-
-            height: 240px;
-
+            height: 260px;
             object-fit: contain;
+        }
 
+        .slot-label {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .slot-subtitle {
+            color: #999;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .remove-slot {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            border: 0;
+            background: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            z-index: 3;
+        }
+
+        .builder-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .piece-picker {
+            margin-top: 30px;
+        }
+
+        .picker-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .picker-section {
+            margin-bottom: 30px;
+        }
+
+        .picker-section h3 {
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+
+        .picker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .picker-item {
+            border: 2px solid transparent;
+            background: #f6f6f6;
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .picker-item:hover {
+            border-color: #111;
+        }
+
+        .picker-item img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
             display: block;
         }
 
+        /* fits */
 
-        .saved-fit-empty {
-            padding: 60px 20px;
-
-            border: 1px solid #e5e5e5;
-
-            border-radius: 14px;
-
-            text-align: center;
-
-            color: #777777;
-
-            grid-column: 1 / -1;
+        .saved-fits {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
         }
 
+        .saved-fit {
+            border: 1px solid #eee;
+            border-radius: 17px;
+            padding: 12px;
+            background: #fff;
+        }
 
+        .saved-fit-images {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-        /* =========================================
-           mobile
-        ========================================= */
+        .saved-fit-image {
+            width: 100%;
+            aspect-ratio: 1 / .8;
+            background: #f7f7f7;
+            border-radius: 11px;
+            overflow: hidden;
+        }
+
+        .saved-fit-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .saved-fit-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 12px;
+        }
+
+        .fit-date {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .delete-fit {
+            border: 0;
+            background: #f3f3f3;
+            padding: 8px 11px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .empty-fits {
+            color: #999;
+            padding: 25px 0;
+        }
+
+        /* modal */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.35);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 22px;
+            padding: 24px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 23px;
+        }
+
+        .close-modal {
+            border: 0;
+            background: #f2f2f2;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            z-index: 200;
+            font-size: 14px;
+        }
 
         @media (max-width: 750px) {
-
-            header {
-                height: auto;
-
-                padding: 15px 18px;
-
-                flex-direction: column;
-
-                gap: 12px;
+            .header-inner {
+                padding: 14px 16px;
+                flex-wrap: wrap;
             }
 
-
             nav {
+                order: 3;
                 width: 100%;
-
-                justify-content: center;
-
                 overflow-x: auto;
             }
 
-
             nav button {
+                flex: 1;
                 white-space: nowrap;
             }
 
-
             main {
-                width: 94%;
-
-                padding-top: 30px;
+                padding: 25px 16px 70px;
             }
 
-
-            .page-header h1 {
-                font-size: 27px;
+            .page-title {
+                font-size: 29px;
             }
 
-
-            .builder-layout {
+            .fit-builder {
                 grid-template-columns: 1fr;
             }
 
-
-            .builder-actions {
-                position: static;
+            .fit-slot {
+                min-height: 250px;
             }
-
-
-            .clothing-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-
-                gap: 12px;
-            }
-
-
-            .clothing-card {
-                width: 100%;
-
-                min-width: 0;
-            }
-
-
-            .clothing-info {
-                padding: 9px;
-            }
-
-
-            .clothing-info select {
-                font-size: 12px;
-            }
-
 
             .saved-fits {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 12px;
             }
 
-
-            .saved-fit-item img {
-                height: 180px;
+            .clothes-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
+            .picker-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
 
-
-        @media (max-width: 450px) {
-
+        @media (max-width: 420px) {
             .saved-fits {
                 grid-template-columns: 1fr;
             }
 
-
-            .saved-fit-item img {
-                height: 300px;
+            .auth-title {
+                font-size: 36px;
             }
-
         }
-
     </style>
-
 </head>
-
-
 
 <body>
 
+    <!-- login -->
 
-<header>
+    <section id="auth-screen">
+        <div class="auth-box">
+            <h1 class="auth-title">wardrobe</h1>
+            <p class="auth-subtitle">your clothes, everywhere.</p>
 
-    <div class="logo">
-        wardrobe
-    </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="login-tab">log in</button>
+                <button class="auth-tab" id="signup-tab">sign up</button>
+            </div>
 
+            <form class="auth-form" id="auth-form">
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="email"
+                    autocomplete="email"
+                    required
+                >
 
-    <nav>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="password"
+                    autocomplete="current-password"
+                    required
+                >
 
-        <button
-            class="nav-button active"
-            data-page="wardrobe"
-        >
-            wardrobe
-        </button>
+                <button class="primary-button" type="submit" id="auth-submit">
+                    log in
+                </button>
+            </form>
 
-
-        <button
-            class="nav-button"
-            data-page="builder"
-        >
-            build a fit
-        </button>
-
-
-        <button
-            class="nav-button"
-            data-page="fits"
-        >
-            my fits
-        </button>
-
-    </nav>
-
-</header>
-
-
-
-<main>
-
-
-    <!-- =========================================
-         wardrobe
-    ========================================== -->
-
-    <section
-        id="wardrobe"
-        class="page active"
-    >
-
-        <div class="page-header">
-
-            <h1>
-                wardrobe
-            </h1>
-
-
-            <p>
-                add your clothes and build
-                your digital closet.
-            </p>
-
+            <p class="auth-message" id="auth-message"></p>
         </div>
-
-
-        <div class="upload-area">
-
-            <p>
-                add photos of your clothes
-            </p>
-
-
-            <label
-                for="file-input"
-                class="primary-button"
-            >
-                add clothing
-            </label>
-
-
-            <input
-                id="file-input"
-                type="file"
-                accept="image/*"
-                multiple
-            >
-
-        </div>
-
-
-        <div
-            id="clothing-grid"
-            class="clothing-grid"
-        ></div>
-
     </section>
 
 
+    <!-- main app -->
 
-    <!-- =========================================
-         build a fit
-    ========================================== -->
+    <div id="app" class="hidden">
 
-    <section
-        id="builder"
-        class="page"
-    >
+        <header>
+            <div class="header-inner">
+                <div class="logo">wardrobe</div>
 
-        <div class="page-header">
-
-            <h1>
-                build a fit
-            </h1>
-
-
-            <p>
-                click a piece to choose
-                what you want to wear.
-            </p>
-
-        </div>
-
-
-        <div class="builder-layout">
-
-
-            <div class="fit-preview">
-
-                <p class="fit-preview-title">
-                    fit preview
-                </p>
-
-
-                <div
-                    id="fit-stack"
-                    class="fit-stack"
-                ></div>
-
-            </div>
-
-
-
-            <div class="builder-actions">
-
-                <h2>
-                    save your fit
-                </h2>
-
-
-                <p>
-                    click any section of your
-                    fit to choose something
-                    from your wardrobe.
-                </p>
-
-
-                <div class="builder-buttons">
-
-                    <button
-                        id="clear-fit"
-                        class="secondary-button"
-                    >
-                        clear
+                <nav>
+                    <button class="nav-button active" data-page="wardrobe-page">
+                        wardrobe
                     </button>
 
+                    <button class="nav-button" data-page="builder-page">
+                        build a fit
+                    </button>
 
-                    <button
-                        id="save-fit"
-                        class="primary-button"
+                    <button class="nav-button" data-page="fits-page">
+                        my fits
+                    </button>
+                </nav>
+
+                <button class="logout-button" id="logout-button">
+                    log out
+                </button>
+            </div>
+        </header>
+
+
+        <main>
+
+            <!-- wardrobe -->
+
+            <section id="wardrobe-page" class="page">
+
+                <h1 class="page-title">my wardrobe</h1>
+
+                <p class="page-description">
+                    add your clothes and build outfits from them.
+                </p>
+
+                <div class="upload-area">
+                    <p>add photos of your clothes</p>
+
+                    <label class="upload-button" for="photo-input">
+                        add clothes
+                    </label>
+
+                    <input
+                        type="file"
+                        id="photo-input"
+                        accept="image/*"
+                        multiple
                     >
-                        save fit
+                </div>
+
+                <div id="wardrobe-container">
+                    <div class="loading">
+                        loading your wardrobe...
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- build fit -->
+
+            <section id="builder-page" class="page hidden">
+
+                <h1 class="page-title">build a fit</h1>
+
+                <p class="page-description">
+                    tap a piece to choose what you want to wear.
+                </p>
+
+                <div class="fit-builder">
+
+                    <button class="fit-slot" data-slot="top">
+                        <span class="slot-label">choose a top</span>
+                        <span class="slot-subtitle">tap to choose</span>
+                    </button>
+
+                    <button class="fit-slot" data-slot="bottom">
+                        <span class="slot-label">choose bottoms</span>
+                        <span class="slot-subtitle">tap to choose</span>
+                    </button>
+
+                    <button class="fit-slot" data-slot="shoes">
+                        <span class="slot-label">choose shoes</span>
+                        <span class="slot-subtitle">tap to choose</span>
+                    </button>
+
+                    <button class="fit-slot" data-slot="outer">
+                        <span class="slot-label">choose an outer layer</span>
+                        <span class="slot-subtitle">optional</span>
                     </button>
 
                 </div>
 
+                <div class="builder-actions">
+                    <button class="primary-button" id="save-fit-button">
+                        save fit
+                    </button>
+
+                    <button class="secondary-button" id="clear-fit-button">
+                        clear
+                    </button>
+                </div>
+
+            </section>
+
+
+            <!-- saved fits -->
+
+            <section id="fits-page" class="page hidden">
+
+                <h1 class="page-title">my fits</h1>
+
+                <p class="page-description">
+                    all your saved outfits.
+                </p>
+
+                <div id="saved-fits" class="saved-fits">
+                    <div class="empty-fits">
+                        no saved fits yet.
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- clothing picker -->
+
+    <div id="picker-modal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 id="picker-title">choose a top</h2>
+
+                <button class="close-modal" id="close-picker">
+                    ×
+                </button>
             </div>
 
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================================
-         my fits
-    ========================================== -->
-
-    <section
-        id="fits"
-        class="page"
-    >
-
-        <div class="page-header">
-
-            <h1>
-                my fits
-            </h1>
-
-
-            <p>
-                your saved outfits.
-            </p>
-
-        </div>
-
-
-        <div
-            id="saved-fits"
-            class="saved-fits"
-        ></div>
-
-    </section>
-
-</main>
-
-
-
-<!-- =========================================
-     clothing picker
-========================================== -->
-
-<div
-    id="picker-overlay"
-    class="picker-overlay"
->
-
-
-    <div class="picker">
-
-
-        <div class="picker-header">
-
-            <h2 id="picker-title">
-                choose a top
-            </h2>
-
-
-            <button
-                id="close-picker"
-                class="close-picker"
-                type="button"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="picker-content">
-
-            <div
-                id="picker-grid"
-                class="picker-grid"
-            ></div>
+            <div id="picker-content"></div>
 
         </div>
 
     </div>
 
-</div>
 
+    <div id="toast" class="toast hidden"></div>
 
 
 <script>
+/* =========================================================
+   supabase setup
+   ========================================================= */
+
+const SUPABASE_URL = "https://laachzywslywffmkpeul.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2cBGYqLVM5KucnD8mi1kdA_A1kjsxpn";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
-    /* =========================================
-       settings
-    ========================================== */
+/* =========================================================
+   app state
+   ========================================================= */
 
-    const MAX_IMAGE_SIZE = 900;
+let currentUser = null;
+let clothes = [];
+let savedFits = [];
 
-    const IMAGE_QUALITY = 0.72;
+let currentFit = {
+    top: null,
+    bottom: null,
+    shoes: null,
+    outer: null
+};
 
+let currentSlot = null;
+let authMode = "login";
+
+
+/* =========================================================
+   helpers
+   ========================================================= */
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+
+    clearTimeout(window.toastTimeout);
+
+    window.toastTimeout = setTimeout(() => {
+        toast.classList.add("hidden");
+    }, 2500);
+}
+
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function getCategoryName(category) {
+    const names = {
+        top: "tops",
+        bottom: "bottoms",
+        shoes: "shoes",
+        outer: "outer layers"
+    };
+
+    return names[category] || category;
+}
+
+
+function getImageUrl(path) {
+    const { data } = supabaseClient
+        .storage
+        .from("clothes")
+        .getPublicUrl(path);
+
+    return data.publicUrl;
+}
+
+
+/* =========================================================
+   image compression
+   ========================================================= */
+
+async function compressImage(file) {
+    return new Promise((resolve, reject) => {
+
+        const reader = new FileReader();
+
+        reader.onload = event => {
+
+            const img = new Image();
+
+            img.onload = () => {
+
+                const maxSize = 1200;
+
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxSize || height > maxSize) {
+
+                    if (width > height) {
+                        height = Math.round(height * maxSize / width);
+                        width = maxSize;
+                    } else {
+                        width = Math.round(width * maxSize / height);
+                        height = maxSize;
+                    }
+                }
+
+                const canvas = document.createElement("canvas");
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const context = canvas.getContext("2d");
+
+                context.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+                canvas.toBlob(
+                    blob => {
+                        if (!blob) {
+                            reject(new Error("image compression failed"));
+                            return;
+                        }
+
+                        resolve(blob);
+                    },
+                    "image/jpeg",
+                    0.82
+                );
+            };
+
+            img.onerror = reject;
+
+            img.src = event.target.result;
+        };
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
+/* =========================================================
+   auth
+   ========================================================= */
+
+document.getElementById("login-tab").addEventListener("click", () => {
+
+    authMode = "login";
+
+    document
+        .getElementById("login-tab")
+        .classList.add("active");
+
+    document
+        .getElementById("signup-tab")
+        .classList.remove("active");
+
+    document.getElementById("auth-submit").textContent = "log in";
+});
+
+
+document.getElementById("signup-tab").addEventListener("click", () => {
+
+    authMode = "signup";
+
+    document
+        .getElementById("signup-tab")
+        .classList.add("active");
+
+    document
+        .getElementById("login-tab")
+        .classList.remove("active");
+
+    document.getElementById("auth-submit").textContent = "sign up";
+});
+
+
+document
+    .getElementById("auth-form")
+    .addEventListener("submit", async event => {
+
+        event.preventDefault();
+
+        const email = document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password = document
+            .getElementById("password")
+            .value;
+
+        const message = document.getElementById("auth-message");
+
+        message.textContent = "loading...";
+
+        let result;
+
+        if (authMode === "login") {
+
+            result = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+        } else {
+
+            result = await supabaseClient.auth.signUp({
+                email,
+                password
+            });
+        }
+
+        if (result.error) {
+
+            message.textContent = result.error.message;
+            return;
+        }
+
+        if (authMode === "signup") {
+
+            if (!result.data.session) {
+
+                message.textContent =
+                    "account created. check your email to confirm your account.";
+
+            } else {
+
+                message.textContent = "";
+            }
+
+        } else {
+
+            message.textContent = "";
+        }
+    });
+
+
+document
+    .getElementById("logout-button")
+    .addEventListener("click", async () => {
+
+        await supabaseClient.auth.signOut();
+
+        currentUser = null;
+
+        document
+            .getElementById("app")
+            .classList.add("hidden");
+
+        document
+            .getElementById("auth-screen")
+            .classList.remove("hidden");
+    });
+
+
+/* =========================================================
+   auth state
+   ========================================================= */
+
+async function checkAuth() {
+
+    const { data, error } =
+        await supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (data.session) {
+
+        currentUser = data.session.user;
+
+        await startApp();
+
+    } else {
+
+        document
+            .getElementById("auth-screen")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("app")
+            .classList.add("hidden");
+    }
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
+
+        if (session) {
+
+            currentUser = session.user;
+
+            await startApp();
+
+        } else {
+
+            currentUser = null;
+
+            document
+                .getElementById("app")
+                .classList.add("hidden");
+
+            document
+                .getElementById("auth-screen")
+                .classList.remove("hidden");
+        }
+    }
+);
+
+
+/* =========================================================
+   start app
+   ========================================================= */
+
+async function startApp() {
+
+    document
+        .getElementById("auth-screen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+    await loadClothes();
+    await loadFits();
+
+    renderWardrobe();
+    renderSavedFits();
+    renderCurrentFit();
+}
+
+
+/* =========================================================
+   load clothes
+   ========================================================= */
+
+async function loadClothes() {
+
+    const { data, error } = await supabaseClient
+        .from("clothes")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .order("created_at", {
+            ascending: false
+        });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast("couldn't load your wardrobe");
+
+        return;
+    }
+
+    clothes = data || [];
+}
+
+
+/* =========================================================
+   load fits
+   ========================================================= */
+
+async function loadFits() {
+
+    const { data, error } = await supabaseClient
+        .from("fits")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .order("created_at", {
+            ascending: false
+        });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast("couldn't load your fits");
+
+        return;
+    }
+
+    savedFits = data || [];
+}
+
+
+/* =========================================================
+   upload clothes
+   ========================================================= */
+
+document
+    .getElementById("photo-input")
+    .addEventListener("change", async event => {
+
+        const files = Array.from(event.target.files);
+
+        if (!files.length) {
+            return;
+        }
+
+        for (const file of files) {
+
+            try {
+
+                await uploadClothing(file);
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast("couldn't upload one of your photos");
+            }
+        }
+
+        event.target.value = "";
+
+        await loadClothes();
+
+        renderWardrobe();
+    });
+
+
+async function uploadClothing(file) {
+
+    const category = await chooseCategory();
+
+    if (!category) {
+        return;
+    }
+
+    showToast("uploading...");
+
+    const compressed = await compressImage(file);
+
+    const filename =
+        `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+
+    const path =
+        `${currentUser.id}/${filename}`;
+
+    const { error: uploadError } =
+        await supabaseClient
+            .storage
+            .from("clothes")
+            .upload(path, compressed, {
+                contentType: "image/jpeg",
+                upsert: false
+            });
+
+    if (uploadError) {
+
+        console.error(uploadError);
+
+        throw uploadError;
+    }
+
+    const imageUrl = getImageUrl(path);
+
+    const { error: databaseError } =
+        await supabaseClient
+            .from("clothes")
+            .insert({
+                user_id: currentUser.id,
+                image_url: imageUrl,
+                category: category
+            });
+
+    if (databaseError) {
+
+        console.error(databaseError);
+
+        await supabaseClient
+            .storage
+            .from("clothes")
+            .remove([path]);
+
+        throw databaseError;
+    }
+
+    showToast("clothing added");
+}
+
+
+/* =========================================================
+   category chooser
+   ========================================================= */
+
+function chooseCategory() {
+
+    return new Promise(resolve => {
+
+        const answer = prompt(
+            "what kind of clothing is this?\n\n" +
+            "type: top, bottom, shoes, or outer"
+        );
+
+        if (!answer) {
+            resolve(null);
+            return;
+        }
+
+        const category = answer
+            .trim()
+            .toLowerCase();
+
+        const valid = [
+            "top",
+            "bottom",
+            "shoes",
+            "outer"
+        ];
+
+        if (!valid.includes(category)) {
+
+            showToast(
+                "please enter top, bottom, shoes, or outer"
+            );
+
+            resolve(null);
+
+            return;
+        }
+
+        resolve(category);
+    });
+}
+
+
+/* =========================================================
+   render wardrobe
+   ========================================================= */
+
+function renderWardrobe() {
+
+    const container =
+        document.getElementById("wardrobe-container");
 
     const categories = [
         "top",
         "bottom",
         "shoes",
-        "outerwear",
-        "accessory"
+        "outer"
     ];
 
+    container.innerHTML = "";
 
+    categories.forEach(category => {
 
-    /* =========================================
-       load data safely
-    ========================================== */
-
-    function loadJSON(
-        key,
-        fallback
-    ) {
-
-        try {
-
-            const value =
-                localStorage.getItem(key);
-
-
-            if (!value) {
-
-                return fallback;
-
-            }
-
-
-            return JSON.parse(value);
-
-        } catch (error) {
-
-            console.error(
-                `could not load ${key}:`,
-                error
-            );
-
-
-            return fallback;
-
-        }
-
-    }
-
-
-    let clothes =
-        loadJSON(
-            "clothes",
-            []
+        const items = clothes.filter(
+            item => item.category === category
         );
 
-
-    let savedFits =
-        loadJSON(
-            "savedFits",
-            []
-        );
-
-
-
-    /* =========================================
-       storage
-    ========================================== */
-
-    function saveData() {
-
-        try {
-
-            localStorage.setItem(
-                "clothes",
-                JSON.stringify(clothes)
-            );
-
-
-            localStorage.setItem(
-                "savedFits",
-                JSON.stringify(savedFits)
-            );
-
-
-            return true;
-
-        } catch (error) {
-
-            console.error(
-                "storage error:",
-                error
-            );
-
-
-            /*
-             * If the browser still says
-             * storage is full, tell the user
-             * instead of silently breaking.
-             */
-
-            alert(
-                "your browser storage is full. try using smaller photos or deleting some old clothing."
-            );
-
-
-            return false;
-
-        }
-
-    }
-
-
-
-    /* =========================================
-       compress uploaded images
-    ========================================== */
-
-    function compressImage(
-        file
-    ) {
-
-        return new Promise(
-            (resolve, reject) => {
-
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    event => {
-
-                        const image =
-                            new Image();
-
-
-                        image.onload =
-                            () => {
-
-                                let width =
-                                    image.width;
-
-
-                                let height =
-                                    image.height;
-
-
-                                /*
-                                 * Keep the original
-                                 * aspect ratio while
-                                 * limiting the longest
-                                 * side.
-                                 */
-
-                                if (
-                                    width >
-                                    MAX_IMAGE_SIZE ||
-                                    height >
-                                    MAX_IMAGE_SIZE
-                                ) {
-
-                                    if (
-                                        width >
-                                        height
-                                    ) {
-
-                                        height =
-                                            Math.round(
-                                                height *
-                                                (
-                                                    MAX_IMAGE_SIZE /
-                                                    width
-                                                )
-                                            );
-
-
-                                        width =
-                                            MAX_IMAGE_SIZE;
-
-                                    } else {
-
-                                        width =
-                                            Math.round(
-                                                width *
-                                                (
-                                                    MAX_IMAGE_SIZE /
-                                                    height
-                                                )
-                                            );
-
-
-                                        height =
-                                            MAX_IMAGE_SIZE;
-
-                                    }
-
-                                }
-
-
-                                const canvas =
-                                    document.createElement(
-                                        "canvas"
-                                    );
-
-
-                                canvas.width =
-                                    width;
-
-
-                                canvas.height =
-                                    height;
-
-
-                                const context =
-                                    canvas.getContext(
-                                        "2d"
-                                    );
-
-
-                                context.drawImage(
-                                    image,
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                );
-
-
-                                /*
-                                 * jpeg compression
-                                 * dramatically reduces
-                                 * localStorage usage.
-                                 */
-
-                                const compressed =
-                                    canvas.toDataURL(
-                                        "image/jpeg",
-                                        IMAGE_QUALITY
-                                    );
-
-
-                                resolve(
-                                    compressed
-                                );
-
-                            };
-
-
-                        image.onerror =
-                            () => {
-
-                                reject(
-                                    new Error(
-                                        "could not read image"
-                                    )
-                                );
-
-                            };
-
-
-                        image.src =
-                            event.target.result;
-
-                    };
-
-
-                reader.onerror =
-                    () => {
-
-                        reject(
-                            new Error(
-                                "could not read file"
-                            )
-                        );
-
-                    };
-
-
-                reader.readAsDataURL(
-                    file
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* =========================================
-       navigation
-    ========================================== */
-
-    const navButtons =
-        document.querySelectorAll(
-            ".nav-button"
-        );
-
-
-    const pages =
-        document.querySelectorAll(
-            ".page"
-        );
-
-
-    navButtons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const page =
-                        button.dataset.page;
-
-
-                    navButtons.forEach(
-                        btn => {
-
-                            btn.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        "active"
-                    );
-
-
-                    pages.forEach(
-                        section => {
-
-                            section.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    document
-                        .getElementById(page)
-                        .classList.add(
-                            "active"
-                        );
-
-
-                    if (
-                        page ===
-                        "builder"
-                    ) {
-
-                        renderFitPreview();
-
-                    }
-
-
-                    if (
-                        page ===
-                        "fits"
-                    ) {
-
-                        renderSavedFits();
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-
-    /* =========================================
-       upload clothing
-    ========================================== */
-
-    document
-        .getElementById(
-            "file-input"
-        )
-        .addEventListener(
-            "change",
-            async event => {
-
-                const files =
-                    Array.from(
-                        event.target.files
-                    );
-
-
-                if (
-                    files.length === 0
-                ) {
-
-                    return;
-
-                }
-
-
-                const addButton =
-                    document.querySelector(
-                        "label[for='file-input']"
-                    );
-
-
-                const originalText =
-                    addButton.textContent;
-
-
-                addButton.textContent =
-                    "processing...";
-
-
-                addButton.style.pointerEvents =
-                    "none";
-
-
-                try {
-
-                    const newClothes =
-                        [];
-
-
-                    /*
-                     * Compress each image before
-                     * adding it to localStorage.
-                     */
-
-                    for (
-                        const file of files
-                    ) {
-
-                        try {
-
-                            const compressedImage =
-                                await compressImage(
-                                    file
-                                );
-
-
-                            newClothes.push({
-
-                                id:
-                                    crypto.randomUUID(),
-
-                                image:
-                                    compressedImage,
-
-                                category:
-                                    "top"
-
-                            });
-
-                        } catch (
-                            imageError
-                        ) {
-
-                            console.error(
-                                imageError
-                            );
-
-                        }
-
-                    }
-
-
-                    if (
-                        newClothes.length === 0
-                    ) {
-
-                        alert(
-                            "none of the images could be added."
-                        );
-
-
-                        return;
-
-                    }
-
-
-                    clothes.push(
-                        ...newClothes
-                    );
-
-
-                    const saved =
-                        saveData();
-
-
-                    if (saved) {
-
-                        renderWardrobe();
-
-                        renderFitPreview();
-
-                    }
-
-                } finally {
-
-                    addButton.textContent =
-                        originalText;
-
-
-                    addButton.style.pointerEvents =
-                        "";
-
-                    event.target.value =
-                        "";
-
-                }
-
-            }
-        );
-
-
-
-    /* =========================================
-       wardrobe rendering
-    ========================================== */
-
-    function renderWardrobe() {
-
-        const grid =
-            document.getElementById(
-                "clothing-grid"
-            );
-
-
-        grid.innerHTML = "";
-
-
-        if (
-            clothes.length === 0
-        ) {
-
-            grid.innerHTML = `
-
-                <div class="empty-state">
-
-                    <p>
-                        your wardrobe is empty.
-                    </p>
-
-                    <p>
-                        add some clothing
-                        to get started.
-                    </p>
-
-                </div>
-
-            `;
-
-
-            return;
-
-        }
-
-
-        clothes.forEach(
-            item => {
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "clothing-card";
-
-
-                card.innerHTML = `
-
-                    <img
-                        class="clothing-image"
-                        src="${item.image}"
-                        alt="${item.category}"
-                    >
-
-
-                    <div
-                        class="clothing-info"
-                    >
-
-                        <select
-                            class="category-select"
-                            data-id="${item.id}"
-                        >
-
-                            <option
-                                value="top"
-                                ${
-                                    item.category ===
-                                    "top"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                top
-                            </option>
-
-
-                            <option
-                                value="bottom"
-                                ${
-                                    item.category ===
-                                    "bottom"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                bottom
-                            </option>
-
-
-                            <option
-                                value="shoes"
-                                ${
-                                    item.category ===
-                                    "shoes"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                shoes
-                            </option>
-
-
-                            <option
-                                value="outerwear"
-                                ${
-                                    item.category ===
-                                    "outerwear"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                outerwear
-                            </option>
-
-
-                            <option
-                                value="accessory"
-                                ${
-                                    item.category ===
-                                    "accessory"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                accessory
-                            </option>
-
-                        </select>
-
-
-                        <div
-                            class="clothing-actions"
-                        >
-
-                            <button
-                                type="button"
-                                class="danger-button delete-clothing"
-                                data-id="${item.id}"
-                            >
-                                delete
-                            </button>
-
+        const section =
+            document.createElement("div");
+
+        section.className = "category-section";
+
+        section.innerHTML = `
+            <h2 class="category-title">
+                ${getCategoryName(category)}
+            </h2>
+
+            ${
+                items.length
+                    ? `
+                        <div class="clothes-grid">
+                            ${items.map(item => `
+                                <div class="clothing-card">
+                                    <img
+                                        src="${escapeHtml(item.image_url)}"
+                                        alt="${category}"
+                                        loading="lazy"
+                                    >
+
+                                    <button
+                                        class="delete-clothing"
+                                        data-id="${item.id}"
+                                        aria-label="delete clothing"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            `).join("")}
                         </div>
-
-                    </div>
-
-                `;
-
-
-                grid.appendChild(
-                    card
-                );
-
+                    `
+                    : `
+                        <p class="empty-message">
+                            nothing here yet.
+                        </p>
+                    `
             }
-        );
+        `;
 
-    }
+        container.appendChild(section);
+    });
 
+    container
+        .querySelectorAll(".delete-clothing")
+        .forEach(button => {
 
-
-    /* =========================================
-       wardrobe controls
-       event delegation
-    ========================================== */
-
-    document
-        .getElementById(
-            "clothing-grid"
-        )
-        .addEventListener(
-            "change",
-            event => {
-
-                if (
-                    !event.target.classList.contains(
-                        "category-select"
-                    )
-                ) {
-
-                    return;
-
-                }
-
-
-                const id =
-                    event.target.dataset.id;
-
-
-                const item =
-                    clothes.find(
-                        clothing =>
-                            clothing.id === id
-                    );
-
-
-                if (!item) {
-
-                    return;
-
-                }
-
-
-                item.category =
-                    event.target.value;
-
-
-                saveData();
-
-
-                renderFitPreview();
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "clothing-grid"
-        )
-        .addEventListener(
-            "click",
-            event => {
-
-                const button =
-                    event.target.closest(
-                        ".delete-clothing"
-                    );
-
-
-                if (!button) {
-
-                    return;
-
-                }
-
-
-                event.preventDefault();
-
+            button.addEventListener("click", async event => {
 
                 event.stopPropagation();
 
+                const id = button.dataset.id;
 
-                const id =
-                    button.dataset.id;
-
-
-                const exists =
-                    clothes.some(
-                        clothing =>
-                            clothing.id === id
-                    );
+                await deleteClothing(id);
+            });
+        });
+}
 
 
-                if (!exists) {
+/* =========================================================
+   delete clothing
+   ========================================================= */
 
-                    return;
+async function deleteClothing(id) {
 
-                }
+    const item = clothes.find(
+        clothing => clothing.id === id
+    );
 
-
-                clothes =
-                    clothes.filter(
-                        clothing =>
-                            clothing.id !== id
-                    );
-
-
-                saveData();
-
-
-                renderWardrobe();
-
-
-                renderFitPreview();
-
-            }
-        );
-
-
-
-    /* =========================================
-       current fit
-    ========================================== */
-
-    function getCurrentFit() {
-
-        return loadJSON(
-            "currentFit",
-            {}
-        );
-
+    if (!item) {
+        return;
     }
 
+    const confirmed = confirm(
+        "delete this clothing item?"
+    );
 
-    function getSelectedItem(
-        category
-    ) {
+    if (!confirmed) {
+        return;
+    }
 
-        const current =
-            getCurrentFit();
+    const imagePath = getStoragePathFromUrl(
+        item.image_url
+    );
+
+    const { error: databaseError } =
+        await supabaseClient
+            .from("clothes")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
+
+    if (databaseError) {
+
+        console.error(databaseError);
+
+        showToast("couldn't delete item");
+
+        return;
+    }
+
+    if (imagePath) {
+
+        await supabaseClient
+            .storage
+            .from("clothes")
+            .remove([imagePath]);
+    }
+
+    clothes = clothes.filter(
+        clothing => clothing.id !== id
+    );
+
+    renderWardrobe();
+
+    renderCurrentFit();
+
+    showToast("clothing deleted");
+}
 
 
-        const id =
-            current[category];
+function getStoragePathFromUrl(url) {
 
+    try {
 
-        if (!id) {
+        const marker =
+            "/storage/v1/object/public/clothes/";
 
+        const index = url.indexOf(marker);
+
+        if (index === -1) {
             return null;
-
         }
 
-
-        return clothes.find(
-            item =>
-                item.id === id
-        ) || null;
-
-    }
-
-
-    function setSelectedItem(
-        category,
-        id
-    ) {
-
-        const current =
-            getCurrentFit();
-
-
-        if (id) {
-
-            current[category] =
-                id;
-
-        } else {
-
-            delete current[
-                category
-            ];
-
-        }
-
-
-        localStorage.setItem(
-            "currentFit",
-            JSON.stringify(
-                current
-            )
+        return decodeURIComponent(
+            url.substring(index + marker.length)
         );
 
+    } catch {
+
+        return null;
     }
+}
 
 
+/* =========================================================
+   navigation
+   ========================================================= */
 
-    /* =========================================
-       fit preview
-    ========================================== */
+document
+    .querySelectorAll(".nav-button")
+    .forEach(button => {
 
-    function renderFitPreview() {
+        button.addEventListener("click", () => {
 
-        const stack =
-            document.getElementById(
-                "fit-stack"
-            );
+            const pageId = button.dataset.page;
 
+            document
+                .querySelectorAll(".page")
+                .forEach(page => {
+                    page.classList.add("hidden");
+                });
 
-        stack.innerHTML = "";
+            document
+                .getElementById(pageId)
+                .classList.remove("hidden");
 
+            document
+                .querySelectorAll(".nav-button")
+                .forEach(navButton => {
+                    navButton.classList.remove("active");
+                });
 
-        categories.forEach(
-            category => {
+            button.classList.add("active");
 
-                const slot =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                slot.className =
-                    "fit-slot";
-
-
-                const item =
-                    getSelectedItem(
-                        category
-                    );
-
-
-                const label =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                label.className =
-                    "fit-slot-label";
-
-
-                label.textContent =
-                    category;
-
-
-                slot.appendChild(
-                    label
-                );
-
-
-                if (item) {
-
-                    const image =
-                        document.createElement(
-                            "img"
-                        );
-
-
-                    image.src =
-                        item.image;
-
-
-                    image.alt =
-                        category;
-
-
-                    slot.appendChild(
-                        image
-                    );
-
-
-                    const remove =
-                        document.createElement(
-                            "button"
-                        );
-
-
-                    remove.className =
-                        "remove-piece";
-
-
-                    remove.type =
-                        "button";
-
-
-                    remove.textContent =
-                        "×";
-
-
-                    remove.addEventListener(
-                        "click",
-                        event => {
-
-                            event.stopPropagation();
-
-
-                            setSelectedItem(
-                                category,
-                                null
-                            );
-
-
-                            renderFitPreview();
-
-                        }
-                    );
-
-
-                    slot.appendChild(
-                        remove
-                    );
-
-                } else {
-
-                    const empty =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    empty.className =
-                        "fit-slot-empty";
-
-
-                    empty.textContent =
-                        `choose a ${category}`;
-
-
-                    slot.appendChild(
-                        empty
-                    );
-
-                }
-
-
-                slot.addEventListener(
-                    "click",
-                    () => {
-
-                        openPicker(
-                            category
-                        );
-
-                    }
-                );
-
-
-                stack.appendChild(
-                    slot
-                );
-
+            if (pageId === "fits-page") {
+                renderSavedFits();
             }
-        );
-
-    }
-
+        });
+    });
 
 
-    /* =========================================
-       picker
-    ========================================== */
+/* =========================================================
+   fit builder
+   ========================================================= */
 
-    const pickerOverlay =
-        document.getElementById(
-            "picker-overlay"
-        );
+document
+    .querySelectorAll(".fit-slot")
+    .forEach(slot => {
 
+        slot.addEventListener("click", () => {
 
-    const pickerGrid =
-        document.getElementById(
-            "picker-grid"
-        );
+            const type = slot.dataset.slot;
 
-
-    const pickerTitle =
-        document.getElementById(
-            "picker-title"
-        );
+            openPicker(type);
+        });
+    });
 
 
-    let currentPickerCategory =
-        null;
+function openPicker(type) {
 
+    currentSlot = type;
 
-    function openPicker(
-        category
-    ) {
+    const modal =
+        document.getElementById("picker-modal");
 
-        currentPickerCategory =
-            category;
+    const title =
+        document.getElementById("picker-title");
 
+    const content =
+        document.getElementById("picker-content");
 
-        pickerTitle.textContent =
-            `choose a ${category}`;
+    title.textContent =
+        `choose ${getCategoryName(type)}`;
 
+    const items = clothes.filter(
+        item => item.category === type
+    );
 
-        pickerGrid.innerHTML = "";
+    if (!items.length) {
 
+        content.innerHTML = `
+            <p class="empty-message">
+                you don't have any ${getCategoryName(type)} yet.
+            </p>
+        `;
 
-        const options =
-            clothes.filter(
-                item =>
-                    item.category ===
-                    category
-            );
+    } else {
 
-
-        if (
-            options.length === 0
-        ) {
-
-            pickerGrid.innerHTML = `
-
-                <div class="picker-empty">
-
-                    <p>
-                        you don't have any
-                        ${category}s yet.
-                    </p>
-
-
-                    <p>
-                        add one to your
-                        wardrobe first.
-                    </p>
-
-                </div>
-
-            `;
-
-        } else {
-
-            options.forEach(
-                item => {
-
-                    const option =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    option.className =
-                        "picker-item";
-
-
-                    option.innerHTML = `
-
+        content.innerHTML = `
+            <div class="picker-grid">
+                ${items.map(item => `
+                    <button
+                        class="picker-item"
+                        data-id="${item.id}"
+                    >
                         <img
-                            src="${item.image}"
-                            alt="${category}"
+                            src="${escapeHtml(item.image_url)}"
+                            alt="${type}"
                         >
+                    </button>
+                `).join("")}
+            </div>
+        `;
+    }
 
+    content
+        .querySelectorAll(".picker-item")
+        .forEach(button => {
 
-                        <div
-                            class="picker-item-name"
-                        >
-                            choose this
-                            ${category}
-                        </div>
+            button.addEventListener("click", () => {
 
-                    `;
+                const item = clothes.find(
+                    clothing =>
+                        clothing.id === button.dataset.id
+                );
 
-
-                    option.addEventListener(
-                        "click",
-                        () => {
-
-                            setSelectedItem(
-                                currentPickerCategory,
-                                item.id
-                            );
-
-
-                            closePicker();
-
-
-                            renderFitPreview();
-
-                        }
-                    );
-
-
-                    pickerGrid.appendChild(
-                        option
-                    );
-
+                if (!item) {
+                    return;
                 }
-            );
 
-        }
-
-
-        pickerOverlay.classList.add(
-            "open"
-        );
-
-    }
-
-
-    function closePicker() {
-
-        pickerOverlay.classList.remove(
-            "open"
-        );
-
-
-        currentPickerCategory =
-            null;
-
-    }
-
-
-    document
-        .getElementById(
-            "close-picker"
-        )
-        .addEventListener(
-            "click",
-            closePicker
-        );
-
-
-    pickerOverlay.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target ===
-                pickerOverlay
-            ) {
+                currentFit[currentSlot] = item;
 
                 closePicker();
 
-            }
+                renderCurrentFit();
+            });
+        });
 
+    modal.classList.remove("hidden");
+}
+
+
+function closePicker() {
+
+    document
+        .getElementById("picker-modal")
+        .classList.add("hidden");
+
+    currentSlot = null;
+}
+
+
+document
+    .getElementById("close-picker")
+    .addEventListener("click", closePicker);
+
+
+document
+    .getElementById("picker-modal")
+    .addEventListener("click", event => {
+
+        if (event.target.id === "picker-modal") {
+            closePicker();
         }
-    );
+    });
 
 
+/* =========================================================
+   render current fit
+   ========================================================= */
 
-    /* =========================================
-       clear current fit
-    ========================================== */
-
-    document
-        .getElementById(
-            "clear-fit"
-        )
-        .addEventListener(
-            "click",
-            () => {
-
-                localStorage.removeItem(
-                    "currentFit"
-                );
-
-
-                renderFitPreview();
-
-            }
-        );
-
-
-
-    /* =========================================
-       save fit
-    ========================================== */
+function renderCurrentFit() {
 
     document
-        .getElementById(
-            "save-fit"
-        )
-        .addEventListener(
-            "click",
-            () => {
+        .querySelectorAll(".fit-slot")
+        .forEach(slot => {
 
-                const current =
-                    getCurrentFit();
+            const type = slot.dataset.slot;
 
+            const item = currentFit[type];
 
-                const items =
-                    categories
-                        .map(
-                            category =>
-                                clothes.find(
-                                    item =>
-                                        item.id ===
-                                        current[
-                                            category
-                                        ]
-                                )
-                        )
-                        .filter(Boolean);
+            if (!item) {
 
+                slot.innerHTML = `
+                    <span class="slot-label">
+                        ${
+                            type === "top"
+                                ? "choose a top"
+                                : type === "bottom"
+                                    ? "choose bottoms"
+                                    : type === "shoes"
+                                        ? "choose shoes"
+                                        : "choose an outer layer"
+                        }
+                    </span>
 
-                if (
-                    items.length === 0
-                ) {
+                    <span class="slot-subtitle">
+                        ${
+                            type === "outer"
+                                ? "optional"
+                                : "tap to choose"
+                        }
+                    </span>
+                `;
 
-                    alert(
-                        "choose at least one piece first."
-                    );
-
-
-                    return;
-
-                }
-
-
-                savedFits.unshift({
-
-                    id:
-                        crypto.randomUUID(),
-
-                    createdAt:
-                        new Date().toISOString(),
-
-                    items:
-                        items.map(
-                            item => ({
-
-                                id:
-                                    item.id,
-
-                                image:
-                                    item.image,
-
-                                category:
-                                    item.category
-
-                            })
-                        )
-
-                });
-
-
-                if (
-                    saveData()
-                ) {
-
-                    alert(
-                        "fit saved."
-                    );
-
-                }
-
+                return;
             }
-        );
 
-
-
-    /* =========================================
-       saved fits
-    ========================================== */
-
-    function renderSavedFits() {
-
-        const container =
-            document.getElementById(
-                "saved-fits"
-            );
-
-
-        container.innerHTML = "";
-
-
-        if (
-            savedFits.length === 0
-        ) {
-
-            container.innerHTML = `
-
-                <div
-                    class="saved-fit-empty"
+            slot.innerHTML = `
+                <img
+                    src="${escapeHtml(item.image_url)}"
+                    alt="${type}"
                 >
 
-                    <p>
-                        you haven't saved
-                        any fits yet.
-                    </p>
-
-
-                    <p>
-                        build a fit and
-                        save it here.
-                    </p>
-
-                </div>
-
+                <button
+                    class="remove-slot"
+                    data-remove-slot="${type}"
+                >
+                    ×
+                </button>
             `;
 
+            slot
+                .querySelector(".remove-slot")
+                .addEventListener("click", event => {
+
+                    event.stopPropagation();
+
+                    currentFit[type] = null;
+
+                    renderCurrentFit();
+                });
+        });
+}
+
+
+/* =========================================================
+   clear fit
+   ========================================================= */
+
+document
+    .getElementById("clear-fit-button")
+    .addEventListener("click", () => {
+
+        currentFit = {
+            top: null,
+            bottom: null,
+            shoes: null,
+            outer: null
+        };
+
+        renderCurrentFit();
+    });
+
+
+/* =========================================================
+   save fit
+   ========================================================= */
+
+document
+    .getElementById("save-fit-button")
+    .addEventListener("click", async () => {
+
+        const hasSomething =
+            currentFit.top ||
+            currentFit.bottom ||
+            currentFit.shoes ||
+            currentFit.outer;
+
+        if (!hasSomething) {
+
+            showToast("choose something first");
 
             return;
-
         }
 
+        const fitData = {
+            top: currentFit.top
+                ? currentFit.top.id
+                : null,
 
-        savedFits.forEach(
-            fit => {
+            bottom: currentFit.bottom
+                ? currentFit.bottom.id
+                : null,
 
-                const card =
-                    document.createElement(
-                        "article"
-                    );
+            shoes: currentFit.shoes
+                ? currentFit.shoes.id
+                : null,
+
+            outer: currentFit.outer
+                ? currentFit.outer.id
+                : null
+        };
+
+        const { data, error } =
+            await supabaseClient
+                .from("fits")
+                .insert({
+                    user_id: currentUser.id,
+                    fit_data: fitData
+                })
+                .select()
+                .single();
+
+        if (error) {
+
+            console.error(error);
+
+            showToast("couldn't save fit");
+
+            return;
+        }
+
+        savedFits.unshift(data);
+
+        showToast("fit saved");
+
+        currentFit = {
+            top: null,
+            bottom: null,
+            shoes: null,
+            outer: null
+        };
+
+        renderCurrentFit();
+    });
 
 
-                card.className =
-                    "saved-fit";
+/* =========================================================
+   saved fits
+   ========================================================= */
 
+function renderSavedFits() {
 
-                const date =
-                    new Date(
-                        fit.createdAt
-                    );
+    const container =
+        document.getElementById("saved-fits");
 
+    if (!savedFits.length) {
 
-                const formattedDate =
-                    date.toLocaleDateString(
-                        undefined,
-                        {
-                            year:
-                                "numeric",
+        container.innerHTML = `
+            <div class="empty-fits">
+                no saved fits yet.
+            </div>
+        `;
 
-                            month:
-                                "short",
+        return;
+    }
 
-                            day:
-                                "numeric"
+    container.innerHTML = savedFits
+        .map(fit => {
+
+            const data =
+                fit.fit_data || {};
+
+            const pieces = [
+                data.top,
+                data.bottom,
+                data.shoes,
+                data.outer
+            ]
+                .filter(Boolean)
+                .map(id =>
+                    clothes.find(
+                        item => item.id === id
+                    )
+                )
+                .filter(Boolean);
+
+            return `
+                <article class="saved-fit">
+
+                    <div class="saved-fit-images">
+
+                        ${
+                            pieces.length
+                                ? pieces.map(piece => `
+                                    <div class="saved-fit-image">
+                                        <img
+                                            src="${escapeHtml(piece.image_url)}"
+                                            alt="${piece.category}"
+                                            loading="lazy"
+                                        >
+                                    </div>
+                                `).join("")
+                                : `
+                                    <div class="empty-message">
+                                        some items from this fit
+                                        are no longer in your wardrobe.
+                                    </div>
+                                `
                         }
-                    );
 
+                    </div>
 
-                card.innerHTML = `
+                    <div class="saved-fit-footer">
 
-                    <div
-                        class="saved-fit-header"
-                    >
-
-                        <span
-                            class="saved-fit-date"
-                        >
-                            ${formattedDate}
+                        <span class="fit-date">
+                            ${formatDate(fit.created_at)}
                         </span>
 
-
                         <button
-                            type="button"
-                            class="danger-button delete-fit"
+                            class="delete-fit"
+                            data-fit-id="${fit.id}"
                         >
                             delete
                         </button>
 
                     </div>
 
+                </article>
+            `;
+        })
+        .join("");
 
-                    <div
-                        class="saved-fit-items"
-                    >
+    container
+        .querySelectorAll(".delete-fit")
+        .forEach(button => {
 
-                        ${fit.items.map(
-                            item => `
+            button.addEventListener("click", async () => {
 
-                            <div
-                                class="saved-fit-item"
-                            >
-
-                                <img
-                                    src="${item.image}"
-                                    alt="${item.category}"
-                                >
-
-                            </div>
-
-                        `).join("")}
-
-                    </div>
-
-                `;
-
-
-                card
-                    .querySelector(
-                        ".delete-fit"
-                    )
-                    .addEventListener(
-                        "click",
-                        event => {
-
-                            event.preventDefault();
-
-
-                            savedFits =
-                                savedFits.filter(
-                                    saved =>
-                                        saved.id !==
-                                        fit.id
-                                );
-
-
-                            saveData();
-
-
-                            renderSavedFits();
-
-                        }
-                    );
-
-
-                container.appendChild(
-                    card
+                await deleteFit(
+                    button.dataset.fitId
                 );
+            });
+        });
+}
 
-            }
-        );
 
+function formatDate(date) {
+
+    return new Date(date).toLocaleDateString(
+        undefined,
+        {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+}
+
+
+/* =========================================================
+   delete fit
+   ========================================================= */
+
+async function deleteFit(id) {
+
+    const confirmed = confirm(
+        "delete this saved fit?"
+    );
+
+    if (!confirmed) {
+        return;
     }
 
+    const { error } =
+        await supabaseClient
+            .from("fits")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
+
+    if (error) {
+
+        console.error(error);
+
+        showToast("couldn't delete fit");
+
+        return;
+    }
+
+    savedFits = savedFits.filter(
+        fit => fit.id !== id
+    );
+
+    renderSavedFits();
+
+    showToast("fit deleted");
+}
 
 
-    /* =========================================
-       initial render
-    ========================================== */
+/* =========================================================
+   start
+   ========================================================= */
 
-    renderWardrobe();
-
-    renderFitPreview();
+checkAuth();
 
 </script>
 
-
 </body>
-
 </html>

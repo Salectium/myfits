@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1079,15 +1080,8 @@
            NODE BACKGROUND REMOVAL SERVER
         ===================================================== */
 
-        /*
-         * LOCAL TEST SERVER
-         *
-         * This will later be replaced with the URL of the
-         * deployed Node server.
-         */
-
         const BACKGROUND_REMOVAL_SERVER =
-            "http://localhost:10000";
+            "https://imgly-test-x420.onrender.com";
 
 
         /* =====================================================
@@ -1259,10 +1253,6 @@
                                         "2d"
                                     );
 
-
-                                /*
-                                 * Keep transparent background.
-                                 */
 
                                 context.clearRect(
                                     0,
@@ -1720,11 +1710,6 @@
                     }
 
 
-                    /*
-                     * Reset immediately so the same photo can
-                     * be selected again if necessary.
-                     */
-
                     event.target.value =
                         "";
 
@@ -1791,13 +1776,6 @@
 
             try {
 
-                /*
-                 * Send the original image to the local Node
-                 * server.
-                 *
-                 * The Node server handles IMG.LY.
-                 */
-
                 const formData =
                     new FormData();
 
@@ -1851,11 +1829,6 @@
                 }
 
 
-                /*
-                 * The Node server returns the processed
-                 * transparent PNG directly.
-                 */
-
                 const transparentBlob =
                     await response.blob();
 
@@ -1882,11 +1855,6 @@
                 );
 
 
-                /*
-                 * Compress the processed PNG while keeping
-                 * transparency.
-                 */
-
                 showToast(
                     "compressing image..."
                 );
@@ -1898,20 +1866,11 @@
                     );
 
 
-                /*
-                 * Create a unique filename.
-                 */
-
                 const filename =
                     `${Date.now()}-${Math.random()
                         .toString(36)
                         .slice(2)}.png`;
 
-
-                /*
-                 * Keep the existing per-user storage
-                 * structure.
-                 */
 
                 const storagePath =
                     `${currentUser.id}/${filename}`;
@@ -1953,10 +1912,6 @@
                     );
 
 
-                /*
-                 * Save the clothing item in the database.
-                 */
-
                 const {
                     error:
                         databaseError
@@ -1983,12 +1938,6 @@
                         databaseError
                     );
 
-
-                    /*
-                     * If the database insert fails,
-                     * remove the uploaded image so we
-                     * don't leave an orphaned file.
-                     */
 
                     await supabaseClient
                         .storage
@@ -2074,8 +2023,6 @@
         }
 
 
-        /* category buttons */
-
         document
             .querySelectorAll(
                 ".category-option"
@@ -2102,8 +2049,6 @@
             );
 
 
-        /* close button */
-
         document
             .getElementById(
                 "close-category-picker"
@@ -2117,8 +2062,6 @@
                 }
             );
 
-
-        /* tap outside modal */
 
         document
             .getElementById(
@@ -3209,3 +3152,4 @@
 
 </body>
 </html>
+```

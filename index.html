@@ -1074,15 +1074,7 @@
                 SUPABASE_URL,
                 SUPABASE_KEY
             );
-
-
-        /* =====================================================
-           NODE BACKGROUND REMOVAL SERVER
-        ===================================================== */
-
-        const BACKGROUND_REMOVAL_SERVER =
-            "https://imgly-test-x420.onrender.com";
-
+        
 
         /* =====================================================
            APP STATE
@@ -1172,150 +1164,118 @@
            TRANSPARENT IMAGE COMPRESSION
         ===================================================== */
 
-        async function compressImage(file) {
+     async function compressImage(file) {
 
-            return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
-                const reader =
-                    new FileReader();
+        const reader = new FileReader();
 
+        reader.onload = event => {
 
-                reader.onload =
-                    event => {
+            const img = new Image();
 
-                        const img =
-                            new Image();
+            img.onload = () => {
 
+                const maxSize = 1400;
 
-                        img.onload =
-                            () => {
+                let width = img.width;
+                let height = img.height;
 
-                                const maxSize =
-                                    1400;
+                if (width > maxSize || height > maxSize) {
 
+                    if (width > height) {
 
-                                let width =
-                                    img.width;
+                        height = Math.round(
+                            height * maxSize / width
+                        );
 
-                                let height =
-                                    img.height;
+                        width = maxSize;
 
+                    } else {
 
-                                if (
-                                    width > maxSize ||
-                                    height > maxSize
-                                ) {
+                        width = Math.round(
+                            width * maxSize / height
+                        );
 
-                                    if (
-                                        width > height
-                                    ) {
+                        height = maxSize;
+                    }
+                }
 
-                                        height =
-                                            Math.round(
-                                                height *
-                                                maxSize /
-                                                width
-                                            );
+                const canvas =
+                    document.createElement("canvas");
 
-                                        width =
-                                            maxSize;
+                canvas.width = width;
+                canvas.height = height;
 
-                                    } else {
+                const context =
+                    canvas.getContext("2d");
 
-                                        width =
-                                            Math.round(
-                                                width *
-                                                maxSize /
-                                                height
-                                            );
+                context.clearRect(
+                    0,
+                    0,
+                    width,
+                    height
+                );
 
-                                        height =
-                                            maxSize;
-                                    }
-                                }
+                context.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
 
+                canvas.toBlob(
+                    blob => {
 
-                                const canvas =
-                                    document.createElement(
-                                        "canvas"
-                                    );
+                        if (!blob) {
 
+                            reject(
+                                new Error(
+                                    "image compression failed"
+                                )
+                            );
 
-                                canvas.width =
-                                    width;
+                            return;
+                        }
 
-                                canvas.height =
-                                    height;
+                        resolve(blob);
 
+                    },
+                    "image/webp",
+                    0.85
+                );
 
-                                const context =
-                                    canvas.getContext(
-                                        "2d"
-                                    );
+            };
 
+            img.onerror = () => {
 
-                                context.clearRect(
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                );
+                reject(
+                    new Error(
+                        "couldn't load image"
+                    )
+                );
 
+            };
 
-                                context.drawImage(
-                                    img,
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                );
+            img.src = event.target.result;
 
+        };
 
-                                canvas.toBlob(
+        reader.onerror = () => {
 
-                                    blob => {
+            reject(
+                new Error(
+                    "couldn't read image"
+                )
+            );
 
-                                        if (!blob) {
+        };
 
-                                            reject(
-                                                new Error(
-                                                    "image compression failed"
-                                                )
-                                            );
+        reader.readAsDataURL(file);
 
-                                            return;
-                                        }
-
-
-                                        resolve(blob);
-
-                                    },
-
-                                    "image/png"
-
-                                );
-
-                            };
-
-
-                        img.onerror =
-                            reject;
-
-
-                        img.src =
-                            event.target.result;
-
-                    };
-
-
-                reader.onerror =
-                    reject;
-
-
-                reader.readAsDataURL(file);
-
-            });
-        }
+    });
+}
 
 
         /* =====================================================
@@ -1758,217 +1718,229 @@
            UPLOAD CLOTHING
         ===================================================== */
 
-        async function uploadClothing(file) {
+async function uploadClothing(file) {
 
-            const category =
-                await chooseCategory();
-
-
-            if (!category) {
-                return;
-            }
+    const category =
+        await chooseCategory();
 
 
-            showToast(
-                "removing background..."
+    if (!category) {
+        return;
+    }
+
+
+    showToast(
+        "removing background..."
+    );
+
+
+    try {
+
+        /*
+         * Send the original image directly to
+         * the Supabase Edge Function.
+         *
+         * The Edge Function keeps the remove.bg
+         * API key on the server and returns the
+         * processed PNG.
+         */
+
+        const response =
+            await fetch(
+                `${SUPABASE_URL}/functions/v1/remove-background`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            file.type ||
+                            "application/octet-stream"
+                    },
+
+                    body: file
+                }
             );
+
+
+        if (!response.ok) {
+
+            let errorMessage =
+                "background removal failed";
 
 
             try {
 
-                const formData =
-                    new FormData();
+                const errorData =
+                    await response.json();
 
 
-                formData.append(
-                    "image",
-                    file
-                );
+                if (errorData.error) {
 
+                    errorMessage =
+                        errorData.error;
 
-                const response =
-                    await fetch(
-                        `${BACKGROUND_REMOVAL_SERVER}/remove-background`,
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    let errorMessage =
-                        "background removal failed";
-
-
-                    try {
-
-                        const errorData =
-                            await response.json();
-
-
-                        if (
-                            errorData.error
-                        ) {
-
-                            errorMessage =
-                                errorData.error;
-                        }
-
-                    } catch {
-                        /*
-                         * Server did not return JSON.
-                         */
-                    }
-
-
-                    throw new Error(
-                        errorMessage
-                    );
                 }
 
-
-                const transparentBlob =
-                    await response.blob();
-
-
-                if (
-                    !transparentBlob.size
-                ) {
-
-                    throw new Error(
-                        "server returned an empty image"
-                    );
-                }
-
-
-                console.log(
-                    "Received processed image:",
-                    transparentBlob.size,
-                    "bytes"
-                );
-
-
-                showToast(
-                    "background removed!"
-                );
-
-
-                showToast(
-                    "compressing image..."
-                );
-
-
-                const compressed =
-                    await compressImage(
-                        transparentBlob
-                    );
-
-
-                const filename =
-                    `${Date.now()}-${Math.random()
-                        .toString(36)
-                        .slice(2)}.png`;
-
-
-                const storagePath =
-                    `${currentUser.id}/${filename}`;
-
-
-                showToast(
-                    "uploading..."
-                );
-
-
-                const {
-                    error: uploadError
-                } =
-                    await supabaseClient
-                        .storage
-                        .from("clothes")
-                        .upload(
-                            storagePath,
-                            compressed,
-                            {
-                                contentType:
-                                    "image/png",
-
-                                upsert:
-                                    false
-                            }
-                        );
-
-
-                if (uploadError) {
-
-                    throw uploadError;
-                }
-
-
-                const imageUrl =
-                    getImageUrl(
-                        storagePath
-                    );
-
-
-                const {
-                    error:
-                        databaseError
-                } =
-                    await supabaseClient
-                        .from("clothes")
-                        .insert({
-
-                            user_id:
-                                currentUser.id,
-
-                            image_url:
-                                imageUrl,
-
-                            category:
-                                category
-
-                        });
-
-
-                if (databaseError) {
-
-                    console.error(
-                        databaseError
-                    );
-
-
-                    await supabaseClient
-                        .storage
-                        .from("clothes")
-                        .remove([
-                            storagePath
-                        ]);
-
-
-                    throw databaseError;
-                }
-
-
-                showToast(
-                    "clothing added"
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "background removal/upload failed:",
-                    error
-                );
-
-
-                throw error;
+            } catch {
+                /*
+                 * Edge Function did not return JSON.
+                 */
             }
+
+
+            throw new Error(
+                errorMessage
+            );
         }
 
 
+        /*
+         * The Edge Function should return
+         * the processed image itself.
+         */
+
+        const transparentBlob =
+            await response.blob();
+
+
+        if (
+            !transparentBlob.size
+        ) {
+
+            throw new Error(
+                "server returned an empty image"
+            );
+
+        }
+
+
+        console.log(
+            "Received processed image:",
+            transparentBlob.size,
+            "bytes"
+        );
+
+
+        showToast(
+            "background removed!"
+        );
+
+
+        showToast(
+            "compressing image..."
+        );
+
+
+        const compressed =
+            await compressImage(
+                transparentBlob
+            );
+
+
+        const filename =
+            `${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2)}.webp`;
+
+
+        const storagePath =
+            `${currentUser.id}/${filename}`;
+
+
+        showToast(
+            "uploading..."
+        );
+
+
+        const {
+            error: uploadError
+        } =
+            await supabaseClient
+                .storage
+                .from("clothes")
+                .upload(
+                    storagePath,
+                    compressed,
+                    {
+                        contentType:
+                            "image/webp",
+
+                        upsert:
+                            false
+                    }
+                );
+
+
+        if (uploadError) {
+
+            throw uploadError;
+
+        }
+
+
+        const imageUrl =
+            getImageUrl(
+                storagePath
+            );
+
+
+        const {
+            error:
+                databaseError
+        } =
+            await supabaseClient
+                .from("clothes")
+                .insert({
+
+                    user_id:
+                        currentUser.id,
+
+                    image_url:
+                        imageUrl,
+
+                    category:
+                        category
+
+                });
+
+
+        if (databaseError) {
+
+            console.error(
+                databaseError
+            );
+
+
+            await supabaseClient
+                .storage
+                .from("clothes")
+                .remove([
+                    storagePath
+                ]);
+
+
+            throw databaseError;
+
+        }
+
+
+        showToast(
+            "clothing added"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "background removal/upload failed:",
+            error
+        );
+
+
+        throw error;
+
+    }
+}
         /* =====================================================
            CATEGORY CHOOSER
         ===================================================== */

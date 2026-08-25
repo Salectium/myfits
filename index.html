@@ -492,6 +492,49 @@
             border-radius: 50%;
         }
 
+        .category-modal-content {
+    max-width: 500px;
+}
+
+.category-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.category-option {
+    width: 100%;
+    border: 1px solid #e5e5e5;
+    background: #f8f8f8;
+    color: #111;
+    border-radius: 14px;
+    padding: 17px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    transition: .15s;
+}
+
+.category-option:hover {
+    background: #f1f1f1;
+    border-color: #ccc;
+}
+
+.category-option:active {
+    transform: scale(.98);
+}
+
+.category-option span:first-child {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.category-option-arrow {
+    color: #999;
+    font-size: 18px;
+}
+
         /* =========================
            loading
         ========================= */
@@ -902,37 +945,104 @@
     </div>
 
 
-    <!-- =========================
-         clothing picker
-    ========================= -->
+<!-- =========================
+     clothing picker
+========================= -->
 
-    <div
-        id="picker-modal"
-        class="modal hidden"
-    >
+<div
+    id="picker-modal"
+    class="modal hidden"
+>
 
-        <div class="modal-content">
+    <div class="modal-content">
 
-            <div class="modal-header">
+        <div class="modal-header">
 
-                <h2 id="picker-title">
-                    choose a top
-                </h2>
+            <h2 id="picker-title">
+                choose a top
+            </h2>
 
-                <button
-                    class="close-modal"
-                    id="close-picker"
-                >
-                    ×
-                </button>
+            <button
+                class="close-modal"
+                id="close-picker"
+            >
+                ×
+            </button>
 
-            </div>
+        </div>
 
-            <div id="picker-content"></div>
+        <div id="picker-content"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     category picker
+========================= -->
+
+<div
+    id="category-modal"
+    class="modal hidden"
+>
+
+    <div class="modal-content category-modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                what kind of clothing is this?
+            </h2>
+
+            <button
+                class="close-modal"
+                id="close-category-picker"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="category-options">
+
+            <button
+                class="category-option"
+                data-category="top"
+            >
+                <span>top</span>
+                <span class="category-option-arrow">→</span>
+            </button>
+
+            <button
+                class="category-option"
+                data-category="bottom"
+            >
+                <span>bottoms</span>
+                <span class="category-option-arrow">→</span>
+            </button>
+
+            <button
+                class="category-option"
+                data-category="shoes"
+            >
+                <span>shoes</span>
+                <span class="category-option-arrow">→</span>
+            </button>
+
+            <button
+                class="category-option"
+                data-category="outer"
+            >
+                <span>outer layer</span>
+                <span class="category-option-arrow">→</span>
+            </button>
 
         </div>
 
     </div>
+
+</div>
 
 
     <div
@@ -1990,66 +2100,121 @@
         }
 
 
-        /* =====================================================
-           CATEGORY CHOOSER
-        ===================================================== */
+/* =====================================================
+   CATEGORY CHOOSER
+===================================================== */
 
-        function chooseCategory() {
-
-            return new Promise(
-                resolve => {
-
-                    const answer =
-                        prompt(
-                            "what kind of clothing is this?\n\n" +
-                            "type: top, bottom, shoes, or outer"
-                        );
+let categoryResolve = null;
 
 
-                    if (!answer) {
+function chooseCategory() {
 
-                        resolve(null);
+    return new Promise(
+        resolve => {
 
-                        return;
-                    }
+            categoryResolve =
+                resolve;
 
+            document
+                .getElementById(
+                    "category-modal"
+                )
+                .classList
+                .remove("hidden");
+
+        }
+    );
+}
+
+
+function closeCategoryPicker(
+    category = null
+) {
+
+    document
+        .getElementById(
+            "category-modal"
+        )
+        .classList
+        .add("hidden");
+
+
+    if (categoryResolve) {
+
+        categoryResolve(
+            category
+        );
+
+        categoryResolve =
+            null;
+    }
+}
+
+
+/* category buttons */
+
+document
+    .querySelectorAll(
+        ".category-option"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
 
                     const category =
-                        answer
-                            .trim()
-                            .toLowerCase();
+                        button.dataset.category;
 
-
-                    const valid = [
-                        "top",
-                        "bottom",
-                        "shoes",
-                        "outer"
-                    ];
-
-
-                    if (
-                        !valid.includes(
-                            category
-                        )
-                    ) {
-
-                        showToast(
-                            "please enter top, bottom, shoes, or outer"
-                        );
-
-                        resolve(null);
-
-                        return;
-                    }
-
-
-                    resolve(
+                    closeCategoryPicker(
                         category
                     );
+
                 }
             );
+
         }
+    );
+
+
+/* close button */
+
+document
+    .getElementById(
+        "close-category-picker"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            closeCategoryPicker();
+
+        }
+    );
+
+
+/* tap outside modal */
+
+document
+    .getElementById(
+        "category-modal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "category-modal"
+            ) {
+
+                closeCategoryPicker();
+
+            }
+
+        }
+    );
 
 
         /* =====================================================
@@ -3106,6 +3271,8 @@
             );
         }
 
+    </script>
+
 
     <!-- =========================
          start
@@ -3117,7 +3284,7 @@
 
 
     <!-- =========================
-         edge function test
+         edge function connection test
     ========================= -->
 
     <div
@@ -3161,159 +3328,130 @@
 
     <script>
 
-        document
-            .getElementById("edge-test-button")
-            .addEventListener(
-                "click",
-                () => {
+        const edgeTestButton =
+            document.getElementById(
+                "edge-test-button"
+            );
 
-                    document
-                        .getElementById(
-                            "edge-test-input"
-                        )
-                        .click();
-
-                }
+        const edgeTestInput =
+            document.getElementById(
+                "edge-test-input"
             );
 
 
-        document
-            .getElementById("edge-test-input")
-            .addEventListener(
-                "change",
-                async event => {
+        edgeTestButton.addEventListener(
+            "click",
+            () => {
 
-                    const file =
-                        event.target.files[0];
+                edgeTestInput.click();
+
+            }
+        );
 
 
-                    if (!file) {
-                        return;
-                    }
+        edgeTestInput.addEventListener(
+            "change",
+            async event => {
 
+                const file =
+                    event.target.files[0];
+
+
+                if (!file) {
+                    return;
+                }
+
+
+                try {
 
                     showToast(
                         "sending image to server..."
                     );
 
 
-                    try {
+                    /*
+                     * Use the existing authenticated
+                     * Supabase client.
+                     *
+                     * supabase.functions.invoke()
+                     * automatically handles the
+                     * authentication headers.
+                     */
 
-                        /*
-                         * Make sure the user is logged in.
-                         */
-
-                        const {
-                            data: sessionData
-                        } =
-                            await supabaseClient
-                                .auth
-                                .getSession();
-
-
-                        const session =
-                            sessionData.session;
-
-
-                        if (!session) {
-
-                            throw new Error(
-                                "you aren't logged in"
-                            );
-
-                        }
-
-
-                        /*
-                         * Send the image directly
-                         * to our Supabase Edge Function.
-                         */
-
-                        const response =
-                            await fetch(
-                                "https://laachzywslywffmkpeul.supabase.co/functions/v1/remove-background",
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .functions
+                            .invoke(
+                                "remove-background",
                                 {
-
-                                    method: "POST",
-
-                                    headers: {
-
-                                        "Authorization":
-                                            `Bearer ${session.access_token}`,
-
-                                        "Content-Type":
-                                            file.type ||
-                                            "image/jpeg"
-
-                                    },
-
-                                    body:
-                                        file
-
+                                    body: file
                                 }
                             );
 
 
-                        const result =
-                            await response.json();
-
-
-                        console.log(
-                            "Edge Function response:",
-                            result
-                        );
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                result.error ||
-                                `server returned ${response.status}`
-                            );
-
-                        }
-
-
-                        showToast(
-                            `server received image (${result.bytes} bytes)`
-                        );
-
-
-                        alert(
-                            "SUCCESS!\n\n" +
-                            "The server received your image.\n\n" +
-                            "Size: " +
-                            result.bytes +
-                            " bytes"
-                        );
-
-
-                    } catch (error) {
+                    if (error) {
 
                         console.error(
-                            "Edge Function test failed:",
+                            "Edge Function error:",
                             error
                         );
 
-
-                        showToast(
-                            "server test failed"
-                        );
-
-
-                        alert(
-                            "SERVER TEST FAILED\n\n" +
-                            error.message
-                        );
+                        throw error;
 
                     }
 
 
-                    event.target.value =
-                        "";
+                    console.log(
+                        "Edge Function response:",
+                        data
+                    );
+
+
+                    showToast(
+                        "server received image!"
+                    );
+
+
+                    alert(
+                        "SUCCESS! 🎉\n\n" +
+                        "The Edge Function received your image.\n\n" +
+                        "Size: " +
+                        data.bytes +
+                        " bytes"
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Edge Function test failed:",
+                        error
+                    );
+
+
+                    showToast(
+                        "server test failed"
+                    );
+
+
+                    alert(
+                        "SERVER TEST FAILED\n\n" +
+                        (
+                            error.message ||
+                            String(error)
+                        )
+                    );
 
                 }
-            );
+
+
+                event.target.value = "";
+
+            }
+        );
 
     </script>
 

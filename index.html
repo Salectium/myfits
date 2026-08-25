@@ -1868,15 +1868,23 @@
 
                         } catch (error) {
 
-                            console.error(
-                                "photo processing error:",
-                                error
-                            );
+     console.error(
+        "photo processing error:",
+        error
+    );
 
-                            showToast(
-                                "couldn't process this photo"
-                            );
-                        }
+    alert(
+        "PHOTO ERROR:\n\n" +
+        (
+            error?.message ||
+            String(error)
+        )
+    );
+
+    showToast(
+        "couldn't process this photo"
+    );
+}
                     }
 
 

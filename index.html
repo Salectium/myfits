@@ -493,47 +493,47 @@
         }
 
         .category-modal-content {
-    max-width: 500px;
-}
+            max-width: 500px;
+        }
 
-.category-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+        .category-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.category-option {
-    width: 100%;
-    border: 1px solid #e5e5e5;
-    background: #f8f8f8;
-    color: #111;
-    border-radius: 14px;
-    padding: 17px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-    transition: .15s;
-}
+        .category-option {
+            width: 100%;
+            border: 1px solid #e5e5e5;
+            background: #f8f8f8;
+            color: #111;
+            border-radius: 14px;
+            padding: 17px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            transition: .15s;
+        }
 
-.category-option:hover {
-    background: #f1f1f1;
-    border-color: #ccc;
-}
+        .category-option:hover {
+            background: #f1f1f1;
+            border-color: #ccc;
+        }
 
-.category-option:active {
-    transform: scale(.98);
-}
+        .category-option:active {
+            transform: scale(.98);
+        }
 
-.category-option span:first-child {
-    font-size: 16px;
-    font-weight: 600;
-}
+        .category-option span:first-child {
+            font-size: 16px;
+            font-weight: 600;
+        }
 
-.category-option-arrow {
-    color: #999;
-    font-size: 18px;
-}
+        .category-option-arrow {
+            color: #999;
+            font-size: 18px;
+        }
 
         /* =========================
            loading
@@ -945,104 +945,104 @@
     </div>
 
 
-<!-- =========================
-     clothing picker
-========================= -->
+    <!-- =========================
+         clothing picker
+    ========================= -->
 
-<div
-    id="picker-modal"
-    class="modal hidden"
->
+    <div
+        id="picker-modal"
+        class="modal hidden"
+    >
 
-    <div class="modal-content">
+        <div class="modal-content">
 
-        <div class="modal-header">
+            <div class="modal-header">
 
-            <h2 id="picker-title">
-                choose a top
-            </h2>
+                <h2 id="picker-title">
+                    choose a top
+                </h2>
 
-            <button
-                class="close-modal"
-                id="close-picker"
-            >
-                ×
-            </button>
+                <button
+                    class="close-modal"
+                    id="close-picker"
+                >
+                    ×
+                </button>
 
-        </div>
+            </div>
 
-        <div id="picker-content"></div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     category picker
-========================= -->
-
-<div
-    id="category-modal"
-    class="modal hidden"
->
-
-    <div class="modal-content category-modal-content">
-
-        <div class="modal-header">
-
-            <h2>
-                what kind of clothing is this?
-            </h2>
-
-            <button
-                class="close-modal"
-                id="close-category-picker"
-            >
-                ×
-            </button>
-
-        </div>
-
-        <div class="category-options">
-
-            <button
-                class="category-option"
-                data-category="top"
-            >
-                <span>top</span>
-                <span class="category-option-arrow">→</span>
-            </button>
-
-            <button
-                class="category-option"
-                data-category="bottom"
-            >
-                <span>bottoms</span>
-                <span class="category-option-arrow">→</span>
-            </button>
-
-            <button
-                class="category-option"
-                data-category="shoes"
-            >
-                <span>shoes</span>
-                <span class="category-option-arrow">→</span>
-            </button>
-
-            <button
-                class="category-option"
-                data-category="outer"
-            >
-                <span>outer layer</span>
-                <span class="category-option-arrow">→</span>
-            </button>
+            <div id="picker-content"></div>
 
         </div>
 
     </div>
 
-</div>
+
+    <!-- =========================
+         category picker
+    ========================= -->
+
+    <div
+        id="category-modal"
+        class="modal hidden"
+    >
+
+        <div class="modal-content category-modal-content">
+
+            <div class="modal-header">
+
+                <h2>
+                    what kind of clothing is this?
+                </h2>
+
+                <button
+                    class="close-modal"
+                    id="close-category-picker"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div class="category-options">
+
+                <button
+                    class="category-option"
+                    data-category="top"
+                >
+                    <span>top</span>
+                    <span class="category-option-arrow">→</span>
+                </button>
+
+                <button
+                    class="category-option"
+                    data-category="bottom"
+                >
+                    <span>bottoms</span>
+                    <span class="category-option-arrow">→</span>
+                </button>
+
+                <button
+                    class="category-option"
+                    data-category="shoes"
+                >
+                    <span>shoes</span>
+                    <span class="category-option-arrow">→</span>
+                </button>
+
+                <button
+                    class="category-option"
+                    data-category="outer"
+                >
+                    <span>outer layer</span>
+                    <span class="category-option-arrow">→</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
     <div
@@ -1076,134 +1076,18 @@
 
 
         /* =====================================================
-           BACKGROUND REMOVAL LOADER
-           
-           IMPORTANT:
-           We load the module dynamically and WAIT for it.
-           
-           This prevents the old problem where uploadClothing()
-           ran before the background-removal library existed.
+           NODE BACKGROUND REMOVAL SERVER
         ===================================================== */
 
-        let backgroundRemovalPromise = null;
-
-
-        async function loadBackgroundRemoval() {
-
-            if (
-                typeof window.removeClothingBackground ===
-                "function"
-            ) {
-
-                return window.removeClothingBackground;
-            }
-
-
-            if (backgroundRemovalPromise) {
-
-                return backgroundRemovalPromise;
-            }
-
-
-            backgroundRemovalPromise =
-                (async () => {
-
-                    try {
-
-                        console.log(
-                            "Loading background removal library..."
-                        );
-
-
-                        const module =
-                            await import(
-                                "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm"
-                            );
-
-
-                        console.log(
-                            "Background removal module loaded:",
-                            module
-                        );
-
-
-                        /*
-                         * Different CDN/module builds can expose
-                         * the function slightly differently.
-                         */
-
-                        const removeBackground =
-                            module.default ||
-                            module.removeBackground ||
-                            module;
-
-
-                        if (
-                            typeof removeBackground !==
-                            "function"
-                        ) {
-
-                            console.error(
-                                "Background removal module contents:",
-                                module
-                            );
-
-
-                            throw new Error(
-                                "background removal module did not export a usable function"
-                            );
-                        }
-
-
-                        window.removeClothingBackground =
-                            removeBackground;
-
-
-                        console.log(
-                            "Background removal ready."
-                        );
-
-
-                        return removeBackground;
-
-                    } catch (error) {
-
-                        console.error(
-                            "Failed to load background removal:",
-                            error
-                        );
-
-
-                        backgroundRemovalPromise =
-                            null;
-
-
-                        throw error;
-                    }
-
-                })();
-
-
-            return backgroundRemovalPromise;
-        }
-
-
         /*
-         * Start loading the library immediately.
+         * LOCAL TEST SERVER
          *
-         * It happens in the background while the app loads,
-         * but uploadClothing() will still wait for it if necessary.
+         * This will later be replaced with the URL of the
+         * deployed Node server.
          */
 
-        loadBackgroundRemoval()
-            .catch(error => {
-
-                console.warn(
-                    "Background removal is not ready yet:",
-                    error
-                );
-
-            });
+        const BACKGROUND_REMOVAL_SERVER =
+            "http://localhost:10000";
 
 
         /* =====================================================
@@ -1377,9 +1261,7 @@
 
 
                                 /*
-                                 * Do NOT paint the canvas white.
-                                 *
-                                 * This keeps the transparent background.
+                                 * Keep transparent background.
                                  */
 
                                 context.clearRect(
@@ -1720,15 +1602,6 @@
                 .remove("hidden");
 
 
-            /*
-             * Make sure background removal is being loaded,
-             * but don't block the entire app from opening.
-             */
-
-            loadBackgroundRemoval()
-                .catch(() => {});
-
-
             await loadClothes();
 
             await loadFits();
@@ -1868,23 +1741,23 @@
 
                         } catch (error) {
 
-     console.error(
-        "photo processing error:",
-        error
-    );
+                            console.error(
+                                "photo processing error:",
+                                error
+                            );
 
-    alert(
-        "PHOTO ERROR:\n\n" +
-        (
-            error?.message ||
-            String(error)
-        )
-    );
+                            alert(
+                                "PHOTO ERROR:\n\n" +
+                                (
+                                    error?.message ||
+                                    String(error)
+                                )
+                            );
 
-    showToast(
-        "couldn't process this photo"
-    );
-}
+                            showToast(
+                                "couldn't process this photo"
+                            );
+                        }
                     }
 
 
@@ -1902,39 +1775,6 @@
 
         async function uploadClothing(file) {
 
-            /*
-             * WAIT for the background removal module.
-             *
-             * This is the main fix.
-             */
-
-            let removeBackground;
-
-
-            try {
-
-                showToast(
-                    "preparing background removal..."
-                );
-
-
-                removeBackground =
-                    await loadBackgroundRemoval();
-
-            } catch (error) {
-
-                console.error(
-                    "background removal loading error:",
-                    error
-                );
-
-
-                throw new Error(
-                    "background removal module did not load correctly"
-                );
-            }
-
-
             const category =
                 await chooseCategory();
 
@@ -1949,277 +1789,356 @@
             );
 
 
-            /*
-             * Run AI background removal.
-             *
-             * The first time can take a while because the
-             * model needs to download into the browser.
-             */
-
-            let transparentBlob;
-
-
             try {
 
-                transparentBlob =
-                    await removeBackground(
-                        file,
+                /*
+                 * Send the original image to the local Node
+                 * server.
+                 *
+                 * The Node server handles IMG.LY.
+                 */
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "image",
+                    file
+                );
+
+
+                const response =
+                    await fetch(
+                        `${BACKGROUND_REMOVAL_SERVER}/remove-background`,
                         {
-                            model:
-                                "isnet_fp16",
-
-                            output: {
-                                format:
-                                    "image/png"
-                            },
-
-                            debug:
-                                false
+                            method: "POST",
+                            body: formData
                         }
                     );
+
+
+                if (!response.ok) {
+
+                    let errorMessage =
+                        "background removal failed";
+
+
+                    try {
+
+                        const errorData =
+                            await response.json();
+
+
+                        if (
+                            errorData.error
+                        ) {
+
+                            errorMessage =
+                                errorData.error;
+                        }
+
+                    } catch {
+                        /*
+                         * Server did not return JSON.
+                         */
+                    }
+
+
+                    throw new Error(
+                        errorMessage
+                    );
+                }
+
+
+                /*
+                 * The Node server returns the processed
+                 * transparent PNG directly.
+                 */
+
+                const transparentBlob =
+                    await response.blob();
+
+
+                if (
+                    !transparentBlob.size
+                ) {
+
+                    throw new Error(
+                        "server returned an empty image"
+                    );
+                }
+
+
+                console.log(
+                    "Received processed image:",
+                    transparentBlob.size,
+                    "bytes"
+                );
+
+
+                showToast(
+                    "background removed!"
+                );
+
+
+                /*
+                 * Compress the processed PNG while keeping
+                 * transparency.
+                 */
+
+                showToast(
+                    "compressing image..."
+                );
+
+
+                const compressed =
+                    await compressImage(
+                        transparentBlob
+                    );
+
+
+                /*
+                 * Create a unique filename.
+                 */
+
+                const filename =
+                    `${Date.now()}-${Math.random()
+                        .toString(36)
+                        .slice(2)}.png`;
+
+
+                /*
+                 * Keep the existing per-user storage
+                 * structure.
+                 */
+
+                const storagePath =
+                    `${currentUser.id}/${filename}`;
+
+
+                showToast(
+                    "uploading..."
+                );
+
+
+                const {
+                    error: uploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .upload(
+                            storagePath,
+                            compressed,
+                            {
+                                contentType:
+                                    "image/png",
+
+                                upsert:
+                                    false
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    throw uploadError;
+                }
+
+
+                const imageUrl =
+                    getImageUrl(
+                        storagePath
+                    );
+
+
+                /*
+                 * Save the clothing item in the database.
+                 */
+
+                const {
+                    error:
+                        databaseError
+                } =
+                    await supabaseClient
+                        .from("clothes")
+                        .insert({
+
+                            user_id:
+                                currentUser.id,
+
+                            image_url:
+                                imageUrl,
+
+                            category:
+                                category
+
+                        });
+
+
+                if (databaseError) {
+
+                    console.error(
+                        databaseError
+                    );
+
+
+                    /*
+                     * If the database insert fails,
+                     * remove the uploaded image so we
+                     * don't leave an orphaned file.
+                     */
+
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .remove([
+                            storagePath
+                        ]);
+
+
+                    throw databaseError;
+                }
+
+
+                showToast(
+                    "clothing added"
+                );
+
 
             } catch (error) {
 
-    console.error(
-        "background removal failed:",
-        error
-    );
-
-    throw error;
-}
-
-
-            if (!transparentBlob) {
-
-                throw new Error(
-                    "background removal returned no image"
-                );
-            }
-
-
-            showToast(
-                "compressing image..."
-            );
-
-
-            const compressed =
-                await compressImage(
-                    transparentBlob
-                );
-
-
-            const filename =
-                `${Date.now()}-${Math.random()
-                    .toString(36)
-                    .slice(2)}.png`;
-
-
-            /*
-             * Keep the existing per-user storage structure.
-             */
-
-            const path =
-                `${currentUser.id}/${filename}`;
-
-
-            showToast(
-                "uploading..."
-            );
-
-
-            const {
-                error: uploadError
-            } =
-                await supabaseClient
-                    .storage
-                    .from("clothes")
-                    .upload(
-                        path,
-                        compressed,
-                        {
-                            contentType:
-                                "image/png",
-
-                            upsert:
-                                false
-                        }
-                    );
-
-
-            if (uploadError) {
-
                 console.error(
-                    uploadError
-                );
-
-                throw uploadError;
-            }
-
-
-            const imageUrl =
-                getImageUrl(path);
-
-
-            const {
-                error:
-                    databaseError
-            } =
-                await supabaseClient
-                    .from("clothes")
-                    .insert({
-
-                        user_id:
-                            currentUser.id,
-
-                        image_url:
-                            imageUrl,
-
-                        category:
-                            category
-
-                    });
-
-
-            if (databaseError) {
-
-                console.error(
-                    databaseError
+                    "background removal/upload failed:",
+                    error
                 );
 
 
-                await supabaseClient
-                    .storage
-                    .from("clothes")
-                    .remove([
-                        path
-                    ]);
-
-
-                throw databaseError;
+                throw error;
             }
+        }
 
 
-            showToast(
-                "clothing added"
+        /* =====================================================
+           CATEGORY CHOOSER
+        ===================================================== */
+
+        let categoryResolve =
+            null;
+
+
+        function chooseCategory() {
+
+            return new Promise(
+                resolve => {
+
+                    categoryResolve =
+                        resolve;
+
+
+                    document
+                        .getElementById(
+                            "category-modal"
+                        )
+                        .classList
+                        .remove("hidden");
+
+                }
             );
         }
 
 
-/* =====================================================
-   CATEGORY CHOOSER
-===================================================== */
-
-let categoryResolve = null;
-
-
-function chooseCategory() {
-
-    return new Promise(
-        resolve => {
-
-            categoryResolve =
-                resolve;
+        function closeCategoryPicker(
+            category = null
+        ) {
 
             document
                 .getElementById(
                     "category-modal"
                 )
                 .classList
-                .remove("hidden");
+                .add("hidden");
 
+
+            if (categoryResolve) {
+
+                categoryResolve(
+                    category
+                );
+
+
+                categoryResolve =
+                    null;
+            }
         }
-    );
-}
 
 
-function closeCategoryPicker(
-    category = null
-) {
+        /* category buttons */
 
-    document
-        .getElementById(
-            "category-modal"
-        )
-        .classList
-        .add("hidden");
+        document
+            .querySelectorAll(
+                ".category-option"
+            )
+            .forEach(
+                button => {
 
+                    button.addEventListener(
+                        "click",
+                        () => {
 
-    if (categoryResolve) {
-
-        categoryResolve(
-            category
-        );
-
-        categoryResolve =
-            null;
-    }
-}
+                            const category =
+                                button.dataset.category;
 
 
-/* category buttons */
+                            closeCategoryPicker(
+                                category
+                            );
 
-document
-    .querySelectorAll(
-        ".category-option"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const category =
-                        button.dataset.category;
-
-                    closeCategoryPicker(
-                        category
+                        }
                     );
 
                 }
             );
 
-        }
-    );
+
+        /* close button */
+
+        document
+            .getElementById(
+                "close-category-picker"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    closeCategoryPicker();
+
+                }
+            );
 
 
-/* close button */
+        /* tap outside modal */
 
-document
-    .getElementById(
-        "close-category-picker"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            closeCategoryPicker();
-
-        }
-    );
-
-
-/* tap outside modal */
-
-document
-    .getElementById(
-        "category-modal"
-    )
-    .addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
+        document
+            .getElementById(
                 "category-modal"
-            ) {
+            )
+            .addEventListener(
+                "click",
+                event => {
 
-                closeCategoryPicker();
+                    if (
+                        event.target.id ===
+                        "category-modal"
+                    ) {
 
-            }
+                        closeCategoryPicker();
 
-        }
-    );
+                    }
+
+                }
+            );
 
 
         /* =====================================================
@@ -2341,8 +2260,10 @@ document
 
                                 event.stopPropagation();
 
+
                                 const id =
                                     button.dataset.id;
+
 
                                 await deleteClothing(
                                     id
@@ -2590,6 +2511,7 @@ document
 
                             const type =
                                 slot.dataset.slot;
+
 
                             openPicker(
                                 type
@@ -3276,187 +3198,12 @@ document
             );
         }
 
-    </script>
 
+        /* =====================================================
+           START
+        ===================================================== */
 
-    <!-- =========================
-         start
-    ========================= -->
-
-    <script>
         checkAuth();
-    </script>
-
-
-    <!-- =========================
-         edge function connection test
-    ========================= -->
-
-    <div
-        id="edge-test"
-        style="
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 5px 25px rgba(0,0,0,.12);
-        "
-    >
-
-        <input
-            type="file"
-            id="edge-test-input"
-            accept="image/*"
-            style="display:none"
-        >
-
-        <button
-            id="edge-test-button"
-            style="
-                border: 0;
-                background: #111;
-                color: white;
-                padding: 10px 14px;
-                border-radius: 9px;
-                cursor: pointer;
-            "
-        >
-            test background server
-        </button>
-
-    </div>
-
-
-    <script>
-
-        const edgeTestButton =
-            document.getElementById(
-                "edge-test-button"
-            );
-
-        const edgeTestInput =
-            document.getElementById(
-                "edge-test-input"
-            );
-
-
-        edgeTestButton.addEventListener(
-            "click",
-            () => {
-
-                edgeTestInput.click();
-
-            }
-        );
-
-
-        edgeTestInput.addEventListener(
-            "change",
-            async event => {
-
-                const file =
-                    event.target.files[0];
-
-
-                if (!file) {
-                    return;
-                }
-
-
-                try {
-
-                    showToast(
-                        "sending image to server..."
-                    );
-
-
-                    /*
-                     * Use the existing authenticated
-                     * Supabase client.
-                     *
-                     * supabase.functions.invoke()
-                     * automatically handles the
-                     * authentication headers.
-                     */
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .functions
-                            .invoke(
-                                "remove-background",
-                                {
-                                    body: file
-                                }
-                            );
-
-
-                    if (error) {
-
-                        console.error(
-                            "Edge Function error:",
-                            error
-                        );
-
-                        throw error;
-
-                    }
-
-
-                    console.log(
-                        "Edge Function response:",
-                        data
-                    );
-
-
-                    showToast(
-                        "server received image!"
-                    );
-
-
-                    alert(
-                        "SUCCESS! 🎉\n\n" +
-                        "The Edge Function received your image.\n\n" +
-                        "Size: " +
-                        data.bytes +
-                        " bytes"
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Edge Function test failed:",
-                        error
-                    );
-
-
-                    showToast(
-                        "server test failed"
-                    );
-
-
-                    alert(
-                        "SERVER TEST FAILED\n\n" +
-                        (
-                            error.message ||
-                            String(error)
-                        )
-                    );
-
-                }
-
-
-                event.target.value = "";
-
-            }
-        );
 
     </script>
 

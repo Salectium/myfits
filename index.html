@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1762,28 +1761,31 @@ async function uploadClothing(file) {
             );
 
 
-        if (!response.ok) {
+if (!response.ok) {
 
-const responseText = await response.text();
+    const responseText = await response.text();
 
-console.error(
-    "Edge Function error:",
-    response.status,
-    responseText
-);
+    console.error(
+        "Edge Function error:",
+        response.status,
+        responseText
+    );
 
-let errorMessage = "background removal failed";
+    let errorMessage = "background removal failed";
 
-try {
-    const errorData = JSON.parse(responseText);
+    try {
+        const errorData = JSON.parse(responseText);
 
-    if (errorData.error) {
-        errorMessage = errorData.error;
+        if (errorData.error) {
+            errorMessage = errorData.error;
+        }
+    } catch {
+        if (responseText) {
+            errorMessage = responseText;
+        }
     }
-} catch {
-    if (responseText) {
-        errorMessage = responseText;
-    }
+
+    throw new Error(errorMessage);
 }
 
 
@@ -3117,4 +3119,3 @@ try {
 
 </body>
 </html>
-```

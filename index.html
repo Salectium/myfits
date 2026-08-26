@@ -1747,6 +1747,8 @@ async function uploadClothing(file) {
         // The remove.bg API key stays safely inside the Edge Function.
        console.log("ABOUT TO CALL EDGE FUNCTION");
 
+console.log("FETCH STARTING:", `${SUPABASE_URL}/functions/v1/remove-background`);
+
 const response = await fetch(
     `${SUPABASE_URL}/functions/v1/remove-background`,
     {

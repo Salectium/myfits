@@ -1719,115 +1719,98 @@
 
 async function uploadClothing(file) {
 
-    const category =
-        await chooseCategory();
-
+    const category = await chooseCategory();
 
     if (!category) {
         return;
     }
 
-
-    showToast(
-        "removing background..."
-    );
-
+    showToast("removing background...");
 
     try {
 
-        /*
-         * Send the original image directly to
-         * the Supabase Edge Function.
-         *
-         * The Edge Function keeps the remove.bg
-         * API key on the server and returns the
-         * processed PNG.
-         */
+        // Get the currently logged-in user's Supabase session
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabaseClient.auth.getSession();
 
-        const response =
-            await fetch(
-                `${SUPABASE_URL}/functions/v1/remove-background`,
-                {
-                    method: "POST",
+        if (sessionError) {
+            throw sessionError;
+        }
 
-                    const {
-    data: { session }
-} = await supabaseClient.auth.getSession();
+        if (!session) {
+            throw new Error("you are not logged in");
+        }
 
-if (!session) {
-    throw new Error("you are not logged in");
-}
+        // Send the original image to the Edge Function
+        // The remove.bg API key stays safely inside the Edge Function.
+        const response = await fetch(
+            `${SUPABASE_URL}/functions/v1/remove-background`,
+            {
+                method: "POST",
 
-const response = await fetch(
-    `${SUPABASE_URL}/functions/v1/remove-background`,
-    {
-        method: "POST",
+                headers: {
+                    "Content-Type":
+                        file.type || "application/octet-stream",
 
-        headers: {
-            "Content-Type":
-                file.type ||
-                "application/octet-stream",
+                    "Authorization":
+                        `Bearer ${session.access_token}`
+                },
 
-            "Authorization":
-                `Bearer ${session.access_token}`
-        },
+                body: file
+            }
+        );
 
-        body: file
-    }
-);
+        // Handle Edge Function errors
+        if (!response.ok) {
 
-                    body: file
-                }
+            const responseText = await response.text();
+
+            console.error(
+                "Edge Function error:",
+                response.status,
+                responseText
             );
 
+            let errorMessage =
+                "background removal failed";
 
-if (!response.ok) {
+            try {
 
-    const responseText = await response.text();
+                const errorData =
+                    JSON.parse(responseText);
 
-    console.error(
-        "Edge Function error:",
-        response.status,
-        responseText
-    );
+                if (errorData.error) {
+                    errorMessage =
+                        errorData.error;
+                }
 
-    let errorMessage = "background removal failed";
+                if (errorData.message) {
+                    errorMessage =
+                        errorData.message;
+                }
 
-    try {
-        const errorData = JSON.parse(responseText);
+            } catch {
 
-        if (errorData.error) {
-            errorMessage = errorData.error;
+                if (responseText) {
+                    errorMessage =
+                        responseText;
+                }
+            }
+
+            throw new Error(errorMessage);
         }
-    } catch {
-        if (responseText) {
-            errorMessage = responseText;
-        }
-    }
 
-    throw new Error(errorMessage);
-}
-
-
-        /*
-         * The Edge Function should return
-         * the processed image itself.
-         */
-
+        // The Edge Function returns the processed PNG
         const transparentBlob =
             await response.blob();
 
-
-        if (
-            !transparentBlob.size
-        ) {
-
+        if (!transparentBlob.size) {
             throw new Error(
                 "server returned an empty image"
             );
-
         }
-
 
         console.log(
             "Received processed image:",
@@ -1835,38 +1818,28 @@ if (!response.ok) {
             "bytes"
         );
 
+        showToast("background removed!");
 
-        showToast(
-            "background removed!"
-        );
-
-
-        showToast(
-            "compressing image..."
-        );
-
+        // Compress the transparent PNG
+        showToast("compressing image...");
 
         const compressed =
             await compressImage(
                 transparentBlob
             );
 
-
+        // Create unique filename
         const filename =
             `${Date.now()}-${Math.random()
                 .toString(36)
                 .slice(2)}.webp`;
 
-
         const storagePath =
             `${currentUser.id}/${filename}`;
 
+        showToast("uploading...");
 
-        showToast(
-            "uploading..."
-        );
-
-
+        // Upload processed image to Supabase Storage
         const {
             error: uploadError
         } =
@@ -1877,47 +1850,30 @@ if (!response.ok) {
                     storagePath,
                     compressed,
                     {
-                        contentType:
-                            "image/webp",
-
-                        upsert:
-                            false
+                        contentType: "image/webp",
+                        upsert: false
                     }
                 );
 
-
         if (uploadError) {
-
             throw uploadError;
-
         }
 
-
+        // Get public image URL
         const imageUrl =
-            getImageUrl(
-                storagePath
-            );
+            getImageUrl(storagePath);
 
-
+        // Save clothing item to database
         const {
-            error:
-                databaseError
+            error: databaseError
         } =
             await supabaseClient
                 .from("clothes")
                 .insert({
-
-                    user_id:
-                        currentUser.id,
-
-                    image_url:
-                        imageUrl,
-
-                    category:
-                        category
-
+                    user_id: currentUser.id,
+                    image_url: imageUrl,
+                    category: category
                 });
-
 
         if (databaseError) {
 
@@ -1925,7 +1881,7 @@ if (!response.ok) {
                 databaseError
             );
 
-
+            // Clean up storage if database insert fails
             await supabaseClient
                 .storage
                 .from("clothes")
@@ -1933,16 +1889,10 @@ if (!response.ok) {
                     storagePath
                 ]);
 
-
             throw databaseError;
-
         }
 
-
-        showToast(
-            "clothing added"
-        );
-
+        showToast("clothing added");
 
     } catch (error) {
 
@@ -1951,9 +1901,7 @@ if (!response.ok) {
             error
         );
 
-
         throw error;
-
     }
 }
         /* =====================================================

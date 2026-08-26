@@ -1750,11 +1750,31 @@ async function uploadClothing(file) {
                 {
                     method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            file.type ||
-                            "application/octet-stream"
-                    },
+                    const {
+    data: { session }
+} = await supabaseClient.auth.getSession();
+
+if (!session) {
+    throw new Error("you are not logged in");
+}
+
+const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/remove-background`,
+    {
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                file.type ||
+                "application/octet-stream",
+
+            "Authorization":
+                `Bearer ${session.access_token}`
+        },
+
+        body: file
+    }
+);
 
                     body: file
                 }

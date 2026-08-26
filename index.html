@@ -340,24 +340,30 @@
             background: #fff;
         }
 
-        .saved-fit-images {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .saved-fit-image {
+        .saved-fit-preview {
             width: 100%;
             aspect-ratio: 1 / .8;
-            background: #f7f7f7;
+            background:
+                linear-gradient(#eeeeee 1px, transparent 1px),
+                linear-gradient(90deg, #eeeeee 1px, transparent 1px),
+                #f7f7f7;
+            background-size: 30px 30px;
             border-radius: 11px;
             overflow: hidden;
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease;
         }
 
-        .saved-fit-image img {
+        .saved-fit-preview:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,.08);
+        }
+
+        .saved-fit-preview img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            display: block;
         }
 
         .saved-fit-footer {
@@ -470,6 +476,80 @@
         .category-option-arrow {
             color: #999;
             font-size: 18px;
+        }
+
+        /* =========================
+           saved fit detail modal
+        ========================= */
+
+        .saved-fit-modal-content {
+            max-width: 850px;
+        }
+
+        .saved-fit-detail-image {
+            width: 100%;
+            min-height: 350px;
+            max-height: 65vh;
+            background:
+                linear-gradient(#eeeeee 1px, transparent 1px),
+                linear-gradient(90deg, #eeeeee 1px, transparent 1px),
+                #f7f7f7;
+            background-size: 30px 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .saved-fit-detail-image img {
+            width: 100%;
+            height: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+        }
+
+        .saved-fit-pieces-title {
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .saved-fit-pieces {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .saved-fit-piece {
+            background: #f7f7f7;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .saved-fit-piece img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+            display: block;
+        }
+
+        .saved-fit-piece-label {
+            padding: 8px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+
+        .saved-fit-piece-empty {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
         }
 
         /* =========================
@@ -685,6 +765,11 @@
             .editor-toolbar button {
                 width: 100%;
             }
+
+            .saved-fit-pieces {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
         }
 
         @media (max-width: 420px) {
@@ -696,6 +781,7 @@
             .auth-title {
                 font-size: 36px;
             }
+
         }
 
     </style>
@@ -984,6 +1070,10 @@
 </div>
 
 
+<!-- =========================
+     CLOTHING PICKER
+========================= -->
+
 <div id="picker-modal" class="modal hidden">
 
     <div class="modal-content">
@@ -1009,6 +1099,10 @@
 
 </div>
 
+
+<!-- =========================
+     CATEGORY PICKER
+========================= -->
 
 <div id="category-modal" class="modal hidden">
 
@@ -1070,6 +1164,38 @@
 </div>
 
 
+<!-- =========================
+     SAVED FIT DETAIL MODAL
+========================= -->
+
+<div id="saved-fit-modal" class="modal hidden">
+
+    <div class="modal-content saved-fit-modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                saved fit
+            </h2>
+
+            <button
+                class="close-modal"
+                id="close-saved-fit"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="saved-fit-detail-content"
+        ></div>
+
+    </div>
+
+</div>
+
+
 <div id="toast" class="toast hidden"></div>
 
 
@@ -1104,10 +1230,6 @@
 
     let currentFit = [];
 
-    /*
-     * Changed from one selected ID to a Set.
-     * This allows multiple clothing items to be selected.
-     */
     let selectedCanvasItemIds = new Set();
 
     let currentPickerMode = "canvas";
@@ -2621,10 +2743,6 @@
 
                 event.preventDefault();
 
-                /*
-                 * Ctrl-click / Cmd-click toggles
-                 * the clicked item in the selection.
-                 */
                 const multiSelect =
                     event.ctrlKey ||
                     event.metaKey;
@@ -2651,11 +2769,6 @@
 
                 } else {
 
-                    /*
-                     * Clicking an already-selected
-                     * item keeps the whole selection,
-                     * allowing the group to be dragged.
-                     */
                     if (
                         !selectedCanvasItemIds.has(
                             item.id
@@ -2676,10 +2789,6 @@
                 const selectedItems =
                     getSelectedCanvasItems();
 
-                /*
-                 * Save every selected item's
-                 * starting position.
-                 */
                 const startPositions =
                     selectedItems.map(
                         selected => ({
@@ -2725,9 +2834,6 @@
             }
 
 
-            /*
-             * Clicking empty canvas clears selection.
-             */
             selectedCanvasItemIds.clear();
 
             renderCanvas();
@@ -3394,53 +3500,8 @@
 
 
     /* =====================================================
-       EXPORT TRANSPARENT WEBP
+       LOAD IMAGE FOR EXPORT
     ===================================================== */
-
-    document
-        .getElementById("export-webp-button")
-        .addEventListener(
-            "click",
-            async () => {
-
-                if (!currentFit.length) {
-
-                    showToast(
-                        "add some clothing first"
-                    );
-
-                    return;
-
-                }
-
-                try {
-
-                    showToast(
-                        "creating transparent WebP..."
-                    );
-
-                    await exportTransparentWebP();
-
-                    showToast(
-                        "WebP exported"
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "WebP export failed:",
-                        error
-                    );
-
-                    showToast(
-                        "couldn't export WebP"
-                    );
-
-                }
-
-            }
-        );
-
 
     async function loadImageForExport(url) {
 
@@ -3450,10 +3511,6 @@
                 const img =
                     new Image();
 
-                /*
-                 * Needed for images coming from
-                 * Supabase storage.
-                 */
                 img.crossOrigin = "anonymous";
 
                 img.onload = () => {
@@ -3478,7 +3535,11 @@
     }
 
 
-    async function exportTransparentWebP() {
+    /* =====================================================
+       CREATE TRANSPARENT WEBP
+    ===================================================== */
+
+    async function createTransparentWebP() {
 
         const canvas =
             getCanvas();
@@ -3486,10 +3547,6 @@
         const canvasRect =
             canvas.getBoundingClientRect();
 
-        /*
-         * Use the actual editor size so the
-         * exported image represents the canvas.
-         */
         const exportCanvas =
             document.createElement("canvas");
 
@@ -3508,11 +3565,6 @@
         const context =
             exportCanvas.getContext("2d");
 
-        /*
-         * IMPORTANT:
-         * No background is drawn here.
-         * Canvas therefore stays transparent.
-         */
         context.clearRect(
             0,
             0,
@@ -3565,26 +3617,120 @@
 
         }
 
-        const url =
-            URL.createObjectURL(blob);
+        return blob;
 
-        const link =
-            document.createElement("a");
+    }
 
-        link.href = url;
 
-        link.download =
-            `wardrobe-fit-${Date.now()}.webp`;
+    /* =====================================================
+       EXPORT TRANSPARENT WEBP
+    ===================================================== */
 
-        document.body.appendChild(link);
+    document
+        .getElementById("export-webp-button")
+        .addEventListener(
+            "click",
+            async () => {
 
-        link.click();
+                if (!currentFit.length) {
 
-        link.remove();
+                    showToast(
+                        "add some clothing first"
+                    );
 
-        setTimeout(
-            () => URL.revokeObjectURL(url),
-            1000
+                    return;
+
+                }
+
+                try {
+
+                    showToast(
+                        "creating transparent WebP..."
+                    );
+
+                    const blob =
+                        await createTransparentWebP();
+
+                    const url =
+                        URL.createObjectURL(blob);
+
+                    const link =
+                        document.createElement("a");
+
+                    link.href = url;
+
+                    link.download =
+                        `wardrobe-fit-${Date.now()}.webp`;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+
+                    link.remove();
+
+                    setTimeout(
+                        () =>
+                            URL.revokeObjectURL(url),
+                        1000
+                    );
+
+                    showToast(
+                        "WebP exported"
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "WebP export failed:",
+                        error
+                    );
+
+                    showToast(
+                        "couldn't export WebP"
+                    );
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       UPLOAD SAVED FIT IMAGE
+    ===================================================== */
+
+    async function uploadSavedFitImage(blob) {
+
+        const filename =
+            `fit-${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2)}.webp`;
+
+        const storagePath =
+            `${currentUser.id}/fits/${filename}`;
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .storage
+                .from("clothes")
+                .upload(
+                    storagePath,
+                    blob,
+                    {
+                        contentType:
+                            "image/webp",
+                        upsert: false
+                    }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return getImageUrl(
+            storagePath
         );
 
     }
@@ -3610,87 +3756,108 @@
 
                 }
 
-                const fitData = {
-
-                    top:
-                        getFirstCanvasPiece(
-                            "top"
-                        ),
-
-                    bottom:
-                        getFirstCanvasPiece(
-                            "bottom"
-                        ),
-
-                    shoes:
-                        getFirstCanvasPiece(
-                            "shoes"
-                        ),
-
-                    outer:
-                        getFirstCanvasPiece(
-                            "outer"
-                        )
-
-                };
-
-
-                const editorData =
-                    currentFit.map(
-                        item => ({
-
-                            id:
-                                item.id,
-
-                            clothingId:
-                                item.clothingId,
-
-                            x:
-                                item.x,
-
-                            y:
-                                item.y,
-
-                            width:
-                                item.width,
-
-                            height:
-                                item.height,
-
-                            zIndex:
-                                item.zIndex
-
-                        })
+                const saveButton =
+                    document.getElementById(
+                        "save-fit-button"
                     );
 
+                saveButton.disabled = true;
 
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("fits")
-                        .insert({
+                try {
 
-                            user_id:
-                                currentUser.id,
+                    showToast(
+                        "creating fit image..."
+                    );
 
-                            fit_data:
-                                fitData,
+                    /*
+                     * Create the exact same transparent
+                     * WebP that the export button uses.
+                     */
+                    const imageBlob =
+                        await createTransparentWebP();
 
-                            editor_data:
-                                editorData
+                    showToast(
+                        "uploading fit image..."
+                    );
 
-                        })
-                        .select()
-                        .single();
+                    const imageUrl =
+                        await uploadSavedFitImage(
+                            imageBlob
+                        );
 
 
-                if (error) {
+                    /*
+                     * Keep the original four-piece
+                     * information so clicking the image
+                     * can still show every item.
+                     */
+                    const fitData = {
 
-                    console.error(error);
+                        image_url:
+                            imageUrl,
 
-                    const fallback =
+                        top:
+                            getFirstCanvasPiece(
+                                "top"
+                            ),
+
+                        bottom:
+                            getFirstCanvasPiece(
+                                "bottom"
+                            ),
+
+                        shoes:
+                            getFirstCanvasPiece(
+                                "shoes"
+                            ),
+
+                        outer:
+                            getFirstCanvasPiece(
+                                "outer"
+                            )
+
+                    };
+
+
+                    /*
+                     * Keep all editor information too.
+                     * This means the saved fit still knows
+                     * exactly how every clothing item was
+                     * positioned.
+                     */
+                    const editorData =
+                        currentFit.map(
+                            item => ({
+
+                                id:
+                                    item.id,
+
+                                clothingId:
+                                    item.clothingId,
+
+                                x:
+                                    item.x,
+
+                                y:
+                                    item.y,
+
+                                width:
+                                    item.width,
+
+                                height:
+                                    item.height,
+
+                                zIndex:
+                                    item.zIndex
+
+                            })
+                        );
+
+
+                    const {
+                        data,
+                        error
+                    } =
                         await supabaseClient
                             .from("fits")
                             .insert({
@@ -3699,46 +3866,92 @@
                                     currentUser.id,
 
                                 fit_data:
-                                    fitData
+                                    fitData,
+
+                                editor_data:
+                                    editorData
 
                             })
                             .select()
                             .single();
 
-                    if (fallback.error) {
 
-                        console.error(
-                            fallback.error
+                    if (error) {
+
+                        console.error(error);
+
+                        /*
+                         * Fallback for databases where
+                         * editor_data doesn't exist.
+                         */
+                        const fallback =
+                            await supabaseClient
+                                .from("fits")
+                                .insert({
+
+                                    user_id:
+                                        currentUser.id,
+
+                                    fit_data:
+                                        fitData
+
+                                })
+                                .select()
+                                .single();
+
+                        if (fallback.error) {
+
+                            console.error(
+                                fallback.error
+                            );
+
+                            showToast(
+                                "couldn't save fit"
+                            );
+
+                            return;
+
+                        }
+
+                        savedFits.unshift(
+                            fallback.data
                         );
 
-                        showToast(
-                            "couldn't save fit"
-                        );
+                    } else {
 
-                        return;
+                        savedFits.unshift(data);
 
                     }
 
-                    savedFits.unshift(
-                        fallback.data
+
+                    showToast(
+                        "fit saved"
                     );
 
-                } else {
+                    currentFit = [];
 
-                    savedFits.unshift(data);
+                    selectedCanvasItemIds.clear();
+
+                    renderCanvas();
+
+                    renderSavedFits();
+
+                } catch (error) {
+
+                    console.error(
+                        "saving fit failed:",
+                        error
+                    );
+
+                    showToast(
+                        "couldn't save fit"
+                    );
+
+                } finally {
+
+                    saveButton.disabled = false;
 
                 }
-
-
-                showToast(
-                    "fit saved"
-                );
-
-                currentFit = [];
-
-                selectedCanvasItemIds.clear();
-
-                renderCanvas();
 
             }
         );
@@ -3758,6 +3971,230 @@
             : null;
 
     }
+
+
+    /* =====================================================
+       SAVED FIT DETAIL MODAL
+    ===================================================== */
+
+    function openSavedFit(fit) {
+
+        const modal =
+            document.getElementById(
+                "saved-fit-modal"
+            );
+
+        const content =
+            document.getElementById(
+                "saved-fit-detail-content"
+            );
+
+        const data =
+            fit.fit_data || {};
+
+        const categories = [
+            {
+                key: "top",
+                name: "top"
+            },
+            {
+                key: "bottom",
+                name: "bottoms"
+            },
+            {
+                key: "shoes",
+                name: "shoes"
+            },
+            {
+                key: "outer",
+                name: "outer layer"
+            }
+        ];
+
+
+        const pieces =
+            categories.map(
+                category => {
+
+                    const clothingId =
+                        data[category.key];
+
+                    const piece =
+                        clothingId
+                            ?
+                            clothes.find(
+                                item =>
+                                    String(
+                                        item.id
+                                    ) ===
+                                    String(
+                                        clothingId
+                                    )
+                            )
+                            :
+                            null;
+
+                    return {
+                        ...category,
+                        piece
+                    };
+
+                }
+            );
+
+
+        /*
+         * New saved fits have image_url.
+         * Older fits may not, so we show a
+         * friendly fallback.
+         */
+        const imageHtml =
+            data.image_url
+                ?
+                `
+                    <div class="saved-fit-detail-image">
+
+                        <img
+                            src="${escapeHtml(data.image_url)}"
+                            alt="saved outfit"
+                        >
+
+                    </div>
+                `
+                :
+                `
+                    <div class="saved-fit-detail-image">
+
+                        <div class="empty-message">
+                            this fit was saved before
+                            outfit images were added.
+                        </div>
+
+                    </div>
+                `;
+
+
+        content.innerHTML = `
+
+            ${imageHtml}
+
+            <h3 class="saved-fit-pieces-title">
+                clothing in this fit
+            </h3>
+
+            <div class="saved-fit-pieces">
+
+                ${
+                    pieces
+                        .map(
+                            category => {
+
+                                if (!category.piece) {
+
+                                    return `
+
+                                        <div class="saved-fit-piece">
+
+                                            <div
+                                                class="saved-fit-piece-empty"
+                                            >
+                                                no ${escapeHtml(
+                                                    category.name
+                                                )}
+                                            </div>
+
+                                            <div
+                                                class="saved-fit-piece-label"
+                                            >
+                                                ${escapeHtml(
+                                                    category.name
+                                                )}
+                                            </div>
+
+                                        </div>
+
+                                    `;
+
+                                }
+
+                                return `
+
+                                    <div class="saved-fit-piece">
+
+                                        <img
+                                            src="${escapeHtml(
+                                                category.piece.image_url
+                                            )}"
+                                            alt="${escapeHtml(
+                                                category.name
+                                            )}"
+                                        >
+
+                                        <div
+                                            class="saved-fit-piece-label"
+                                        >
+                                            ${escapeHtml(
+                                                category.name
+                                            )}
+                                        </div>
+
+                                    </div>
+
+                                `;
+
+                            }
+                        )
+                        .join("")
+                }
+
+            </div>
+
+        `;
+
+        modal.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    function closeSavedFit() {
+
+        document
+            .getElementById(
+                "saved-fit-modal"
+            )
+            .classList
+            .add("hidden");
+
+    }
+
+
+    document
+        .getElementById("close-saved-fit")
+        .addEventListener(
+            "click",
+            closeSavedFit
+        );
+
+
+    document
+        .getElementById("saved-fit-modal")
+        .addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target.id ===
+                    "saved-fit-modal"
+                ) {
+
+                    closeSavedFit();
+
+                }
+
+            }
+        );
 
 
     /* =====================================================
@@ -3794,6 +4231,60 @@
                         const data =
                             fit.fit_data || {};
 
+                        /*
+                         * New behavior:
+                         * show ONLY the saved WebP.
+                         */
+                        if (data.image_url) {
+
+                            return `
+
+                                <article class="saved-fit">
+
+                                    <div
+                                        class="saved-fit-preview"
+                                        data-fit-id="${fit.id}"
+                                        title="click to view fit"
+                                    >
+
+                                        <img
+                                            src="${escapeHtml(
+                                                data.image_url
+                                            )}"
+                                            alt="saved outfit"
+                                            loading="lazy"
+                                        >
+
+                                    </div>
+
+                                    <div class="saved-fit-footer">
+
+                                        <span class="fit-date">
+                                            ${formatDate(
+                                                fit.created_at
+                                            )}
+                                        </span>
+
+                                        <button
+                                            class="delete-fit"
+                                            data-fit-id="${fit.id}"
+                                        >
+                                            delete
+                                        </button>
+
+                                    </div>
+
+                                </article>
+
+                            `;
+
+                        }
+
+
+                        /*
+                         * Fallback for older saved fits
+                         * which don't have image_url.
+                         */
                         const pieces = [
 
                             data.top,
@@ -3820,7 +4311,11 @@
 
                             <article class="saved-fit">
 
-                                <div class="saved-fit-images">
+                                <div
+                                    class="saved-fit-preview"
+                                    data-fit-id="${fit.id}"
+                                    title="click to view fit"
+                                >
 
                                     ${
                                         pieces.length
@@ -3829,33 +4324,28 @@
                                                 .map(
                                                     piece => `
 
-                                                    <div
-                                                        class="saved-fit-image"
-                                                    >
-
                                                         <img
-                                                            src="${escapeHtml(piece.image_url)}"
-                                                            alt="${escapeHtml(piece.category)}"
+                                                            src="${escapeHtml(
+                                                                piece.image_url
+                                                            )}"
+                                                            alt="${escapeHtml(
+                                                                piece.category
+                                                            )}"
                                                             loading="lazy"
                                                         >
 
-                                                    </div>
-
-                                                `
+                                                    `
                                                 )
                                                 .join("")
                                             :
                                             `
-                                            <div class="empty-message">
-                                                some items from this
-                                                fit are no longer
-                                                in your wardrobe.
-                                            </div>
+                                                <div class="empty-message">
+                                                    unavailable
+                                                </div>
                                             `
                                     }
 
                                 </div>
-
 
                                 <div class="saved-fit-footer">
 
@@ -3881,6 +4371,42 @@
                     }
                 )
                 .join("");
+
+
+        /*
+         * Clicking the image opens the detail modal.
+         */
+        container
+            .querySelectorAll(".saved-fit-preview")
+            .forEach(
+                preview => {
+
+                    preview.addEventListener(
+                        "click",
+                        () => {
+
+                            const fit =
+                                savedFits.find(
+                                    saved =>
+                                        String(
+                                            saved.id
+                                        ) ===
+                                        String(
+                                            preview.dataset.fitId
+                                        )
+                                );
+
+                            if (!fit) {
+                                return;
+                            }
+
+                            openSavedFit(fit);
+
+                        }
+                    );
+
+                }
+            );
 
 
         container
@@ -3935,6 +4461,13 @@
             return;
         }
 
+        const fit =
+            savedFits.find(
+                saved =>
+                    String(saved.id) ===
+                    String(id)
+            );
+
         const {
             error
         } =
@@ -3959,10 +4492,40 @@
 
         }
 
+
+        /*
+         * Also delete the generated WebP
+         * from storage when possible.
+         */
+        if (
+            fit &&
+            fit.fit_data &&
+            fit.fit_data.image_url
+        ) {
+
+            const imagePath =
+                getStoragePathFromUrl(
+                    fit.fit_data.image_url
+                );
+
+            if (imagePath) {
+
+                await supabaseClient
+                    .storage
+                    .from("clothes")
+                    .remove([
+                        imagePath
+                    ]);
+
+            }
+
+        }
+
+
         savedFits =
             savedFits.filter(
-                fit =>
-                    String(fit.id) !==
+                saved =>
+                    String(saved.id) !==
                     String(id)
             );
 

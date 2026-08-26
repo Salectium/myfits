@@ -1745,22 +1745,29 @@ async function uploadClothing(file) {
 
         // Send the original image to the Edge Function
         // The remove.bg API key stays safely inside the Edge Function.
-        const response = await fetch(
-            `${SUPABASE_URL}/functions/v1/remove-background`,
-            {
-                method: "POST",
+       console.log("ABOUT TO CALL EDGE FUNCTION");
 
-                headers: {
-                    "Content-Type":
-                        file.type || "application/octet-stream",
+const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/remove-background`,
+    {
+        method: "POST",
 
-                    "Authorization":
-                        `Bearer ${session.access_token}`
-                },
+        headers: {
+            "Content-Type":
+                file.type || "application/octet-stream",
 
-                body: file
-            }
-        );
+            "Authorization":
+                `Bearer ${session.access_token}`
+        },
+
+        body: file
+    }
+);
+
+console.log("EDGE FUNCTION RESPONDED:", response.status);
+
+// Handle Edge Function errors
+if (!response.ok) {
 
         // Handle Edge Function errors
         if (!response.ok) {

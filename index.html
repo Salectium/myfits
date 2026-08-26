@@ -626,6 +626,91 @@
                 font-size: 36px;
             }
         }
+
+        /* =========================
+           fit editor
+        ========================= */
+
+        .editor-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .fit-editor {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .fit-canvas {
+            position: relative;
+            width: 100%;
+            min-height: 650px;
+            background: #f7f7f7;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .canvas-empty {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .canvas-empty-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .canvas-empty-subtitle {
+            color: #999;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .editor-toolbar button {
+            white-space: nowrap;
+        }
+
+        @media (max-width: 750px) {
+
+            .editor-header {
+                flex-direction: column;
+            }
+
+            .editor-header .primary-button {
+                width: 100%;
+            }
+
+            .fit-canvas {
+                min-height: 550px;
+            }
+
+            .editor-toolbar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .editor-toolbar button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -821,75 +906,19 @@
                 class="page hidden"
             >
 
-                <h1 class="page-title">
-                    build a fit
-                </h1>
+                <div class="editor-header">
 
-                <p class="page-description">
-                    tap a piece to choose what you want to wear.
-                </p>
+                    <div>
 
-                <div class="fit-builder">
+                        <h1 class="page-title">
+                            build a fit
+                        </h1>
 
-                    <button
-                        class="fit-slot"
-                        data-slot="top"
-                    >
-                        <span class="slot-label">
-                            choose a top
-                        </span>
+                        <p class="page-description">
+                            create your outfit exactly how you want it.
+                        </p>
 
-                        <span class="slot-subtitle">
-                            tap to choose
-                        </span>
-                    </button>
-
-
-                    <button
-                        class="fit-slot"
-                        data-slot="bottom"
-                    >
-                        <span class="slot-label">
-                            choose bottoms
-                        </span>
-
-                        <span class="slot-subtitle">
-                            tap to choose
-                        </span>
-                    </button>
-
-
-                    <button
-                        class="fit-slot"
-                        data-slot="shoes"
-                    >
-                        <span class="slot-label">
-                            choose shoes
-                        </span>
-
-                        <span class="slot-subtitle">
-                            tap to choose
-                        </span>
-                    </button>
-
-
-                    <button
-                        class="fit-slot"
-                        data-slot="outer"
-                    >
-                        <span class="slot-label">
-                            choose an outer layer
-                        </span>
-
-                        <span class="slot-subtitle">
-                            optional
-                        </span>
-                    </button>
-
-                </div>
-
-
-                <div class="builder-actions">
+                    </div>
 
                     <button
                         class="primary-button"
@@ -898,12 +927,72 @@
                         save fit
                     </button>
 
-                    <button
-                        class="secondary-button"
-                        id="clear-fit-button"
+                </div>
+
+
+                <div class="fit-editor">
+
+                    <div
+                        id="fit-canvas"
+                        class="fit-canvas"
                     >
-                        clear
-                    </button>
+
+                        <div
+                            id="canvas-empty"
+                            class="canvas-empty"
+                        >
+
+                            <div class="canvas-empty-title">
+                                your outfit
+                            </div>
+
+                            <div class="canvas-empty-subtitle">
+                                add clothing to get started
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="editor-toolbar">
+
+                        <button
+                            class="secondary-button"
+                            id="add-clothing-button"
+                        >
+                            + add clothing
+                        </button>
+
+                        <button
+                            class="secondary-button"
+                            id="delete-selected-button"
+                        >
+                            delete
+                        </button>
+
+                        <button
+                            class="secondary-button"
+                            id="bring-forward-button"
+                        >
+                            bring forward
+                        </button>
+
+                        <button
+                            class="secondary-button"
+                            id="send-backward-button"
+                        >
+                            send backward
+                        </button>
+
+                        <button
+                            class="secondary-button"
+                            id="clear-fit-button"
+                        >
+                            clear
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -1073,7 +1162,7 @@
                 SUPABASE_URL,
                 SUPABASE_KEY
             );
-        
+
 
         /* =====================================================
            APP STATE
@@ -1163,118 +1252,118 @@
            TRANSPARENT IMAGE COMPRESSION
         ===================================================== */
 
-     async function compressImage(file) {
+        async function compressImage(file) {
 
-    return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
 
-        const reader = new FileReader();
+                const reader = new FileReader();
 
-        reader.onload = event => {
+                reader.onload = event => {
 
-            const img = new Image();
+                    const img = new Image();
 
-            img.onload = () => {
+                    img.onload = () => {
 
-                const maxSize = 1400;
+                        const maxSize = 1400;
 
-                let width = img.width;
-                let height = img.height;
+                        let width = img.width;
+                        let height = img.height;
 
-                if (width > maxSize || height > maxSize) {
+                        if (width > maxSize || height > maxSize) {
 
-                    if (width > height) {
+                            if (width > height) {
 
-                        height = Math.round(
-                            height * maxSize / width
-                        );
+                                height = Math.round(
+                                    height * maxSize / width
+                                );
 
-                        width = maxSize;
+                                width = maxSize;
 
-                    } else {
+                            } else {
 
-                        width = Math.round(
-                            width * maxSize / height
-                        );
+                                width = Math.round(
+                                    width * maxSize / height
+                                );
 
-                        height = maxSize;
-                    }
-                }
-
-                const canvas =
-                    document.createElement("canvas");
-
-                canvas.width = width;
-                canvas.height = height;
-
-                const context =
-                    canvas.getContext("2d");
-
-                context.clearRect(
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-                context.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-                canvas.toBlob(
-                    blob => {
-
-                        if (!blob) {
-
-                            reject(
-                                new Error(
-                                    "image compression failed"
-                                )
-                            );
-
-                            return;
+                                height = maxSize;
+                            }
                         }
 
-                        resolve(blob);
+                        const canvas =
+                            document.createElement("canvas");
 
-                    },
-                    "image/webp",
-                    0.85
-                );
+                        canvas.width = width;
+                        canvas.height = height;
 
-            };
+                        const context =
+                            canvas.getContext("2d");
 
-            img.onerror = () => {
+                        context.clearRect(
+                            0,
+                            0,
+                            width,
+                            height
+                        );
 
-                reject(
-                    new Error(
-                        "couldn't load image"
-                    )
-                );
+                        context.drawImage(
+                            img,
+                            0,
+                            0,
+                            width,
+                            height
+                        );
 
-            };
+                        canvas.toBlob(
+                            blob => {
 
-            img.src = event.target.result;
+                                if (!blob) {
 
-        };
+                                    reject(
+                                        new Error(
+                                            "image compression failed"
+                                        )
+                                    );
 
-        reader.onerror = () => {
+                                    return;
+                                }
 
-            reject(
-                new Error(
-                    "couldn't read image"
-                )
-            );
+                                resolve(blob);
 
-        };
+                            },
+                            "image/webp",
+                            0.85
+                        );
 
-        reader.readAsDataURL(file);
+                    };
 
-    });
-}
+                    img.onerror = () => {
+
+                        reject(
+                            new Error(
+                                "couldn't load image"
+                            )
+                        );
+
+                    };
+
+                    img.src = event.target.result;
+
+                };
+
+                reader.onerror = () => {
+
+                    reject(
+                        new Error(
+                            "couldn't read image"
+                        )
+                    );
+
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+        }
 
 
         /* =====================================================
@@ -1717,199 +1806,213 @@
            UPLOAD CLOTHING
         ===================================================== */
 
-async function uploadClothing(file) {
+        async function uploadClothing(file) {
 
-    const category = await chooseCategory();
+            const category = await chooseCategory();
 
-    if (!category) {
-        return;
-    }
+            if (!category) {
+                return;
+            }
 
-    showToast("removing background...");
-
-    try {
-
-        // Get the currently logged-in user's Supabase session
-        const {
-            data: { session },
-            error: sessionError
-        } = await supabaseClient.auth.getSession();
-
-        if (sessionError) {
-            throw sessionError;
-        }
-
-        if (!session) {
-            throw new Error("you are not logged in");
-        }
-
-        // Send the original image to the Edge Function
-        // The remove.bg API key stays safely inside the Edge Function.
-       console.log("ABOUT TO CALL EDGE FUNCTION");
-
-console.log("FETCH STARTING:", `${SUPABASE_URL}/functions/v1/remove-background`);
-
-const response = await fetch(
-    `${SUPABASE_URL}/functions/v1/remove-background`,
-    {
-        method: "POST",
-
-        headers: {
-            "Content-Type":
-                file.type || "application/octet-stream",
-
-            "Authorization":
-                `Bearer ${session.access_token}`
-        },
-
-        body: file
-    }
-);
-
-console.log("EDGE FUNCTION RESPONDED:", response.status);
-
-        // Handle Edge Function errors
-        if (!response.ok) {
-
-            const responseText = await response.text();
-
-            console.error(
-                "Edge Function error:",
-                response.status,
-                responseText
-            );
-
-            let errorMessage =
-                "background removal failed";
+            showToast("removing background...");
 
             try {
 
-                const errorData =
-                    JSON.parse(responseText);
+                const {
+                    data: { session },
+                    error: sessionError
+                } = await supabaseClient.auth.getSession();
 
-                if (errorData.error) {
-                    errorMessage =
-                        errorData.error;
+                if (sessionError) {
+                    throw sessionError;
                 }
 
-                if (errorData.message) {
-                    errorMessage =
-                        errorData.message;
+                if (!session) {
+                    throw new Error("you are not logged in");
                 }
 
-            } catch {
+                console.log("ABOUT TO CALL EDGE FUNCTION");
 
-                if (responseText) {
-                    errorMessage =
-                        responseText;
-                }
-            }
+                console.log(
+                    "FETCH STARTING:",
+                    `${SUPABASE_URL}/functions/v1/remove-background`
+                );
 
-            throw new Error(errorMessage);
-        }
-
-        // The Edge Function returns the processed PNG
-        const transparentBlob =
-            await response.blob();
-
-        if (!transparentBlob.size) {
-            throw new Error(
-                "server returned an empty image"
-            );
-        }
-
-        console.log(
-            "Received processed image:",
-            transparentBlob.size,
-            "bytes"
-        );
-
-        showToast("background removed!");
-
-        // Compress the transparent PNG
-        showToast("compressing image...");
-
-        const compressed =
-            await compressImage(
-                transparentBlob
-            );
-
-        // Create unique filename
-        const filename =
-            `${Date.now()}-${Math.random()
-                .toString(36)
-                .slice(2)}.webp`;
-
-        const storagePath =
-            `${currentUser.id}/${filename}`;
-
-        showToast("uploading...");
-
-        // Upload processed image to Supabase Storage
-        const {
-            error: uploadError
-        } =
-            await supabaseClient
-                .storage
-                .from("clothes")
-                .upload(
-                    storagePath,
-                    compressed,
+                const response = await fetch(
+                    `${SUPABASE_URL}/functions/v1/remove-background`,
                     {
-                        contentType: "image/webp",
-                        upsert: false
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                file.type || "application/octet-stream",
+
+                            "Authorization":
+                                `Bearer ${session.access_token}`
+                        },
+
+                        body: file
                     }
                 );
 
-        if (uploadError) {
-            throw uploadError;
+                console.log(
+                    "EDGE FUNCTION RESPONDED:",
+                    response.status
+                );
+
+                if (!response.ok) {
+
+                    const responseText =
+                        await response.text();
+
+                    console.error(
+                        "Edge Function error:",
+                        response.status,
+                        responseText
+                    );
+
+                    let errorMessage =
+                        "background removal failed";
+
+                    try {
+
+                        const errorData =
+                            JSON.parse(responseText);
+
+                        if (errorData.error) {
+                            errorMessage =
+                                errorData.error;
+                        }
+
+                        if (errorData.message) {
+                            errorMessage =
+                                errorData.message;
+                        }
+
+                    } catch {
+
+                        if (responseText) {
+                            errorMessage =
+                                responseText;
+                        }
+                    }
+
+                    throw new Error(
+                        errorMessage
+                    );
+                }
+
+                const transparentBlob =
+                    await response.blob();
+
+                if (!transparentBlob.size) {
+                    throw new Error(
+                        "server returned an empty image"
+                    );
+                }
+
+                console.log(
+                    "Received processed image:",
+                    transparentBlob.size,
+                    "bytes"
+                );
+
+                showToast(
+                    "background removed!"
+                );
+
+                showToast(
+                    "compressing image..."
+                );
+
+                const compressed =
+                    await compressImage(
+                        transparentBlob
+                    );
+
+                const filename =
+                    `${Date.now()}-${Math.random()
+                        .toString(36)
+                        .slice(2)}.webp`;
+
+                const storagePath =
+                    `${currentUser.id}/${filename}`;
+
+                showToast(
+                    "uploading..."
+                );
+
+                const {
+                    error: uploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .upload(
+                            storagePath,
+                            compressed,
+                            {
+                                contentType:
+                                    "image/webp",
+                                upsert: false
+                            }
+                        );
+
+                if (uploadError) {
+                    throw uploadError;
+                }
+
+                const imageUrl =
+                    getImageUrl(
+                        storagePath
+                    );
+
+                const {
+                    error: databaseError
+                } =
+                    await supabaseClient
+                        .from("clothes")
+                        .insert({
+                            user_id:
+                                currentUser.id,
+                            image_url:
+                                imageUrl,
+                            category:
+                                category
+                        });
+
+                if (databaseError) {
+
+                    console.error(
+                        databaseError
+                    );
+
+                    await supabaseClient
+                        .storage
+                        .from("clothes")
+                        .remove([
+                            storagePath
+                        ]);
+
+                    throw databaseError;
+                }
+
+                showToast(
+                    "clothing added"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "background removal/upload failed:",
+                    error
+                );
+
+                throw error;
+            }
         }
 
-        // Get public image URL
-        const imageUrl =
-            getImageUrl(storagePath);
 
-        // Save clothing item to database
-        const {
-            error: databaseError
-        } =
-            await supabaseClient
-                .from("clothes")
-                .insert({
-                    user_id: currentUser.id,
-                    image_url: imageUrl,
-                    category: category
-                });
-
-        if (databaseError) {
-
-            console.error(
-                databaseError
-            );
-
-            // Clean up storage if database insert fails
-            await supabaseClient
-                .storage
-                .from("clothes")
-                .remove([
-                    storagePath
-                ]);
-
-            throw databaseError;
-        }
-
-        showToast("clothing added");
-
-    } catch (error) {
-
-        console.error(
-            "background removal/upload failed:",
-            error
-        );
-
-        throw error;
-    }
-}
         /* =====================================================
            CATEGORY CHOOSER
         ===================================================== */
@@ -2380,6 +2483,7 @@ console.log("EDGE FUNCTION RESPONDED:", response.status);
 
         /* =====================================================
            FIT BUILDER
+           OLD SYSTEM — INTENTIONALLY LEFT IN PLACE FOR NOW
         ===================================================== */
 
         document

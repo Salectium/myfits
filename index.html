@@ -7,7 +7,6 @@
 
     <title>wardrobe</title>
 
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -38,7 +37,6 @@
         .hidden {
             display: none !important;
         }
-
 
         /* =========================
            auth
@@ -133,7 +131,6 @@
             line-height: 1.5;
         }
 
-
         /* =========================
            app
         ========================= */
@@ -209,7 +206,6 @@
             margin-bottom: 30px;
         }
 
-
         /* =========================
            upload
         ========================= */
@@ -239,7 +235,6 @@
             border-radius: 10px;
             cursor: pointer;
         }
-
 
         /* =========================
            wardrobe
@@ -295,40 +290,6 @@
             padding: 15px 0;
         }
 
-
-        /* =========================
-           old builder compatibility
-        ========================= */
-
-        .fit-builder {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto 35px;
-        }
-
-        .fit-slot {
-            border: 2px dashed #ddd;
-            background: #fafafa;
-            border-radius: 18px;
-            min-height: 300px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: .15s;
-        }
-
-        .fit-slot img {
-            width: 100%;
-            height: 260px;
-            object-fit: contain;
-        }
-
-
         /* =========================
            picker
         ========================= */
@@ -361,7 +322,6 @@
             object-fit: contain;
             display: block;
         }
-
 
         /* =========================
            saved fits
@@ -425,7 +385,6 @@
             color: #999;
             padding: 25px 0;
         }
-
 
         /* =========================
            modal
@@ -492,7 +451,6 @@
             align-items: center;
             justify-content: space-between;
             text-align: left;
-            transition: .15s;
         }
 
         .category-option:hover {
@@ -514,9 +472,8 @@
             font-size: 18px;
         }
 
-
         /* =========================
-           NEW FIT EDITOR
+           fit editor
         ========================= */
 
         .editor-header {
@@ -582,7 +539,6 @@
             white-space: nowrap;
         }
 
-
         /* =========================
            canvas clothing item
         ========================= */
@@ -612,6 +568,11 @@
             outline-offset: 3px;
         }
 
+        .canvas-item.multi-selected {
+            outline: 2px solid #666;
+            outline-offset: 3px;
+        }
+
         .resize-handle {
             position: absolute;
             right: -8px;
@@ -625,6 +586,12 @@
             touch-action: none;
         }
 
+        .selection-info {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            margin-top: 10px;
+        }
 
         /* =========================
            loading
@@ -635,7 +602,6 @@
             padding: 60px 20px;
             color: #888;
         }
-
 
         /* =========================
            toast
@@ -655,7 +621,6 @@
             max-width: calc(100vw - 30px);
             text-align: center;
         }
-
 
         /* =========================
            mobile
@@ -738,2092 +703,2131 @@
 
 <body>
 
+<section id="auth-screen">
 
-    <!-- =========================
-         login
-    ========================= -->
+    <div class="auth-box">
 
-    <section id="auth-screen">
+        <h1 class="auth-title">wardrobe</h1>
 
-        <div class="auth-box">
+        <p class="auth-subtitle">
+            your clothes, everywhere.
+        </p>
 
-            <h1 class="auth-title">
-                wardrobe
-            </h1>
+        <div class="auth-tabs">
 
-            <p class="auth-subtitle">
-                your clothes, everywhere.
-            </p>
+            <button class="auth-tab active" id="login-tab">
+                log in
+            </button>
 
-            <div class="auth-tabs">
-
-                <button
-                    class="auth-tab active"
-                    id="login-tab"
-                >
-                    log in
-                </button>
-
-                <button
-                    class="auth-tab"
-                    id="signup-tab"
-                >
-                    sign up
-                </button>
-
-            </div>
-
-            <form
-                class="auth-form"
-                id="auth-form"
-            >
-
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="email"
-                    autocomplete="email"
-                    required
-                >
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="password"
-                    autocomplete="current-password"
-                    required
-                >
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                    id="auth-submit"
-                >
-                    log in
-                </button>
-
-            </form>
-
-            <p
-                class="auth-message"
-                id="auth-message"
-            ></p>
+            <button class="auth-tab" id="signup-tab">
+                sign up
+            </button>
 
         </div>
 
-    </section>
+        <form class="auth-form" id="auth-form">
+
+            <input
+                type="email"
+                id="email"
+                placeholder="email"
+                autocomplete="email"
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button
+                class="primary-button"
+                type="submit"
+                id="auth-submit"
+            >
+                log in
+            </button>
+
+        </form>
+
+        <p class="auth-message" id="auth-message"></p>
+
+    </div>
+
+</section>
 
 
-    <!-- =========================
-         app
-    ========================= -->
+<div id="app" class="hidden">
 
-    <div
-        id="app"
-        class="hidden"
-    >
+    <header>
 
-        <header>
+        <div class="header-inner">
 
-            <div class="header-inner">
+            <div class="logo">
+                wardrobe
+            </div>
 
-                <div class="logo">
-                    wardrobe
-                </div>
-
-                <nav>
-
-                    <button
-                        class="nav-button active"
-                        data-page="wardrobe-page"
-                    >
-                        wardrobe
-                    </button>
-
-                    <button
-                        class="nav-button"
-                        data-page="builder-page"
-                    >
-                        build a fit
-                    </button>
-
-                    <button
-                        class="nav-button"
-                        data-page="fits-page"
-                    >
-                        my fits
-                    </button>
-
-                </nav>
+            <nav>
 
                 <button
-                    class="logout-button"
-                    id="logout-button"
+                    class="nav-button active"
+                    data-page="wardrobe-page"
                 >
-                    log out
+                    wardrobe
+                </button>
+
+                <button
+                    class="nav-button"
+                    data-page="builder-page"
+                >
+                    build a fit
+                </button>
+
+                <button
+                    class="nav-button"
+                    data-page="fits-page"
+                >
+                    my fits
+                </button>
+
+            </nav>
+
+            <button
+                class="logout-button"
+                id="logout-button"
+            >
+                log out
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section id="wardrobe-page" class="page">
+
+            <h1 class="page-title">
+                my wardrobe
+            </h1>
+
+            <p class="page-description">
+                add your clothes and build outfits from them.
+            </p>
+
+            <div class="upload-area">
+
+                <p>
+                    add photos of your clothes
+                </p>
+
+                <label
+                    class="upload-button"
+                    for="photo-input"
+                >
+                    add clothes
+                </label>
+
+                <input
+                    type="file"
+                    id="photo-input"
+                    accept="image/*"
+                    multiple
+                >
+
+            </div>
+
+            <div id="wardrobe-container">
+
+                <div class="loading">
+                    loading your wardrobe...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section id="builder-page" class="page hidden">
+
+            <div class="editor-header">
+
+                <div>
+
+                    <h1 class="page-title">
+                        build a fit
+                    </h1>
+
+                    <p class="page-description">
+                        create your outfit exactly how you want it.
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary-button"
+                    id="save-fit-button"
+                >
+                    save fit
                 </button>
 
             </div>
 
-        </header>
 
+            <div class="fit-editor">
 
-        <main>
-
-
-            <!-- =========================
-                 wardrobe
-            ========================= -->
-
-            <section
-                id="wardrobe-page"
-                class="page"
-            >
-
-                <h1 class="page-title">
-                    my wardrobe
-                </h1>
-
-                <p class="page-description">
-                    add your clothes and build outfits from them.
-                </p>
-
-                <div class="upload-area">
-
-                    <p>
-                        add photos of your clothes
-                    </p>
-
-                    <label
-                        class="upload-button"
-                        for="photo-input"
-                    >
-                        add clothes
-                    </label>
-
-                    <input
-                        type="file"
-                        id="photo-input"
-                        accept="image/*"
-                        multiple
-                    >
-
-                </div>
-
-                <div id="wardrobe-container">
-
-                    <div class="loading">
-                        loading your wardrobe...
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================
-                 build a fit
-            ========================= -->
-
-            <section
-                id="builder-page"
-                class="page hidden"
-            >
-
-                <div class="editor-header">
-
-                    <div>
-
-                        <h1 class="page-title">
-                            build a fit
-                        </h1>
-
-                        <p class="page-description">
-                            create your outfit exactly how you want it.
-                        </p>
-
-                    </div>
-
-                    <button
-                        class="primary-button"
-                        id="save-fit-button"
-                    >
-                        save fit
-                    </button>
-
-                </div>
-
-
-                <div class="fit-editor">
+                <div id="fit-canvas" class="fit-canvas">
 
                     <div
-                        id="fit-canvas"
-                        class="fit-canvas"
+                        id="canvas-empty"
+                        class="canvas-empty"
                     >
 
-                        <div
-                            id="canvas-empty"
-                            class="canvas-empty"
-                        >
+                        <div class="canvas-empty-title">
+                            your outfit
+                        </div>
 
-                            <div class="canvas-empty-title">
-                                your outfit
-                            </div>
-
-                            <div class="canvas-empty-subtitle">
-                                add clothing to get started
-                            </div>
-
+                        <div class="canvas-empty-subtitle">
+                            add clothing to get started
                         </div>
 
                     </div>
 
-
-                    <div class="editor-toolbar">
-
-                        <button
-                            class="secondary-button"
-                            id="add-clothing-button"
-                        >
-                            + add clothing
-                        </button>
-
-                        <button
-                            class="secondary-button"
-                            id="delete-selected-button"
-                        >
-                            delete
-                        </button>
-
-                        <button
-                            class="secondary-button"
-                            id="bring-forward-button"
-                        >
-                            bring forward
-                        </button>
-
-                        <button
-                            class="secondary-button"
-                            id="send-backward-button"
-                        >
-                            send backward
-                        </button>
-
-                        <button
-                            class="secondary-button"
-                            id="clear-fit-button"
-                        >
-                            clear
-                        </button>
-
-                    </div>
-
                 </div>
 
-            </section>
-
-
-            <!-- =========================
-                 saved fits
-            ========================= -->
-
-            <section
-                id="fits-page"
-                class="page hidden"
-            >
-
-                <h1 class="page-title">
-                    my fits
-                </h1>
-
-                <p class="page-description">
-                    all your saved outfits.
-                </p>
 
                 <div
-                    id="saved-fits"
-                    class="saved-fits"
+                    id="selection-info"
+                    class="selection-info"
                 >
+                    click an item to select it · ctrl/cmd-click to select multiple
+                </div>
 
-                    <div class="empty-fits">
-                        no saved fits yet.
-                    </div>
+
+                <div class="editor-toolbar">
+
+                    <button
+                        class="secondary-button"
+                        id="add-clothing-button"
+                    >
+                        + add clothing
+                    </button>
+
+                    <button
+                        class="secondary-button"
+                        id="delete-selected-button"
+                    >
+                        delete
+                    </button>
+
+                    <button
+                        class="secondary-button"
+                        id="bring-forward-button"
+                    >
+                        bring forward
+                    </button>
+
+                    <button
+                        class="secondary-button"
+                        id="send-backward-button"
+                    >
+                        send backward
+                    </button>
+
+                    <button
+                        class="secondary-button"
+                        id="export-webp-button"
+                    >
+                        export WebP
+                    </button>
+
+                    <button
+                        class="secondary-button"
+                        id="clear-fit-button"
+                    >
+                        clear
+                    </button>
 
                 </div>
 
-            </section>
+            </div>
 
-        </main>
-
-    </div>
+        </section>
 
 
-    <!-- =========================
-         clothing picker
-    ========================= -->
+        <section id="fits-page" class="page hidden">
 
-    <div
-        id="picker-modal"
-        class="modal hidden"
-    >
+            <h1 class="page-title">
+                my fits
+            </h1>
 
-        <div class="modal-content">
+            <p class="page-description">
+                all your saved outfits.
+            </p>
 
-            <div class="modal-header">
+            <div id="saved-fits" class="saved-fits">
 
-                <h2 id="picker-title">
-                    choose clothing
-                </h2>
-
-                <button
-                    class="close-modal"
-                    id="close-picker"
-                >
-                    ×
-                </button>
+                <div class="empty-fits">
+                    no saved fits yet.
+                </div>
 
             </div>
 
-            <div id="picker-content"></div>
+        </section>
+
+    </main>
+
+</div>
+
+
+<div id="picker-modal" class="modal hidden">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="picker-title">
+                choose clothing
+            </h2>
+
+            <button
+                class="close-modal"
+                id="close-picker"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="picker-content"></div>
+
+    </div>
+
+</div>
+
+
+<div id="category-modal" class="modal hidden">
+
+    <div class="modal-content category-modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                what kind of clothing is this?
+            </h2>
+
+            <button
+                class="close-modal"
+                id="close-category-picker"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="category-options">
+
+            <button
+                class="category-option"
+                data-category="top"
+            >
+                <span>top</span>
+                <span class="category-option-arrow">→</span>
+            </button>
+
+            <button
+                class="category-option"
+                data-category="bottom"
+            >
+                <span>bottoms</span>
+                <span class="category-option-arrow">→</span>
+            </button>
+
+            <button
+                class="category-option"
+                data-category="shoes"
+            >
+                <span>shoes</span>
+                <span class="category-option-arrow">→</span>
+            </button>
+
+            <button
+                class="category-option"
+                data-category="outer"
+            >
+                <span>outer layer</span>
+                <span class="category-option-arrow">→</span>
+            </button>
 
         </div>
 
     </div>
 
+</div>
 
-    <!-- =========================
-         category picker
-    ========================= -->
 
-    <div
-        id="category-modal"
-        class="modal hidden"
-    >
+<div id="toast" class="toast hidden"></div>
 
-        <div class="modal-content category-modal-content">
 
-            <div class="modal-header">
+<script>
 
-                <h2>
-                    what kind of clothing is this?
-                </h2>
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
 
-                <button
-                    class="close-modal"
-                    id="close-category-picker"
-                >
-                    ×
-                </button>
+    const SUPABASE_URL =
+        "https://laachzywslywffmkpeul.supabase.co";
 
-            </div>
+    const SUPABASE_KEY =
+        "sb_publishable_2cBGYqLVM5KucnD8mi1kdA_A1kjsxpn";
 
-            <div class="category-options">
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
-                <button
-                    class="category-option"
-                    data-category="top"
-                >
-                    <span>top</span>
-                    <span class="category-option-arrow">→</span>
-                </button>
 
-                <button
-                    class="category-option"
-                    data-category="bottom"
-                >
-                    <span>bottoms</span>
-                    <span class="category-option-arrow">→</span>
-                </button>
+    /* =====================================================
+       STATE
+    ===================================================== */
 
-                <button
-                    class="category-option"
-                    data-category="shoes"
-                >
-                    <span>shoes</span>
-                    <span class="category-option-arrow">→</span>
-                </button>
+    let currentUser = null;
 
-                <button
-                    class="category-option"
-                    data-category="outer"
-                >
-                    <span>outer layer</span>
-                    <span class="category-option-arrow">→</span>
-                </button>
+    let clothes = [];
 
-            </div>
+    let savedFits = [];
 
-        </div>
+    let currentFit = [];
 
-    </div>
+    /*
+     * Changed from one selected ID to a Set.
+     * This allows multiple clothing items to be selected.
+     */
+    let selectedCanvasItemIds = new Set();
 
+    let currentPickerMode = "canvas";
 
-    <div
-        id="toast"
-        class="toast hidden"
-    ></div>
+    let authMode = "login";
 
+    let interaction = null;
 
-    <!-- =====================================================
-         MAIN JAVASCRIPT
-         ===================================================== -->
 
-    <script>
+    /* =====================================================
+       HELPERS
+    ===================================================== */
 
-        /* =====================================================
-           SUPABASE SETUP
-        ===================================================== */
+    function showToast(message) {
 
-        const SUPABASE_URL =
-            "https://laachzywslywffmkpeul.supabase.co";
+        const toast =
+            document.getElementById("toast");
 
-        const SUPABASE_KEY =
-            "sb_publishable_2cBGYqLVM5KucnD8mi1kdA_A1kjsxpn";
+        toast.textContent = message;
 
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
+        toast.classList.remove("hidden");
 
+        clearTimeout(window.toastTimeout);
 
-        /* =====================================================
-           APP STATE
-        ===================================================== */
+        window.toastTimeout =
+            setTimeout(() => {
 
-        let currentUser = null;
+                toast.classList.add("hidden");
 
-        let clothes = [];
+            }, 3000);
+    }
 
-        let savedFits = [];
 
-        let currentFit = [];
+    function escapeHtml(value) {
 
-        let selectedCanvasItemId = null;
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
 
-        let currentPickerMode = "canvas";
 
-        let authMode = "login";
+    function getCategoryName(category) {
 
-        let interaction = null;
+        const names = {
+            top: "tops",
+            bottom: "bottoms",
+            shoes: "shoes",
+            outer: "outer layers"
+        };
 
+        return names[category] || category;
+    }
 
-        /* =====================================================
-           HELPERS
-        ===================================================== */
 
-        function showToast(message) {
+    function getImageUrl(path) {
 
-            const toast =
-                document.getElementById("toast");
+        const { data } =
+            supabaseClient
+                .storage
+                .from("clothes")
+                .getPublicUrl(path);
 
-            toast.textContent = message;
+        return data.publicUrl;
+    }
 
-            toast.classList.remove("hidden");
 
-            clearTimeout(window.toastTimeout);
+    /* =====================================================
+       IMAGE COMPRESSION
+    ===================================================== */
 
-            window.toastTimeout =
-                setTimeout(() => {
+    async function compressImage(file) {
 
-                    toast.classList.add("hidden");
+        return new Promise((resolve, reject) => {
 
-                }, 3000);
-        }
+            const reader =
+                new FileReader();
 
+            reader.onload = event => {
 
-        function escapeHtml(value) {
+                const img =
+                    new Image();
 
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-        }
+                img.onload = () => {
 
+                    const maxSize = 1400;
 
-        function getCategoryName(category) {
+                    let width = img.width;
+                    let height = img.height;
 
-            const names = {
-                top: "tops",
-                bottom: "bottoms",
-                shoes: "shoes",
-                outer: "outer layers"
-            };
+                    if (
+                        width > maxSize ||
+                        height > maxSize
+                    ) {
 
-            return names[category] || category;
-        }
+                        if (width > height) {
 
+                            height =
+                                Math.round(
+                                    height *
+                                    maxSize /
+                                    width
+                                );
 
-        function getImageUrl(path) {
+                            width = maxSize;
 
-            const { data } =
-                supabaseClient
-                    .storage
-                    .from("clothes")
-                    .getPublicUrl(path);
+                        } else {
 
-            return data.publicUrl;
-        }
+                            width =
+                                Math.round(
+                                    width *
+                                    maxSize /
+                                    height
+                                );
 
-
-        /* =====================================================
-           TRANSPARENT IMAGE COMPRESSION
-        ===================================================== */
-
-        async function compressImage(file) {
-
-            return new Promise((resolve, reject) => {
-
-                const reader =
-                    new FileReader();
-
-                reader.onload = event => {
-
-                    const img =
-                        new Image();
-
-                    img.onload = () => {
-
-                        const maxSize = 1400;
-
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (
-                            width > maxSize ||
-                            height > maxSize
-                        ) {
-
-                            if (width > height) {
-
-                                height =
-                                    Math.round(
-                                        height *
-                                        maxSize /
-                                        width
-                                    );
-
-                                width = maxSize;
-
-                            } else {
-
-                                width =
-                                    Math.round(
-                                        width *
-                                        maxSize /
-                                        height
-                                    );
-
-                                height = maxSize;
-
-                            }
+                            height = maxSize;
 
                         }
 
-                        const canvas =
-                            document.createElement(
-                                "canvas"
-                            );
+                    }
 
-                        canvas.width = width;
-                        canvas.height = height;
+                    const canvas =
+                        document.createElement("canvas");
 
-                        const context =
-                            canvas.getContext(
-                                "2d"
-                            );
+                    canvas.width = width;
+                    canvas.height = height;
 
-                        context.clearRect(
-                            0,
-                            0,
-                            width,
-                            height
-                        );
+                    const context =
+                        canvas.getContext("2d");
 
-                        context.drawImage(
-                            img,
-                            0,
-                            0,
-                            width,
-                            height
-                        );
+                    context.clearRect(
+                        0,
+                        0,
+                        width,
+                        height
+                    );
 
-                        canvas.toBlob(
-                            blob => {
+                    context.drawImage(
+                        img,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
 
-                                if (!blob) {
+                    canvas.toBlob(
+                        blob => {
 
-                                    reject(
-                                        new Error(
-                                            "image compression failed"
-                                        )
-                                    );
+                            if (!blob) {
 
-                                    return;
-                                }
+                                reject(
+                                    new Error(
+                                        "image compression failed"
+                                    )
+                                );
 
-                                resolve(blob);
+                                return;
+                            }
 
-                            },
-                            "image/webp",
-                            0.85
-                        );
+                            resolve(blob);
 
-                    };
-
-                    img.onerror = () => {
-
-                        reject(
-                            new Error(
-                                "couldn't load image"
-                            )
-                        );
-
-                    };
-
-                    img.src =
-                        event.target.result;
+                        },
+                        "image/webp",
+                        0.85
+                    );
 
                 };
 
-                reader.onerror = () => {
+                img.onerror = () => {
 
                     reject(
                         new Error(
-                            "couldn't read image"
+                            "couldn't load image"
                         )
                     );
 
                 };
 
-                reader.readAsDataURL(file);
+                img.src =
+                    event.target.result;
 
-            });
-        }
+            };
+
+            reader.onerror = () => {
+
+                reject(
+                    new Error(
+                        "couldn't read image"
+                    )
+                );
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+    }
 
 
-        /* =====================================================
-           AUTH
-        ===================================================== */
+    /* =====================================================
+       AUTH
+    ===================================================== */
 
-        document
-            .getElementById("login-tab")
-            .addEventListener(
-                "click",
-                () => {
+    document
+        .getElementById("login-tab")
+        .addEventListener(
+            "click",
+            () => {
 
-                    authMode = "login";
+                authMode = "login";
 
+                document
+                    .getElementById("login-tab")
+                    .classList.add("active");
+
+                document
+                    .getElementById("signup-tab")
+                    .classList.remove("active");
+
+                document
+                    .getElementById("auth-submit")
+                    .textContent = "log in";
+
+            }
+        );
+
+
+    document
+        .getElementById("signup-tab")
+        .addEventListener(
+            "click",
+            () => {
+
+                authMode = "signup";
+
+                document
+                    .getElementById("signup-tab")
+                    .classList.add("active");
+
+                document
+                    .getElementById("login-tab")
+                    .classList.remove("active");
+
+                document
+                    .getElementById("auth-submit")
+                    .textContent = "sign up";
+
+            }
+        );
+
+
+    document
+        .getElementById("auth-form")
+        .addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                const email =
                     document
-                        .getElementById("login-tab")
-                        .classList
-                        .add("active");
+                        .getElementById("email")
+                        .value
+                        .trim();
 
+                const password =
                     document
-                        .getElementById("signup-tab")
-                        .classList
-                        .remove("active");
+                        .getElementById("password")
+                        .value;
 
+                const message =
                     document
-                        .getElementById("auth-submit")
-                        .textContent =
-                        "log in";
+                        .getElementById("auth-message");
+
+                message.textContent = "loading...";
+
+                let result;
+
+                if (authMode === "login") {
+
+                    result =
+                        await supabaseClient
+                            .auth
+                            .signInWithPassword({
+                                email,
+                                password
+                            });
+
+                } else {
+
+                    result =
+                        await supabaseClient
+                            .auth
+                            .signUp({
+                                email,
+                                password
+                            });
 
                 }
-            );
 
-
-        document
-            .getElementById("signup-tab")
-            .addEventListener(
-                "click",
-                () => {
-
-                    authMode = "signup";
-
-                    document
-                        .getElementById("signup-tab")
-                        .classList
-                        .add("active");
-
-                    document
-                        .getElementById("login-tab")
-                        .classList
-                        .remove("active");
-
-                    document
-                        .getElementById("auth-submit")
-                        .textContent =
-                        "sign up";
-
-                }
-            );
-
-
-        document
-            .getElementById("auth-form")
-            .addEventListener(
-                "submit",
-                async event => {
-
-                    event.preventDefault();
-
-                    const email =
-                        document
-                            .getElementById("email")
-                            .value
-                            .trim();
-
-                    const password =
-                        document
-                            .getElementById("password")
-                            .value;
-
-                    const message =
-                        document
-                            .getElementById("auth-message");
+                if (result.error) {
 
                     message.textContent =
-                        "loading...";
+                        result.error.message;
 
-                    let result;
+                    return;
+                }
 
-                    if (
-                        authMode === "login"
-                    ) {
+                if (
+                    authMode === "signup" &&
+                    !result.data.session
+                ) {
 
-                        result =
-                            await supabaseClient
-                                .auth
-                                .signInWithPassword({
-                                    email,
-                                    password
-                                });
+                    message.textContent =
+                        "account created. check your email to confirm your account.";
 
-                    } else {
+                } else {
 
-                        result =
-                            await supabaseClient
-                                .auth
-                                .signUp({
-                                    email,
-                                    password
-                                });
-
-                    }
-
-                    if (result.error) {
-
-                        message.textContent =
-                            result.error.message;
-
-                        return;
-                    }
-
-                    if (
-                        authMode === "signup" &&
-                        !result.data.session
-                    ) {
-
-                        message.textContent =
-                            "account created. check your email to confirm your account.";
-
-                    } else {
-
-                        message.textContent = "";
-
-                    }
+                    message.textContent = "";
 
                 }
-            );
 
+            }
+        );
+
+
+    document
+        .getElementById("logout-button")
+        .addEventListener(
+            "click",
+            async () => {
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+            }
+        );
+
+
+    /* =====================================================
+       AUTH STATE
+    ===================================================== */
+
+    async function checkAuth() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+        }
+
+        if (data.session) {
+
+            currentUser =
+                data.session.user;
+
+            await startApp();
+
+        } else {
+
+            document
+                .getElementById("auth-screen")
+                .classList.remove("hidden");
+
+            document
+                .getElementById("app")
+                .classList.add("hidden");
+
+        }
+    }
+
+
+    supabaseClient
+        .auth
+        .onAuthStateChange(
+            async (
+                event,
+                session
+            ) => {
+
+                if (session) {
+
+                    currentUser =
+                        session.user;
+
+                    await startApp();
+
+                } else {
+
+                    currentUser = null;
+
+                    document
+                        .getElementById("app")
+                        .classList.add("hidden");
+
+                    document
+                        .getElementById("auth-screen")
+                        .classList.remove("hidden");
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       START APP
+    ===================================================== */
+
+    async function startApp() {
 
         document
-            .getElementById("logout-button")
-            .addEventListener(
-                "click",
-                async () => {
+            .getElementById("auth-screen")
+            .classList.add("hidden");
 
-                    await supabaseClient
-                        .auth
-                        .signOut();
+        document
+            .getElementById("app")
+            .classList.remove("hidden");
 
-                }
+        await loadClothes();
+
+        await loadFits();
+
+        renderWardrobe();
+
+        renderSavedFits();
+
+        renderCanvas();
+
+    }
+
+
+    /* =====================================================
+       LOAD CLOTHES
+    ===================================================== */
+
+    async function loadClothes() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("clothes")
+                .select("*")
+                .eq(
+                    "user_id",
+                    currentUser.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+        if (error) {
+
+            console.error(error);
+
+            showToast(
+                "couldn't load your wardrobe"
             );
 
+            return;
+        }
 
-        /* =====================================================
-           AUTH STATE
-        ===================================================== */
+        clothes = data || [];
 
-        async function checkAuth() {
+    }
+
+
+    /* =====================================================
+       LOAD FITS
+    ===================================================== */
+
+    async function loadFits() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("fits")
+                .select("*")
+                .eq(
+                    "user_id",
+                    currentUser.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+        if (error) {
+
+            console.error(error);
+
+            showToast(
+                "couldn't load your fits"
+            );
+
+            return;
+        }
+
+        savedFits = data || [];
+
+    }
+
+
+    /* =====================================================
+       UPLOAD
+    ===================================================== */
+
+    document
+        .getElementById("photo-input")
+        .addEventListener(
+            "change",
+            async event => {
+
+                const files =
+                    Array.from(
+                        event.target.files
+                    );
+
+                if (!files.length) {
+                    return;
+                }
+
+                event.target.value = "";
+
+                for (const file of files) {
+
+                    try {
+
+                        await uploadClothing(file);
+
+                    } catch (error) {
+
+                        console.error(
+                            "photo processing error:",
+                            error
+                        );
+
+                        alert(
+                            "PHOTO ERROR:\n\n" +
+                            (
+                                error?.message ||
+                                String(error)
+                            )
+                        );
+
+                        showToast(
+                            "couldn't process this photo"
+                        );
+
+                    }
+
+                }
+
+                await loadClothes();
+
+                renderWardrobe();
+
+            }
+        );
+
+
+    async function uploadClothing(file) {
+
+        const category =
+            await chooseCategory();
+
+        if (!category) {
+            return;
+        }
+
+        showToast(
+            "removing background..."
+        );
+
+        try {
 
             const {
-                data,
-                error
+                data: { session },
+                error: sessionError
             } =
                 await supabaseClient
                     .auth
                     .getSession();
 
-            if (error) {
-
-                console.error(error);
-
-                return;
+            if (sessionError) {
+                throw sessionError;
             }
 
-            if (data.session) {
-
-                currentUser =
-                    data.session.user;
-
-                await startApp();
-
-            } else {
-
-                document
-                    .getElementById("auth-screen")
-                    .classList
-                    .remove("hidden");
-
-                document
-                    .getElementById("app")
-                    .classList
-                    .add("hidden");
-
+            if (!session) {
+                throw new Error(
+                    "you are not logged in"
+                );
             }
-        }
 
+            const response =
+                await fetch(
+                    `${SUPABASE_URL}/functions/v1/remove-background`,
+                    {
+                        method: "POST",
 
-        supabaseClient
-            .auth
-            .onAuthStateChange(
-                async (
-                    event,
-                    session
-                ) => {
+                        headers: {
+                            "Content-Type":
+                                file.type ||
+                                "application/octet-stream",
 
-                    if (session) {
+                            "Authorization":
+                                `Bearer ${session.access_token}`
+                        },
 
-                        currentUser =
-                            session.user;
+                        body: file
+                    }
+                );
 
-                        await startApp();
+            if (!response.ok) {
 
-                    } else {
+                const responseText =
+                    await response.text();
 
-                        currentUser = null;
+                let errorMessage =
+                    "background removal failed";
 
-                        document
-                            .getElementById("app")
-                            .classList
-                            .add("hidden");
+                try {
 
-                        document
-                            .getElementById("auth-screen")
-                            .classList
-                            .remove("hidden");
+                    const errorData =
+                        JSON.parse(responseText);
 
+                    if (errorData.error) {
+                        errorMessage =
+                            errorData.error;
+                    }
+
+                    if (errorData.message) {
+                        errorMessage =
+                            errorData.message;
+                    }
+
+                } catch {
+
+                    if (responseText) {
+                        errorMessage =
+                            responseText;
                     }
 
                 }
-            );
 
-
-        /* =====================================================
-           START APP
-        ===================================================== */
-
-        async function startApp() {
-
-            document
-                .getElementById("auth-screen")
-                .classList
-                .add("hidden");
-
-            document
-                .getElementById("app")
-                .classList
-                .remove("hidden");
-
-            await loadClothes();
-
-            await loadFits();
-
-            renderWardrobe();
-
-            renderSavedFits();
-
-            renderCanvas();
-
-        }
-
-
-        /* =====================================================
-           LOAD CLOTHES
-        ===================================================== */
-
-        async function loadClothes() {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("clothes")
-                    .select("*")
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    )
-                    .order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    );
-
-            if (error) {
-
-                console.error(error);
-
-                showToast(
-                    "couldn't load your wardrobe"
-                );
-
-                return;
+                throw new Error(errorMessage);
             }
 
-            clothes = data || [];
+            const transparentBlob =
+                await response.blob();
 
-        }
+            if (!transparentBlob.size) {
 
-
-        /* =====================================================
-           LOAD FITS
-        ===================================================== */
-
-        async function loadFits() {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("fits")
-                    .select("*")
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    )
-                    .order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    );
-
-            if (error) {
-
-                console.error(error);
-
-                showToast(
-                    "couldn't load your fits"
+                throw new Error(
+                    "server returned an empty image"
                 );
 
-                return;
-            }
-
-            savedFits = data || [];
-
-        }
-
-
-        /* =====================================================
-           UPLOAD INPUT
-        ===================================================== */
-
-        document
-            .getElementById("photo-input")
-            .addEventListener(
-                "change",
-                async event => {
-
-                    const files =
-                        Array.from(
-                            event.target.files
-                        );
-
-                    if (!files.length) {
-                        return;
-                    }
-
-                    event.target.value = "";
-
-                    for (
-                        const file of files
-                    ) {
-
-                        try {
-
-                            await uploadClothing(
-                                file
-                            );
-
-                        } catch (error) {
-
-                            console.error(
-                                "photo processing error:",
-                                error
-                            );
-
-                            alert(
-                                "PHOTO ERROR:\n\n" +
-                                (
-                                    error?.message ||
-                                    String(error)
-                                )
-                            );
-
-                            showToast(
-                                "couldn't process this photo"
-                            );
-
-                        }
-
-                    }
-
-                    await loadClothes();
-
-                    renderWardrobe();
-
-                }
-            );
-
-
-        /* =====================================================
-           UPLOAD CLOTHING
-        ===================================================== */
-
-        async function uploadClothing(file) {
-
-            const category =
-                await chooseCategory();
-
-            if (!category) {
-                return;
             }
 
             showToast(
-                "removing background..."
+                "background removed!"
             );
 
-            try {
+            showToast(
+                "compressing image..."
+            );
 
-                const {
-                    data: { session },
-                    error: sessionError
-                } =
-                    await supabaseClient
-                        .auth
-                        .getSession();
+            const compressed =
+                await compressImage(
+                    transparentBlob
+                );
 
-                if (sessionError) {
-                    throw sessionError;
-                }
+            const filename =
+                `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(2)}.webp`;
 
-                if (!session) {
-                    throw new Error(
-                        "you are not logged in"
-                    );
-                }
+            const storagePath =
+                `${currentUser.id}/${filename}`;
 
-                const response =
-                    await fetch(
-                        `${SUPABASE_URL}/functions/v1/remove-background`,
+            showToast(
+                "uploading..."
+            );
+
+            const {
+                error: uploadError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("clothes")
+                    .upload(
+                        storagePath,
+                        compressed,
                         {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    file.type ||
-                                    "application/octet-stream",
-
-                                "Authorization":
-                                    `Bearer ${session.access_token}`
-                            },
-
-                            body: file
+                            contentType:
+                                "image/webp",
+                            upsert: false
                         }
                     );
 
-                if (!response.ok) {
-
-                    const responseText =
-                        await response.text();
-
-                    let errorMessage =
-                        "background removal failed";
-
-                    try {
-
-                        const errorData =
-                            JSON.parse(
-                                responseText
-                            );
-
-                        if (errorData.error) {
-                            errorMessage =
-                                errorData.error;
-                        }
-
-                        if (errorData.message) {
-                            errorMessage =
-                                errorData.message;
-                        }
-
-                    } catch {
-
-                        if (responseText) {
-                            errorMessage =
-                                responseText;
-                        }
-
-                    }
-
-                    throw new Error(
-                        errorMessage
-                    );
-                }
-
-                const transparentBlob =
-                    await response.blob();
-
-                if (!transparentBlob.size) {
-
-                    throw new Error(
-                        "server returned an empty image"
-                    );
-
-                }
-
-                showToast(
-                    "background removed!"
-                );
-
-                showToast(
-                    "compressing image..."
-                );
-
-                const compressed =
-                    await compressImage(
-                        transparentBlob
-                    );
-
-                const filename =
-                    `${Date.now()}-${Math.random()
-                        .toString(36)
-                        .slice(2)}.webp`;
-
-                const storagePath =
-                    `${currentUser.id}/${filename}`;
-
-                showToast(
-                    "uploading..."
-                );
-
-                const {
-                    error: uploadError
-                } =
-                    await supabaseClient
-                        .storage
-                        .from("clothes")
-                        .upload(
-                            storagePath,
-                            compressed,
-                            {
-                                contentType:
-                                    "image/webp",
-                                upsert: false
-                            }
-                        );
-
-                if (uploadError) {
-                    throw uploadError;
-                }
-
-                const imageUrl =
-                    getImageUrl(
-                        storagePath
-                    );
-
-                const {
-                    error: databaseError
-                } =
-                    await supabaseClient
-                        .from("clothes")
-                        .insert({
-                            user_id:
-                                currentUser.id,
-                            image_url:
-                                imageUrl,
-                            category:
-                                category
-                        });
-
-                if (databaseError) {
-
-                    await supabaseClient
-                        .storage
-                        .from("clothes")
-                        .remove([
-                            storagePath
-                        ]);
-
-                    throw databaseError;
-
-                }
-
-                showToast(
-                    "clothing added"
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "background removal/upload failed:",
-                    error
-                );
-
-                throw error;
-
-            }
-        }
-
-
-        /* =====================================================
-           CATEGORY CHOOSER
-        ===================================================== */
-
-        let categoryResolve = null;
-
-
-        function chooseCategory() {
-
-            return new Promise(
-                resolve => {
-
-                    categoryResolve =
-                        resolve;
-
-                    document
-                        .getElementById(
-                            "category-modal"
-                        )
-                        .classList
-                        .remove("hidden");
-
-                }
-            );
-        }
-
-
-        function closeCategoryPicker(
-            category = null
-        ) {
-
-            document
-                .getElementById(
-                    "category-modal"
-                )
-                .classList
-                .add("hidden");
-
-            if (categoryResolve) {
-
-                categoryResolve(
-                    category
-                );
-
-                categoryResolve = null;
-
-            }
-        }
-
-
-        document
-            .querySelectorAll(
-                ".category-option"
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            closeCategoryPicker(
-                                button.dataset.category
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-
-        document
-            .getElementById(
-                "close-category-picker"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    closeCategoryPicker();
-
-                }
-            );
-
-
-        document
-            .getElementById(
-                "category-modal"
-            )
-            .addEventListener(
-                "click",
-                event => {
-
-                    if (
-                        event.target.id ===
-                        "category-modal"
-                    ) {
-
-                        closeCategoryPicker();
-
-                    }
-
-                }
-            );
-
-
-        /* =====================================================
-           RENDER WARDROBE
-        ===================================================== */
-
-        function renderWardrobe() {
-
-            const container =
-                document.getElementById(
-                    "wardrobe-container"
-                );
-
-            const categories = [
-                "top",
-                "bottom",
-                "shoes",
-                "outer"
-            ];
-
-            container.innerHTML = "";
-
-            categories.forEach(
-                category => {
-
-                    const items =
-                        clothes.filter(
-                            item =>
-                                item.category ===
-                                category
-                        );
-
-                    const section =
-                        document.createElement(
-                            "div"
-                        );
-
-                    section.className =
-                        "category-section";
-
-                    section.innerHTML = `
-
-                        <h2 class="category-title">
-                            ${getCategoryName(category)}
-                        </h2>
-
-                        ${
-                            items.length
-                                ?
-                                `
-                                <div class="clothes-grid">
-
-                                    ${
-                                        items
-                                            .map(
-                                                item => `
-
-                                                <div class="clothing-card">
-
-                                                    <img
-                                                        src="${escapeHtml(item.image_url)}"
-                                                        alt="${category}"
-                                                        loading="lazy"
-                                                    >
-
-                                                    <button
-                                                        class="delete-clothing"
-                                                        data-id="${item.id}"
-                                                        aria-label="delete clothing"
-                                                    >
-                                                        ×
-                                                    </button>
-
-                                                </div>
-
-                                            `
-                                            )
-                                            .join("")
-                                    }
-
-                                </div>
-                                `
-                                :
-                                `
-                                <p class="empty-message">
-                                    nothing here yet.
-                                </p>
-                                `
-                        }
-
-                    `;
-
-                    container.appendChild(
-                        section
-                    );
-
-                }
-            );
-
-
-            container
-                .querySelectorAll(
-                    ".delete-clothing"
-                )
-                .forEach(
-                    button => {
-
-                        button.addEventListener(
-                            "click",
-                            async event => {
-
-                                event.stopPropagation();
-
-                                await deleteClothing(
-                                    button.dataset.id
-                                );
-
-                            }
-                        );
-
-                    }
-                );
-
-        }
-
-
-        /* =====================================================
-           DELETE CLOTHING
-        ===================================================== */
-
-        async function deleteClothing(id) {
-
-            const item =
-                clothes.find(
-                    clothing =>
-                        String(
-                            clothing.id
-                        ) ===
-                        String(id)
-                );
-
-            if (!item) {
-                return;
+            if (uploadError) {
+                throw uploadError;
             }
 
-            const confirmed =
-                confirm(
-                    "delete this clothing item?"
-                );
-
-            if (!confirmed) {
-                return;
-            }
-
-            const imagePath =
-                getStoragePathFromUrl(
-                    item.image_url
-                );
+            const imageUrl =
+                getImageUrl(storagePath);
 
             const {
                 error: databaseError
             } =
                 await supabaseClient
                     .from("clothes")
-                    .delete()
-                    .eq(
-                        "id",
-                        id
-                    )
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    );
+                    .insert({
+                        user_id:
+                            currentUser.id,
+                        image_url:
+                            imageUrl,
+                        category:
+                            category
+                    });
 
             if (databaseError) {
-
-                console.error(
-                    databaseError
-                );
-
-                showToast(
-                    "couldn't delete item"
-                );
-
-                return;
-            }
-
-            if (imagePath) {
 
                 await supabaseClient
                     .storage
                     .from("clothes")
                     .remove([
-                        imagePath
+                        storagePath
                     ]);
 
+                throw databaseError;
             }
-
-            clothes =
-                clothes.filter(
-                    clothing =>
-                        String(
-                            clothing.id
-                        ) !==
-                        String(id)
-                );
-
-            currentFit =
-                currentFit.filter(
-                    item =>
-                        String(
-                            item.clothingId
-                        ) !==
-                        String(id)
-                );
-
-            if (
-                selectedCanvasItemId &&
-                !currentFit.some(
-                    item =>
-                        item.id ===
-                        selectedCanvasItemId
-                )
-            ) {
-
-                selectedCanvasItemId = null;
-
-            }
-
-            renderWardrobe();
-
-            renderCanvas();
-
-            renderSavedFits();
 
             showToast(
-                "clothing deleted"
+                "clothing added"
             );
 
+        } catch (error) {
+
+            console.error(
+                "background removal/upload failed:",
+                error
+            );
+
+            throw error;
+
         }
+    }
 
 
-        function getStoragePathFromUrl(url) {
+    /* =====================================================
+       CATEGORY CHOOSER
+    ===================================================== */
 
-            try {
+    let categoryResolve = null;
 
-                const marker =
-                    "/storage/v1/object/public/clothes/";
 
-                const index =
-                    url.indexOf(
-                        marker
-                    );
+    function chooseCategory() {
 
-                if (
-                    index ===
-                    -1
-                ) {
+        return new Promise(
+            resolve => {
 
-                    return null;
+                categoryResolve = resolve;
 
-                }
-
-                return decodeURIComponent(
-                    url.substring(
-                        index +
-                        marker.length
+                document
+                    .getElementById(
+                        "category-modal"
                     )
-                );
-
-            } catch {
-
-                return null;
+                    .classList
+                    .remove("hidden");
 
             }
-        }
+        );
+    }
 
 
-        /* =====================================================
-           NAVIGATION
-        ===================================================== */
+    function closeCategoryPicker(
+        category = null
+    ) {
 
         document
-            .querySelectorAll(
-                ".nav-button"
+            .getElementById(
+                "category-modal"
             )
-            .forEach(
-                button => {
+            .classList
+            .add("hidden");
 
-                    button.addEventListener(
-                        "click",
-                        () => {
+        if (categoryResolve) {
 
-                            const pageId =
-                                button.dataset.page;
+            categoryResolve(category);
 
-                            document
-                                .querySelectorAll(
-                                    ".page"
-                                )
-                                .forEach(
-                                    page => {
-
-                                        page.classList
-                                            .add("hidden");
-
-                                    }
-                                );
-
-                            document
-                                .getElementById(
-                                    pageId
-                                )
-                                .classList
-                                .remove("hidden");
-
-                            document
-                                .querySelectorAll(
-                                    ".nav-button"
-                                )
-                                .forEach(
-                                    navButton => {
-
-                                        navButton
-                                            .classList
-                                            .remove(
-                                                "active"
-                                            );
-
-                                    }
-                                );
-
-                            button
-                                .classList
-                                .add("active");
-
-                            if (
-                                pageId ===
-                                "fits-page"
-                            ) {
-
-                                renderSavedFits();
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
-
-        /* =====================================================
-           CANVAS HELPERS
-        ===================================================== */
-
-        function getCanvas() {
-
-            return document.getElementById(
-                "fit-canvas"
-            );
+            categoryResolve = null;
 
         }
+    }
 
 
-        function createCanvasItem(
-            clothing
-        ) {
+    document
+        .querySelectorAll(".category-option")
+        .forEach(
+            button => {
 
-            const canvas =
-                getCanvas();
+                button.addEventListener(
+                    "click",
+                    () => {
 
-            const rect =
-                canvas.getBoundingClientRect();
-
-            const existingCount =
-                currentFit.length;
-
-            const width =
-                Math.min(
-                    220,
-                    Math.max(
-                        100,
-                        rect.width * 0.25
-                    )
-                );
-
-            const height =
-                width * 1.15;
-
-            const item = {
-
-                id:
-                    `${Date.now()}-${Math.random()
-                        .toString(36)
-                        .slice(2)}`,
-
-                clothingId:
-                    clothing.id,
-
-                image_url:
-                    clothing.image_url,
-
-                category:
-                    clothing.category,
-
-                x:
-                    Math.max(
-                        20,
-                        (rect.width - width) / 2 +
-                        existingCount * 15
-                    ),
-
-                y:
-                    Math.max(
-                        20,
-                        (rect.height - height) / 2 +
-                        existingCount * 15
-                    ),
-
-                width,
-
-                height,
-
-                zIndex:
-                    existingCount + 1
-
-            };
-
-            currentFit.push(item);
-
-            selectedCanvasItemId =
-                item.id;
-
-            renderCanvas();
-
-        }
-
-
-        function selectCanvasItem(id) {
-
-            selectedCanvasItemId = id;
-
-            renderCanvas();
-
-        }
-
-
-        function getSelectedCanvasItem() {
-
-            return currentFit.find(
-                item =>
-                    item.id ===
-                    selectedCanvasItemId
-            ) || null;
-
-        }
-
-
-        /* =====================================================
-           RENDER CANVAS
-        ===================================================== */
-
-        function renderCanvas() {
-
-            const canvas =
-                getCanvas();
-
-            if (!canvas) {
-                return;
-            }
-
-            canvas
-                .querySelectorAll(
-                    ".canvas-item"
-                )
-                .forEach(
-                    element =>
-                        element.remove()
-                );
-
-            const empty =
-                document.getElementById(
-                    "canvas-empty"
-                );
-
-            empty.classList.toggle(
-                "hidden",
-                currentFit.length > 0
-            );
-
-
-            currentFit
-                .sort(
-                    (a, b) =>
-                        a.zIndex -
-                        b.zIndex
-                )
-                .forEach(
-                    item => {
-
-                        const element =
-                            document.createElement(
-                                "div"
-                            );
-
-                        element.className =
-                            "canvas-item";
-
-                        if (
-                            item.id ===
-                            selectedCanvasItemId
-                        ) {
-
-                            element.classList
-                                .add(
-                                    "selected"
-                                );
-
-                        }
-
-                        element.dataset.itemId =
-                            item.id;
-
-                        element.style.left =
-                            `${item.x}px`;
-
-                        element.style.top =
-                            `${item.y}px`;
-
-                        element.style.width =
-                            `${item.width}px`;
-
-                        element.style.height =
-                            `${item.height}px`;
-
-                        element.style.zIndex =
-                            item.zIndex;
-
-                        element.innerHTML = `
-
-                            <img
-                                src="${escapeHtml(item.image_url)}"
-                                alt="${escapeHtml(item.category)}"
-                                draggable="false"
-                            >
-
-                            ${
-                                item.id ===
-                                selectedCanvasItemId
-                                    ?
-                                    `
-                                    <div
-                                        class="resize-handle"
-                                        data-resize-id="${item.id}"
-                                    ></div>
-                                    `
-                                    :
-                                    ""
-                            }
-
-                        `;
-
-                        canvas.appendChild(
-                            element
+                        closeCategoryPicker(
+                            button.dataset.category
                         );
 
                     }
                 );
-
-        }
-
-
-        /* =====================================================
-           CANVAS POINTER EVENTS
-        ===================================================== */
-
-        const canvas =
-            document.getElementById(
-                "fit-canvas"
-            );
-
-
-        canvas.addEventListener(
-            "pointerdown",
-            event => {
-
-                const resizeHandle =
-                    event.target.closest(
-                        ".resize-handle"
-                    );
-
-                if (resizeHandle) {
-
-                    const item =
-                        currentFit.find(
-                            current =>
-                                current.id ===
-                                resizeHandle.dataset
-                                    .resizeId
-                        );
-
-                    if (!item) {
-                        return;
-                    }
-
-                    event.preventDefault();
-
-                    selectedCanvasItemId =
-                        item.id;
-
-                    interaction = {
-
-                        type:
-                            "resize",
-
-                        itemId:
-                            item.id,
-
-                        startX:
-                            event.clientX,
-
-                        startY:
-                            event.clientY,
-
-                        startWidth:
-                            item.width,
-
-                        startHeight:
-                            item.height
-
-                    };
-
-                    canvas.setPointerCapture(
-                        event.pointerId
-                    );
-
-                    return;
-
-                }
-
-
-                const canvasElement =
-                    event.target.closest(
-                        ".canvas-item"
-                    );
-
-                if (canvasElement) {
-
-                    const item =
-                        currentFit.find(
-                            current =>
-                                current.id ===
-                                canvasElement.dataset
-                                    .itemId
-                        );
-
-                    if (!item) {
-                        return;
-                    }
-
-                    event.preventDefault();
-
-                    selectedCanvasItemId =
-                        item.id;
-
-                    interaction = {
-
-                        type:
-                            "drag",
-
-                        itemId:
-                            item.id,
-
-                        startX:
-                            event.clientX,
-
-                        startY:
-                            event.clientY,
-
-                        startItemX:
-                            item.x,
-
-                        startItemY:
-                            item.y
-
-                    };
-
-                    canvas.setPointerCapture(
-                        event.pointerId
-                    );
-
-                    renderCanvas();
-
-                    return;
-
-                }
-
-
-                selectedCanvasItemId =
-                    null;
-
-                renderCanvas();
 
             }
         );
 
 
-        canvas.addEventListener(
-            "pointermove",
+    document
+        .getElementById("close-category-picker")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeCategoryPicker();
+
+            }
+        );
+
+
+    document
+        .getElementById("category-modal")
+        .addEventListener(
+            "click",
             event => {
 
-                if (!interaction) {
+                if (
+                    event.target.id ===
+                    "category-modal"
+                ) {
+
+                    closeCategoryPicker();
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       WARDROBE
+    ===================================================== */
+
+    function renderWardrobe() {
+
+        const container =
+            document.getElementById(
+                "wardrobe-container"
+            );
+
+        const categories = [
+            "top",
+            "bottom",
+            "shoes",
+            "outer"
+        ];
+
+        container.innerHTML = "";
+
+        categories.forEach(
+            category => {
+
+                const items =
+                    clothes.filter(
+                        item =>
+                            item.category ===
+                            category
+                    );
+
+                const section =
+                    document.createElement("div");
+
+                section.className =
+                    "category-section";
+
+                section.innerHTML = `
+
+                    <h2 class="category-title">
+                        ${getCategoryName(category)}
+                    </h2>
+
+                    ${
+                        items.length
+                            ?
+                            `
+                            <div class="clothes-grid">
+
+                                ${
+                                    items
+                                        .map(
+                                            item => `
+
+                                            <div class="clothing-card">
+
+                                                <img
+                                                    src="${escapeHtml(item.image_url)}"
+                                                    alt="${category}"
+                                                    loading="lazy"
+                                                >
+
+                                                <button
+                                                    class="delete-clothing"
+                                                    data-id="${item.id}"
+                                                    aria-label="delete clothing"
+                                                >
+                                                    ×
+                                                </button>
+
+                                            </div>
+
+                                        `
+                                        )
+                                        .join("")
+                                }
+
+                            </div>
+                            `
+                            :
+                            `
+                            <p class="empty-message">
+                                nothing here yet.
+                            </p>
+                            `
+                    }
+
+                `;
+
+                container.appendChild(section);
+
+            }
+        );
+
+
+        container
+            .querySelectorAll(".delete-clothing")
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        async event => {
+
+                            event.stopPropagation();
+
+                            await deleteClothing(
+                                button.dataset.id
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       DELETE CLOTHING
+    ===================================================== */
+
+    async function deleteClothing(id) {
+
+        const item =
+            clothes.find(
+                clothing =>
+                    String(clothing.id) ===
+                    String(id)
+            );
+
+        if (!item) {
+            return;
+        }
+
+        const confirmed =
+            confirm(
+                "delete this clothing item?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const imagePath =
+            getStoragePathFromUrl(
+                item.image_url
+            );
+
+        const {
+            error: databaseError
+        } =
+            await supabaseClient
+                .from("clothes")
+                .delete()
+                .eq("id", id)
+                .eq(
+                    "user_id",
+                    currentUser.id
+                );
+
+        if (databaseError) {
+
+            console.error(databaseError);
+
+            showToast(
+                "couldn't delete item"
+            );
+
+            return;
+        }
+
+        if (imagePath) {
+
+            await supabaseClient
+                .storage
+                .from("clothes")
+                .remove([
+                    imagePath
+                ]);
+
+        }
+
+        clothes =
+            clothes.filter(
+                clothing =>
+                    String(clothing.id) !==
+                    String(id)
+            );
+
+        currentFit =
+            currentFit.filter(
+                item =>
+                    String(item.clothingId) !==
+                    String(id)
+            );
+
+        selectedCanvasItemIds.delete(id);
+
+        renderWardrobe();
+
+        renderCanvas();
+
+        renderSavedFits();
+
+        showToast(
+            "clothing deleted"
+        );
+
+    }
+
+
+    function getStoragePathFromUrl(url) {
+
+        try {
+
+            const marker =
+                "/storage/v1/object/public/clothes/";
+
+            const index =
+                url.indexOf(marker);
+
+            if (index === -1) {
+                return null;
+            }
+
+            return decodeURIComponent(
+                url.substring(
+                    index + marker.length
+                )
+            );
+
+        } catch {
+
+            return null;
+
+        }
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    document
+        .querySelectorAll(".nav-button")
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const pageId =
+                            button.dataset.page;
+
+                        document
+                            .querySelectorAll(".page")
+                            .forEach(
+                                page => {
+                                    page.classList
+                                        .add("hidden");
+                                }
+                            );
+
+                        document
+                            .getElementById(pageId)
+                            .classList
+                            .remove("hidden");
+
+                        document
+                            .querySelectorAll(".nav-button")
+                            .forEach(
+                                navButton => {
+                                    navButton.classList
+                                        .remove("active");
+                                }
+                            );
+
+                        button.classList.add("active");
+
+                        if (
+                            pageId ===
+                            "fits-page"
+                        ) {
+
+                            renderSavedFits();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       CANVAS
+    ===================================================== */
+
+    function getCanvas() {
+
+        return document.getElementById(
+            "fit-canvas"
+        );
+
+    }
+
+
+    function createCanvasItem(clothing) {
+
+        const canvas =
+            getCanvas();
+
+        const rect =
+            canvas.getBoundingClientRect();
+
+        const existingCount =
+            currentFit.length;
+
+        const width =
+            Math.min(
+                220,
+                Math.max(
+                    100,
+                    rect.width * 0.25
+                )
+            );
+
+        const height =
+            width * 1.15;
+
+        const item = {
+
+            id:
+                `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(2)}`,
+
+            clothingId:
+                clothing.id,
+
+            image_url:
+                clothing.image_url,
+
+            category:
+                clothing.category,
+
+            x:
+                Math.max(
+                    20,
+                    (rect.width - width) / 2 +
+                    existingCount * 15
+                ),
+
+            y:
+                Math.max(
+                    20,
+                    (rect.height - height) / 2 +
+                    existingCount * 15
+                ),
+
+            width,
+
+            height,
+
+            zIndex:
+                existingCount + 1
+
+        };
+
+        currentFit.push(item);
+
+        selectedCanvasItemIds.clear();
+
+        selectedCanvasItemIds.add(item.id);
+
+        renderCanvas();
+
+    }
+
+
+    function getSelectedCanvasItems() {
+
+        return currentFit.filter(
+            item =>
+                selectedCanvasItemIds.has(
+                    item.id
+                )
+        );
+
+    }
+
+
+    function updateSelectionInfo() {
+
+        const info =
+            document.getElementById(
+                "selection-info"
+            );
+
+        const count =
+            selectedCanvasItemIds.size;
+
+        if (!count) {
+
+            info.textContent =
+                "click an item to select it · ctrl/cmd-click to select multiple";
+
+        } else if (count === 1) {
+
+            info.textContent =
+                "1 item selected · ctrl/cmd-click to select more";
+
+        } else {
+
+            info.textContent =
+                `${count} items selected · drag to move them together`;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RENDER CANVAS
+    ===================================================== */
+
+    function renderCanvas() {
+
+        const canvas =
+            getCanvas();
+
+        if (!canvas) {
+            return;
+        }
+
+        canvas
+            .querySelectorAll(".canvas-item")
+            .forEach(
+                element =>
+                    element.remove()
+            );
+
+        const empty =
+            document.getElementById(
+                "canvas-empty"
+            );
+
+        empty.classList.toggle(
+            "hidden",
+            currentFit.length > 0
+        );
+
+
+        currentFit
+            .sort(
+                (a, b) =>
+                    a.zIndex -
+                    b.zIndex
+            )
+            .forEach(
+                item => {
+
+                    const element =
+                        document.createElement("div");
+
+                    element.className =
+                        "canvas-item";
+
+                    if (
+                        selectedCanvasItemIds.has(
+                            item.id
+                        )
+                    ) {
+
+                        if (
+                            selectedCanvasItemIds.size === 1
+                        ) {
+
+                            element.classList.add(
+                                "selected"
+                            );
+
+                        } else {
+
+                            element.classList.add(
+                                "multi-selected"
+                            );
+
+                        }
+
+                    }
+
+                    element.dataset.itemId =
+                        item.id;
+
+                    element.style.left =
+                        `${item.x}px`;
+
+                    element.style.top =
+                        `${item.y}px`;
+
+                    element.style.width =
+                        `${item.width}px`;
+
+                    element.style.height =
+                        `${item.height}px`;
+
+                    element.style.zIndex =
+                        item.zIndex;
+
+                    element.innerHTML = `
+
+                        <img
+                            src="${escapeHtml(item.image_url)}"
+                            alt="${escapeHtml(item.category)}"
+                            draggable="false"
+                        >
+
+                        ${
+                            selectedCanvasItemIds.size === 1 &&
+                            selectedCanvasItemIds.has(item.id)
+                                ?
+                                `
+                                <div
+                                    class="resize-handle"
+                                    data-resize-id="${item.id}"
+                                ></div>
+                                `
+                                :
+                                ""
+                        }
+
+                    `;
+
+                    canvas.appendChild(element);
+
+                }
+            );
+
+        updateSelectionInfo();
+
+    }
+
+
+    /* =====================================================
+       CANVAS POINTER EVENTS
+    ===================================================== */
+
+    const canvas =
+        document.getElementById(
+            "fit-canvas"
+        );
+
+
+    canvas.addEventListener(
+        "pointerdown",
+        event => {
+
+            const resizeHandle =
+                event.target.closest(
+                    ".resize-handle"
+                );
+
+            if (resizeHandle) {
+
+                const item =
+                    currentFit.find(
+                        current =>
+                            current.id ===
+                            resizeHandle.dataset
+                                .resizeId
+                    );
+
+                if (!item) {
                     return;
                 }
+
+                event.preventDefault();
+
+                selectedCanvasItemIds.clear();
+
+                selectedCanvasItemIds.add(
+                    item.id
+                );
+
+                interaction = {
+
+                    type:
+                        "resize",
+
+                    itemId:
+                        item.id,
+
+                    startX:
+                        event.clientX,
+
+                    startY:
+                        event.clientY,
+
+                    startWidth:
+                        item.width,
+
+                    startHeight:
+                        item.height
+
+                };
+
+                canvas.setPointerCapture(
+                    event.pointerId
+                );
+
+                renderCanvas();
+
+                return;
+
+            }
+
+
+            const canvasElement =
+                event.target.closest(
+                    ".canvas-item"
+                );
+
+            if (canvasElement) {
+
+                const itemId =
+                    canvasElement.dataset.itemId;
+
+                const item =
+                    currentFit.find(
+                        current =>
+                            current.id ===
+                            itemId
+                    );
+
+                if (!item) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                /*
+                 * Ctrl-click / Cmd-click toggles
+                 * the clicked item in the selection.
+                 */
+                const multiSelect =
+                    event.ctrlKey ||
+                    event.metaKey;
+
+                if (multiSelect) {
+
+                    if (
+                        selectedCanvasItemIds.has(
+                            item.id
+                        )
+                    ) {
+
+                        selectedCanvasItemIds.delete(
+                            item.id
+                        );
+
+                    } else {
+
+                        selectedCanvasItemIds.add(
+                            item.id
+                        );
+
+                    }
+
+                } else {
+
+                    /*
+                     * Clicking an already-selected
+                     * item keeps the whole selection,
+                     * allowing the group to be dragged.
+                     */
+                    if (
+                        !selectedCanvasItemIds.has(
+                            item.id
+                        )
+                    ) {
+
+                        selectedCanvasItemIds.clear();
+
+                        selectedCanvasItemIds.add(
+                            item.id
+                        );
+
+                    }
+
+                }
+
+
+                const selectedItems =
+                    getSelectedCanvasItems();
+
+                /*
+                 * Save every selected item's
+                 * starting position.
+                 */
+                const startPositions =
+                    selectedItems.map(
+                        selected => ({
+
+                            id:
+                                selected.id,
+
+                            x:
+                                selected.x,
+
+                            y:
+                                selected.y
+
+                        })
+                    );
+
+                interaction = {
+
+                    type:
+                        "drag",
+
+                    itemId:
+                        item.id,
+
+                    startX:
+                        event.clientX,
+
+                    startY:
+                        event.clientY,
+
+                    startPositions
+
+                };
+
+                canvas.setPointerCapture(
+                    event.pointerId
+                );
+
+                renderCanvas();
+
+                return;
+
+            }
+
+
+            /*
+             * Clicking empty canvas clears selection.
+             */
+            selectedCanvasItemIds.clear();
+
+            renderCanvas();
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "pointermove",
+        event => {
+
+            if (!interaction) {
+                return;
+            }
+
+            const canvasRect =
+                canvas.getBoundingClientRect();
+
+
+            if (
+                interaction.type ===
+                "drag"
+            ) {
+
+                const dx =
+                    event.clientX -
+                    interaction.startX;
+
+                const dy =
+                    event.clientY -
+                    interaction.startY;
+
+                interaction.startPositions
+                    .forEach(
+                        start => {
+
+                            const item =
+                                currentFit.find(
+                                    current =>
+                                        current.id ===
+                                        start.id
+                                );
+
+                            if (!item) {
+                                return;
+                            }
+
+                            item.x =
+                                start.x + dx;
+
+                            item.y =
+                                start.y + dy;
+
+                            const maxX =
+                                Math.max(
+                                    0,
+                                    canvasRect.width -
+                                    item.width
+                                );
+
+                            const maxY =
+                                Math.max(
+                                    0,
+                                    canvasRect.height -
+                                    item.height
+                                );
+
+                            item.x =
+                                Math.max(
+                                    0,
+                                    Math.min(
+                                        item.x,
+                                        maxX
+                                    )
+                                );
+
+                            item.y =
+                                Math.max(
+                                    0,
+                                    Math.min(
+                                        item.y,
+                                        maxY
+                                    )
+                                );
+
+                            updateCanvasItemPosition(
+                                item
+                            );
+
+                        }
+                    );
+
+            }
+
+
+            if (
+                interaction.type ===
+                "resize"
+            ) {
 
                 const item =
                     currentFit.find(
@@ -2836,157 +2840,374 @@
                     return;
                 }
 
-                const canvasRect =
-                    canvas.getBoundingClientRect();
+                const dx =
+                    event.clientX -
+                    interaction.startX;
 
+                const aspect =
+                    interaction.startHeight /
+                    interaction.startWidth;
 
-                if (
-                    interaction.type ===
-                    "drag"
-                ) {
+                let newWidth =
+                    interaction.startWidth +
+                    dx;
 
-                    const dx =
-                        event.clientX -
-                        interaction.startX;
+                let newHeight =
+                    newWidth *
+                    aspect;
 
-                    const dy =
-                        event.clientY -
-                        interaction.startY;
+                const minimum = 50;
 
-                    item.x =
-                        interaction.startItemX +
-                        dx;
-
-                    item.y =
-                        interaction.startItemY +
-                        dy;
-
-                    const maxX =
-                        Math.max(
-                            0,
-                            canvasRect.width -
-                            item.width
-                        );
-
-                    const maxY =
-                        Math.max(
-                            0,
-                            canvasRect.height -
-                            item.height
-                        );
-
-                    item.x =
-                        Math.max(
-                            0,
-                            Math.min(
-                                item.x,
-                                maxX
-                            )
-                        );
-
-                    item.y =
-                        Math.max(
-                            0,
-                            Math.min(
-                                item.y,
-                                maxY
-                            )
-                        );
-
-                    updateCanvasItemPosition(
-                        item
+                newWidth =
+                    Math.max(
+                        minimum,
+                        newWidth
                     );
 
-                }
-
+                newHeight =
+                    Math.max(
+                        minimum,
+                        newHeight
+                    );
 
                 if (
-                    interaction.type ===
-                    "resize"
+                    item.x +
+                    newWidth >
+                    canvasRect.width
                 ) {
 
-                    const dx =
-                        event.clientX -
-                        interaction.startX;
+                    newWidth =
+                        canvasRect.width -
+                        item.x;
 
-                    const dy =
-                        event.clientY -
-                        interaction.startY;
-
-                    const aspect =
-                        interaction.startHeight /
-                        interaction.startWidth;
-
-                    let newWidth =
-                        interaction.startWidth +
-                        dx;
-
-                    let newHeight =
+                    newHeight =
                         newWidth *
                         aspect;
 
-                    const minimum =
-                        50;
+                }
 
-                    newWidth =
-                        Math.max(
-                            minimum,
-                            newWidth
-                        );
+                if (
+                    item.y +
+                    newHeight >
+                    canvasRect.height
+                ) {
 
                     newHeight =
-                        Math.max(
-                            minimum,
-                            newHeight
-                        );
+                        canvasRect.height -
+                        item.y;
 
-                    if (
-                        item.x +
-                        newWidth >
-                        canvasRect.width
-                    ) {
+                    newWidth =
+                        newHeight /
+                        aspect;
 
-                        newWidth =
-                            canvasRect.width -
-                            item.x;
+                }
 
-                        newHeight =
-                            newWidth *
-                            aspect;
-
-                    }
-
-                    if (
-                        item.y +
-                        newHeight >
-                        canvasRect.height
-                    ) {
-
-                        newHeight =
-                            canvasRect.height -
-                            item.y;
-
-                        newWidth =
-                            newHeight /
-                            aspect;
-
-                    }
-
-                    item.width =
-                        Math.max(
-                            minimum,
-                            newWidth
-                        );
-
-                    item.height =
-                        Math.max(
-                            minimum,
-                            newHeight
-                        );
-
-                    updateCanvasItemSize(
-                        item
+                item.width =
+                    Math.max(
+                        minimum,
+                        newWidth
                     );
+
+                item.height =
+                    Math.max(
+                        minimum,
+                        newHeight
+                    );
+
+                updateCanvasItemSize(item);
+
+            }
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "pointerup",
+        event => {
+
+            if (!interaction) {
+                return;
+            }
+
+            interaction = null;
+
+            try {
+
+                canvas.releasePointerCapture(
+                    event.pointerId
+                );
+
+            } catch {
+
+            }
+
+            renderCanvas();
+
+        }
+    );
+
+
+    canvas.addEventListener(
+        "pointercancel",
+        () => {
+
+            interaction = null;
+
+        }
+    );
+
+
+    function updateCanvasItemPosition(item) {
+
+        const element =
+            canvas.querySelector(
+                `[data-item-id="${item.id}"]`
+            );
+
+        if (!element) {
+            return;
+        }
+
+        element.style.left =
+            `${item.x}px`;
+
+        element.style.top =
+            `${item.y}px`;
+
+    }
+
+
+    function updateCanvasItemSize(item) {
+
+        const element =
+            canvas.querySelector(
+                `[data-item-id="${item.id}"]`
+            );
+
+        if (!element) {
+            return;
+        }
+
+        element.style.width =
+            `${item.width}px`;
+
+        element.style.height =
+            `${item.height}px`;
+
+    }
+
+
+    /* =====================================================
+       ADD CLOTHING
+    ===================================================== */
+
+    document
+        .getElementById("add-clothing-button")
+        .addEventListener(
+            "click",
+            () => {
+
+                currentPickerMode =
+                    "canvas";
+
+                openPicker();
+
+            }
+        );
+
+
+    function openPicker() {
+
+        const modal =
+            document.getElementById(
+                "picker-modal"
+            );
+
+        const title =
+            document.getElementById(
+                "picker-title"
+            );
+
+        const content =
+            document.getElementById(
+                "picker-content"
+            );
+
+        title.textContent =
+            "choose clothing";
+
+        if (!clothes.length) {
+
+            content.innerHTML = `
+
+                <p class="empty-message">
+                    you don't have any clothing
+                    yet. add some in your wardrobe first.
+                </p>
+
+            `;
+
+            modal.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        const categories = [
+            "top",
+            "bottom",
+            "shoes",
+            "outer"
+        ];
+
+
+        content.innerHTML = `
+
+            ${
+                categories
+                    .map(
+                        category => {
+
+                            const items =
+                                clothes.filter(
+                                    item =>
+                                        item.category ===
+                                        category
+                                );
+
+                            if (!items.length) {
+                                return "";
+                            }
+
+                            return `
+
+                                <div class="piece-picker">
+
+                                    <h3 class="category-title">
+                                        ${getCategoryName(category)}
+                                    </h3>
+
+                                    <div class="picker-grid">
+
+                                        ${
+                                            items
+                                                .map(
+                                                    item => `
+
+                                                    <button
+                                                        class="picker-item"
+                                                        data-id="${item.id}"
+                                                    >
+
+                                                        <img
+                                                            src="${escapeHtml(item.image_url)}"
+                                                            alt="${escapeHtml(category)}"
+                                                        >
+
+                                                    </button>
+
+                                                `
+                                                )
+                                                .join("")
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }
+                    )
+                    .join("")
+            }
+
+        `;
+
+
+        content
+            .querySelectorAll(".picker-item")
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const item =
+                                clothes.find(
+                                    clothing =>
+                                        String(
+                                            clothing.id
+                                        ) ===
+                                        String(
+                                            button.dataset.id
+                                        )
+                                );
+
+                            if (!item) {
+                                return;
+                            }
+
+                            if (
+                                currentPickerMode ===
+                                "canvas"
+                            ) {
+
+                                createCanvasItem(
+                                    item
+                                );
+
+                            }
+
+                            closePicker();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        modal.classList.remove("hidden");
+
+    }
+
+
+    function closePicker() {
+
+        document
+            .getElementById("picker-modal")
+            .classList
+            .add("hidden");
+
+    }
+
+
+    document
+        .getElementById("close-picker")
+        .addEventListener(
+            "click",
+            closePicker
+        );
+
+
+    document
+        .getElementById("picker-modal")
+        .addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target.id ===
+                    "picker-modal"
+                ) {
+
+                    closePicker();
 
                 }
 
@@ -2994,25 +3215,95 @@
         );
 
 
-        canvas.addEventListener(
-            "pointerup",
-            event => {
+    /* =====================================================
+       DELETE SELECTED
+    ===================================================== */
 
-                if (!interaction) {
-                    return;
-                }
+    document
+        .getElementById("delete-selected-button")
+        .addEventListener(
+            "click",
+            () => {
 
-                interaction = null;
+                if (
+                    !selectedCanvasItemIds.size
+                ) {
 
-                try {
-
-                    canvas.releasePointerCapture(
-                        event.pointerId
+                    showToast(
+                        "select something first"
                     );
 
-                } catch {
+                    return;
 
                 }
+
+                const count =
+                    selectedCanvasItemIds.size;
+
+                currentFit =
+                    currentFit.filter(
+                        item =>
+                            !selectedCanvasItemIds.has(
+                                item.id
+                            )
+                    );
+
+                selectedCanvasItemIds.clear();
+
+                renderCanvas();
+
+                showToast(
+                    count === 1
+                        ? "item deleted"
+                        : `${count} items deleted`
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       BRING FORWARD
+    ===================================================== */
+
+    document
+        .getElementById("bring-forward-button")
+        .addEventListener(
+            "click",
+            () => {
+
+                const selected =
+                    getSelectedCanvasItems();
+
+                if (!selected.length) {
+
+                    showToast(
+                        "select something first"
+                    );
+
+                    return;
+
+                }
+
+                const maxZ =
+                    Math.max(
+                        ...currentFit.map(
+                            item =>
+                                item.zIndex
+                        ),
+                        0
+                    );
+
+                selected.forEach(
+                    (item, index) => {
+
+                        item.zIndex =
+                            maxZ +
+                            index +
+                            1;
+
+                    }
+                );
 
                 renderCanvas();
 
@@ -3020,555 +3311,386 @@
         );
 
 
-        canvas.addEventListener(
-            "pointercancel",
+    /* =====================================================
+       SEND BACKWARD
+    ===================================================== */
+
+    document
+        .getElementById("send-backward-button")
+        .addEventListener(
+            "click",
             () => {
 
-                interaction = null;
+                const selected =
+                    getSelectedCanvasItems();
+
+                if (!selected.length) {
+
+                    showToast(
+                        "select something first"
+                    );
+
+                    return;
+
+                }
+
+                const minZ =
+                    Math.min(
+                        ...currentFit.map(
+                            item =>
+                                item.zIndex
+                        ),
+                        1
+                    );
+
+                selected.forEach(
+                    (item, index) => {
+
+                        item.zIndex =
+                            minZ -
+                            index -
+                            1;
+
+                    }
+                );
+
+                renderCanvas();
 
             }
         );
 
 
-        function updateCanvasItemPosition(
-            item
-        ) {
+    /* =====================================================
+       CLEAR FIT
+    ===================================================== */
 
-            const element =
-                canvas.querySelector(
-                    `[data-item-id="${item.id}"]`
-                );
+    document
+        .getElementById("clear-fit-button")
+        .addEventListener(
+            "click",
+            () => {
 
-            if (!element) {
-                return;
-            }
-
-            element.style.left =
-                `${item.x}px`;
-
-            element.style.top =
-                `${item.y}px`;
-
-        }
-
-
-        function updateCanvasItemSize(
-            item
-        ) {
-
-            const element =
-                canvas.querySelector(
-                    `[data-item-id="${item.id}"]`
-                );
-
-            if (!element) {
-                return;
-            }
-
-            element.style.width =
-                `${item.width}px`;
-
-            element.style.height =
-                `${item.height}px`;
-
-        }
-
-
-        /* =====================================================
-           ADD CLOTHING
-        ===================================================== */
-
-        document
-            .getElementById(
-                "add-clothing-button"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    currentPickerMode =
-                        "canvas";
-
-                    openPicker();
-
+                if (!currentFit.length) {
+                    return;
                 }
-            );
 
+                const confirmed =
+                    confirm(
+                        "clear this outfit?"
+                    );
 
-        function openPicker() {
+                if (!confirmed) {
+                    return;
+                }
 
-            const modal =
-                document.getElementById(
-                    "picker-modal"
-                );
+                currentFit = [];
 
-            const title =
-                document.getElementById(
-                    "picker-title"
-                );
+                selectedCanvasItemIds.clear();
 
-            const content =
-                document.getElementById(
-                    "picker-content"
-                );
-
-            title.textContent =
-                "choose clothing";
-
-            if (!clothes.length) {
-
-                content.innerHTML = `
-
-                    <p class="empty-message">
-                        you don't have any clothing
-                        yet. add some in your wardrobe first.
-                    </p>
-
-                `;
-
-                modal.classList.remove(
-                    "hidden"
-                );
-
-                return;
+                renderCanvas();
 
             }
+        );
 
 
-            const categories = [
-                "top",
-                "bottom",
-                "shoes",
-                "outer"
-            ];
+    /* =====================================================
+       EXPORT TRANSPARENT WEBP
+    ===================================================== */
 
+    document
+        .getElementById("export-webp-button")
+        .addEventListener(
+            "click",
+            async () => {
 
-            content.innerHTML = `
+                if (!currentFit.length) {
 
-                ${
-                    categories
-                        .map(
-                            category => {
+                    showToast(
+                        "add some clothing first"
+                    );
 
-                                const items =
-                                    clothes.filter(
-                                        item =>
-                                            item.category ===
-                                            category
-                                    );
-
-                                if (!items.length) {
-                                    return "";
-                                }
-
-                                return `
-
-                                    <div
-                                        class="piece-picker"
-                                    >
-
-                                        <h3
-                                            class="category-title"
-                                        >
-                                            ${getCategoryName(category)}
-                                        </h3>
-
-                                        <div
-                                            class="picker-grid"
-                                        >
-
-                                            ${
-                                                items
-                                                    .map(
-                                                        item => `
-
-                                                        <button
-                                                            class="picker-item"
-                                                            data-id="${item.id}"
-                                                        >
-
-                                                            <img
-                                                                src="${escapeHtml(item.image_url)}"
-                                                                alt="${escapeHtml(category)}"
-                                                            >
-
-                                                        </button>
-
-                                                    `
-                                                    )
-                                                    .join("")
-                                            }
-
-                                        </div>
-
-                                    </div>
-
-                                `;
-
-                            }
-                        )
-                        .join("")
-                }
-
-            `;
-
-
-            content
-                .querySelectorAll(
-                    ".picker-item"
-                )
-                .forEach(
-                    button => {
-
-                        button.addEventListener(
-                            "click",
-                            () => {
-
-                                const item =
-                                    clothes.find(
-                                        clothing =>
-                                            String(
-                                                clothing.id
-                                            ) ===
-                                            String(
-                                                button.dataset.id
-                                            )
-                                    );
-
-                                if (!item) {
-                                    return;
-                                }
-
-                                if (
-                                    currentPickerMode ===
-                                    "canvas"
-                                ) {
-
-                                    createCanvasItem(
-                                        item
-                                    );
-
-                                }
-
-                                closePicker();
-
-                            }
-                        );
-
-                    }
-                );
-
-
-            modal.classList.remove(
-                "hidden"
-            );
-
-        }
-
-
-        function closePicker() {
-
-            document
-                .getElementById(
-                    "picker-modal"
-                )
-                .classList
-                .add("hidden");
-
-        }
-
-
-        document
-            .getElementById(
-                "close-picker"
-            )
-            .addEventListener(
-                "click",
-                closePicker
-            );
-
-
-        document
-            .getElementById(
-                "picker-modal"
-            )
-            .addEventListener(
-                "click",
-                event => {
-
-                    if (
-                        event.target.id ===
-                        "picker-modal"
-                    ) {
-
-                        closePicker();
-
-                    }
+                    return;
 
                 }
-            );
 
+                try {
 
-        /* =====================================================
-           DELETE SELECTED
-        ===================================================== */
+                    showToast(
+                        "creating transparent WebP..."
+                    );
 
-        document
-            .getElementById(
-                "delete-selected-button"
-            )
-            .addEventListener(
-                "click",
-                () => {
+                    await exportTransparentWebP();
 
-                    if (
-                        !selectedCanvasItemId
-                    ) {
+                    showToast(
+                        "WebP exported"
+                    );
 
-                        showToast(
-                            "select something first"
-                        );
+                } catch (error) {
 
-                        return;
-
-                    }
-
-                    currentFit =
-                        currentFit.filter(
-                            item =>
-                                item.id !==
-                                selectedCanvasItemId
-                        );
-
-                    selectedCanvasItemId =
-                        null;
-
-                    renderCanvas();
-
-                }
-            );
-
-
-        /* =====================================================
-           BRING FORWARD
-        ===================================================== */
-
-        document
-            .getElementById(
-                "bring-forward-button"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    const selected =
-                        getSelectedCanvasItem();
-
-                    if (!selected) {
-
-                        showToast(
-                            "select something first"
-                        );
-
-                        return;
-
-                    }
-
-                    const maxZ =
-                        Math.max(
-                            ...currentFit.map(
-                                item =>
-                                    item.zIndex
-                            ),
-                            0
-                        );
-
-                    selected.zIndex =
-                        maxZ + 1;
-
-                    renderCanvas();
-
-                }
-            );
-
-
-        /* =====================================================
-           SEND BACKWARD
-        ===================================================== */
-
-        document
-            .getElementById(
-                "send-backward-button"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    const selected =
-                        getSelectedCanvasItem();
-
-                    if (!selected) {
-
-                        showToast(
-                            "select something first"
-                        );
-
-                        return;
-
-                    }
-
-                    const minZ =
-                        Math.min(
-                            ...currentFit.map(
-                                item =>
-                                    item.zIndex
-                            ),
-                            1
-                        );
-
-                    selected.zIndex =
-                        minZ - 1;
-
-                    renderCanvas();
-
-                }
-            );
-
-
-        /* =====================================================
-           CLEAR FIT
-        ===================================================== */
-
-        document
-            .getElementById(
-                "clear-fit-button"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    if (
-                        !currentFit.length
-                    ) {
-
-                        return;
-
-                    }
-
-                    const confirmed =
-                        confirm(
-                            "clear this outfit?"
-                        );
-
-                    if (!confirmed) {
-                        return;
-                    }
-
-                    currentFit = [];
-
-                    selectedCanvasItemId =
-                        null;
-
-                    renderCanvas();
-
-                }
-            );
-
-
-        /* =====================================================
-           SAVE FIT
-        ===================================================== */
-
-        document
-            .getElementById(
-                "save-fit-button"
-            )
-            .addEventListener(
-                "click",
-                async () => {
-
-                    if (
-                        !currentFit.length
-                    ) {
-
-                        showToast(
-                            "add some clothing first"
-                        );
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Keep the original fit_data structure
-                     * so existing saved fits continue working.
-                     */
-
-                    const fitData = {
-
-                        top:
-                            getFirstCanvasPiece(
-                                "top"
-                            ),
-
-                        bottom:
-                            getFirstCanvasPiece(
-                                "bottom"
-                            ),
-
-                        shoes:
-                            getFirstCanvasPiece(
-                                "shoes"
-                            ),
-
-                        outer:
-                            getFirstCanvasPiece(
-                                "outer"
-                            )
-
-                    };
-
-
-                    /*
-                     * editor_data stores the actual
-                     * canvas layout, positions, sizes
-                     * and layering.
-                     */
-
-                    const editorData =
-                        currentFit.map(
-                            item => ({
-
-                                id:
-                                    item.id,
-
-                                clothingId:
-                                    item.clothingId,
-
-                                x:
-                                    item.x,
-
-                                y:
-                                    item.y,
-
-                                width:
-                                    item.width,
-
-                                height:
-                                    item.height,
-
-                                zIndex:
-                                    item.zIndex
-
-                            })
-                        );
-
-
-                    const {
-                        data,
+                    console.error(
+                        "WebP export failed:",
                         error
-                    } =
+                    );
+
+                    showToast(
+                        "couldn't export WebP"
+                    );
+
+                }
+
+            }
+        );
+
+
+    async function loadImageForExport(url) {
+
+        return new Promise(
+            (resolve, reject) => {
+
+                const img =
+                    new Image();
+
+                /*
+                 * Needed for images coming from
+                 * Supabase storage.
+                 */
+                img.crossOrigin = "anonymous";
+
+                img.onload = () => {
+                    resolve(img);
+                };
+
+                img.onerror = () => {
+
+                    reject(
+                        new Error(
+                            "couldn't load clothing image"
+                        )
+                    );
+
+                };
+
+                img.src = url;
+
+            }
+        );
+
+    }
+
+
+    async function exportTransparentWebP() {
+
+        const canvas =
+            getCanvas();
+
+        const canvasRect =
+            canvas.getBoundingClientRect();
+
+        /*
+         * Use the actual editor size so the
+         * exported image represents the canvas.
+         */
+        const exportCanvas =
+            document.createElement("canvas");
+
+        const scale = 2;
+
+        exportCanvas.width =
+            Math.round(
+                canvasRect.width * scale
+            );
+
+        exportCanvas.height =
+            Math.round(
+                canvasRect.height * scale
+            );
+
+        const context =
+            exportCanvas.getContext("2d");
+
+        /*
+         * IMPORTANT:
+         * No background is drawn here.
+         * Canvas therefore stays transparent.
+         */
+        context.clearRect(
+            0,
+            0,
+            exportCanvas.width,
+            exportCanvas.height
+        );
+
+        const orderedItems =
+            [...currentFit]
+                .sort(
+                    (a, b) =>
+                        a.zIndex -
+                        b.zIndex
+                );
+
+        for (
+            const item of orderedItems
+        ) {
+
+            const img =
+                await loadImageForExport(
+                    item.image_url
+                );
+
+            context.drawImage(
+                img,
+                item.x * scale,
+                item.y * scale,
+                item.width * scale,
+                item.height * scale
+            );
+
+        }
+
+        const blob =
+            await new Promise(
+                resolve =>
+                    exportCanvas.toBlob(
+                        resolve,
+                        "image/webp",
+                        0.95
+                    )
+            );
+
+        if (!blob) {
+
+            throw new Error(
+                "couldn't create WebP"
+            );
+
+        }
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            `wardrobe-fit-${Date.now()}.webp`;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(
+            () => URL.revokeObjectURL(url),
+            1000
+        );
+
+    }
+
+
+    /* =====================================================
+       SAVE FIT
+    ===================================================== */
+
+    document
+        .getElementById("save-fit-button")
+        .addEventListener(
+            "click",
+            async () => {
+
+                if (!currentFit.length) {
+
+                    showToast(
+                        "add some clothing first"
+                    );
+
+                    return;
+
+                }
+
+                const fitData = {
+
+                    top:
+                        getFirstCanvasPiece(
+                            "top"
+                        ),
+
+                    bottom:
+                        getFirstCanvasPiece(
+                            "bottom"
+                        ),
+
+                    shoes:
+                        getFirstCanvasPiece(
+                            "shoes"
+                        ),
+
+                    outer:
+                        getFirstCanvasPiece(
+                            "outer"
+                        )
+
+                };
+
+
+                const editorData =
+                    currentFit.map(
+                        item => ({
+
+                            id:
+                                item.id,
+
+                            clothingId:
+                                item.clothingId,
+
+                            x:
+                                item.x,
+
+                            y:
+                                item.y,
+
+                            width:
+                                item.width,
+
+                            height:
+                                item.height,
+
+                            zIndex:
+                                item.zIndex
+
+                        })
+                    );
+
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("fits")
+                        .insert({
+
+                            user_id:
+                                currentUser.id,
+
+                            fit_data:
+                                fitData,
+
+                            editor_data:
+                                editorData
+
+                        })
+                        .select()
+                        .single();
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    const fallback =
                         await supabaseClient
                             .from("fits")
                             .insert({
@@ -3577,275 +3699,216 @@
                                     currentUser.id,
 
                                 fit_data:
-                                    fitData,
-
-                                editor_data:
-                                    editorData
+                                    fitData
 
                             })
                             .select()
                             .single();
 
-
-                    /*
-                     * If the database doesn't have
-                     * editor_data yet, fall back to the
-                     * old save format instead of breaking
-                     * the whole app.
-                     */
-
-                    if (error) {
+                    if (fallback.error) {
 
                         console.error(
-                            error
+                            fallback.error
                         );
 
-                        /*
-                         * Try the original schema.
-                         */
-
-                        const fallback =
-                            await supabaseClient
-                                .from("fits")
-                                .insert({
-
-                                    user_id:
-                                        currentUser.id,
-
-                                    fit_data:
-                                        fitData
-
-                                })
-                                .select()
-                                .single();
-
-                        if (fallback.error) {
-
-                            console.error(
-                                fallback.error
-                            );
-
-                            showToast(
-                                "couldn't save fit"
-                            );
-
-                            return;
-
-                        }
-
-                        savedFits.unshift(
-                            fallback.data
+                        showToast(
+                            "couldn't save fit"
                         );
 
-                    } else {
-
-                        savedFits.unshift(
-                            data
-                        );
+                        return;
 
                     }
 
-
-                    showToast(
-                        "fit saved"
+                    savedFits.unshift(
+                        fallback.data
                     );
 
-                    currentFit = [];
+                } else {
 
-                    selectedCanvasItemId =
-                        null;
+                    savedFits.unshift(data);
 
-                    renderCanvas();
+                }
+
+
+                showToast(
+                    "fit saved"
+                );
+
+                currentFit = [];
+
+                selectedCanvasItemIds.clear();
+
+                renderCanvas();
+
+            }
+        );
+
+
+    function getFirstCanvasPiece(category) {
+
+        const item =
+            currentFit.find(
+                piece =>
+                    piece.category ===
+                    category
+            );
+
+        return item
+            ? item.clothingId
+            : null;
+
+    }
+
+
+    /* =====================================================
+       SAVED FITS
+    ===================================================== */
+
+    function renderSavedFits() {
+
+        const container =
+            document.getElementById(
+                "saved-fits"
+            );
+
+        if (!savedFits.length) {
+
+            container.innerHTML = `
+
+                <div class="empty-fits">
+                    no saved fits yet.
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            savedFits
+                .map(
+                    fit => {
+
+                        const data =
+                            fit.fit_data || {};
+
+                        const pieces = [
+
+                            data.top,
+                            data.bottom,
+                            data.shoes,
+                            data.outer
+
+                        ]
+                            .filter(Boolean)
+                            .map(
+                                id =>
+                                    clothes.find(
+                                        item =>
+                                            String(
+                                                item.id
+                                            ) ===
+                                            String(id)
+                                    )
+                            )
+                            .filter(Boolean);
+
+
+                        return `
+
+                            <article class="saved-fit">
+
+                                <div class="saved-fit-images">
+
+                                    ${
+                                        pieces.length
+                                            ?
+                                            pieces
+                                                .map(
+                                                    piece => `
+
+                                                    <div
+                                                        class="saved-fit-image"
+                                                    >
+
+                                                        <img
+                                                            src="${escapeHtml(piece.image_url)}"
+                                                            alt="${escapeHtml(piece.category)}"
+                                                            loading="lazy"
+                                                        >
+
+                                                    </div>
+
+                                                `
+                                                )
+                                                .join("")
+                                            :
+                                            `
+                                            <div class="empty-message">
+                                                some items from this
+                                                fit are no longer
+                                                in your wardrobe.
+                                            </div>
+                                            `
+                                    }
+
+                                </div>
+
+
+                                <div class="saved-fit-footer">
+
+                                    <span class="fit-date">
+                                        ${formatDate(
+                                            fit.created_at
+                                        )}
+                                    </span>
+
+                                    <button
+                                        class="delete-fit"
+                                        data-fit-id="${fit.id}"
+                                    >
+                                        delete
+                                    </button>
+
+                                </div>
+
+                            </article>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+        container
+            .querySelectorAll(".delete-fit")
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        async () => {
+
+                            await deleteFit(
+                                button.dataset.fitId
+                            );
+
+                        }
+                    );
 
                 }
             );
 
-
-        function getFirstCanvasPiece(
-            category
-        ) {
-
-            const item =
-                currentFit.find(
-                    piece =>
-                        piece.category ===
-                        category
-                );
-
-            return item
-                ? item.clothingId
-                : null;
-
-        }
+    }
 
 
-        /* =====================================================
-           SAVED FITS
-        ===================================================== */
+    function formatDate(date) {
 
-        function renderSavedFits() {
-
-            const container =
-                document.getElementById(
-                    "saved-fits"
-                );
-
-            if (!savedFits.length) {
-
-                container.innerHTML = `
-
-                    <div class="empty-fits">
-                        no saved fits yet.
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-                savedFits
-                    .map(
-                        fit => {
-
-                            const data =
-                                fit.fit_data ||
-                                {};
-
-                            const pieces = [
-
-                                data.top,
-
-                                data.bottom,
-
-                                data.shoes,
-
-                                data.outer
-
-                            ]
-                                .filter(Boolean)
-                                .map(
-                                    id =>
-                                        clothes.find(
-                                            item =>
-                                                String(
-                                                    item.id
-                                                ) ===
-                                                String(
-                                                    id
-                                                )
-                                        )
-                                )
-                                .filter(Boolean);
-
-
-                            return `
-
-                                <article
-                                    class="saved-fit"
-                                >
-
-                                    <div
-                                        class="saved-fit-images"
-                                    >
-
-                                        ${
-                                            pieces.length
-                                                ?
-                                                pieces
-                                                    .map(
-                                                        piece => `
-
-                                                        <div
-                                                            class="saved-fit-image"
-                                                        >
-
-                                                            <img
-                                                                src="${escapeHtml(piece.image_url)}"
-                                                                alt="${escapeHtml(piece.category)}"
-                                                                loading="lazy"
-                                                            >
-
-                                                        </div>
-
-                                                    `
-                                                    )
-                                                    .join("")
-                                                :
-                                                `
-                                                <div class="empty-message">
-                                                    some items from this
-                                                    fit are no longer
-                                                    in your wardrobe.
-                                                </div>
-                                                `
-                                        }
-
-                                    </div>
-
-
-                                    <div
-                                        class="saved-fit-footer"
-                                    >
-
-                                        <span
-                                            class="fit-date"
-                                        >
-                                            ${formatDate(
-                                                fit.created_at
-                                            )}
-                                        </span>
-
-
-                                        <button
-                                            class="delete-fit"
-                                            data-fit-id="${fit.id}"
-                                        >
-                                            delete
-                                        </button>
-
-                                    </div>
-
-                                </article>
-
-                            `;
-
-                        }
-                    )
-                    .join("");
-
-
-            container
-                .querySelectorAll(
-                    ".delete-fit"
-                )
-                .forEach(
-                    button => {
-
-                        button.addEventListener(
-                            "click",
-                            async () => {
-
-                                await deleteFit(
-                                    button.dataset.fitId
-                                );
-
-                            }
-                        );
-
-                    }
-                );
-
-        }
-
-
-        function formatDate(date) {
-
-            return new Date(
-                date
-            ).toLocaleDateString(
+        return new Date(date)
+            .toLocaleDateString(
                 undefined,
                 {
                     month: "short",
@@ -3854,78 +3917,71 @@
                 }
             );
 
-        }
+    }
 
 
-        /* =====================================================
-           DELETE FIT
-        ===================================================== */
+    /* =====================================================
+       DELETE FIT
+    ===================================================== */
 
-        async function deleteFit(id) {
+    async function deleteFit(id) {
 
-            const confirmed =
-                confirm(
-                    "delete this saved fit?"
-                );
-
-            if (!confirmed) {
-                return;
-            }
-
-            const {
-                error
-            } =
-                await supabaseClient
-                    .from("fits")
-                    .delete()
-                    .eq(
-                        "id",
-                        id
-                    )
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    );
-
-            if (error) {
-
-                console.error(
-                    error
-                );
-
-                showToast(
-                    "couldn't delete fit"
-                );
-
-                return;
-
-            }
-
-            savedFits =
-                savedFits.filter(
-                    fit =>
-                        String(
-                            fit.id
-                        ) !==
-                        String(id)
-                );
-
-            renderSavedFits();
-
-            showToast(
-                "fit deleted"
+        const confirmed =
+            confirm(
+                "delete this saved fit?"
             );
 
+        if (!confirmed) {
+            return;
         }
 
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("fits")
+                .delete()
+                .eq("id", id)
+                .eq(
+                    "user_id",
+                    currentUser.id
+                );
 
-        /* =====================================================
-           START
-        ===================================================== */
+        if (error) {
 
-        checkAuth();
+            console.error(error);
 
-    </script>
+            showToast(
+                "couldn't delete fit"
+            );
+
+            return;
+
+        }
+
+        savedFits =
+            savedFits.filter(
+                fit =>
+                    String(fit.id) !==
+                    String(id)
+            );
+
+        renderSavedFits();
+
+        showToast(
+            "fit deleted"
+        );
+
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    checkAuth();
+
+</script>
 
 </body>
 </html>

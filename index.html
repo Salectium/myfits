@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -37,6 +38,7 @@
         .hidden {
             display: none !important;
         }
+
 
         /* =========================
            auth
@@ -121,12 +123,7 @@
         }
 
         .secondary-button:hover {
-            background: #f5f5f5;
-        }
-
-        .secondary-button:active,
-        .primary-button:active {
-            transform: scale(.98);
+            background: #f7f7f7;
         }
 
         .auth-message {
@@ -135,6 +132,7 @@
             color: #777;
             line-height: 1.5;
         }
+
 
         /* =========================
            app
@@ -211,6 +209,7 @@
             margin-bottom: 30px;
         }
 
+
         /* =========================
            upload
         ========================= */
@@ -240,6 +239,7 @@
             border-radius: 10px;
             cursor: pointer;
         }
+
 
         /* =========================
            wardrobe
@@ -295,98 +295,39 @@
             padding: 15px 0;
         }
 
+
         /* =========================
-           new fit editor
+           old builder compatibility
         ========================= */
 
-        .editor-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
+        .fit-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 25px;
+            max-width: 800px;
+            margin: 0 auto 35px;
         }
 
-        .fit-editor {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .fit-canvas {
+        .fit-slot {
+            border: 2px dashed #ddd;
+            background: #fafafa;
+            border-radius: 18px;
+            min-height: 300px;
             position: relative;
-            width: 100%;
-            min-height: 650px;
-            background: #f7f7f7;
-            border: 1px solid #e5e5e5;
-            border-radius: 20px;
             overflow: hidden;
-            user-select: none;
-        }
-
-        .canvas-empty {
-            position: absolute;
-            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            pointer-events: none;
+            transition: .15s;
         }
 
-        .canvas-empty-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .canvas-empty-subtitle {
-            color: #999;
-            font-size: 14px;
-            margin-top: 6px;
-        }
-
-        /* =========================
-           canvas clothing pieces
-        ========================= */
-
-        .canvas-item {
-            position: absolute;
-            width: 190px;
-            height: 190px;
-            cursor: grab;
-            touch-action: none;
-            user-select: none;
-        }
-
-        .canvas-item:active {
-            cursor: grabbing;
-        }
-
-        .canvas-item img {
+        .fit-slot img {
             width: 100%;
-            height: 100%;
+            height: 260px;
             object-fit: contain;
-            pointer-events: none;
-            display: block;
         }
 
-        .canvas-item.selected {
-            outline: 2px solid #111;
-            outline-offset: 3px;
-            border-radius: 8px;
-        }
-
-        .editor-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .editor-toolbar button {
-            white-space: nowrap;
-        }
 
         /* =========================
            picker
@@ -421,6 +362,7 @@
             display: block;
         }
 
+
         /* =========================
            saved fits
         ========================= */
@@ -439,18 +381,17 @@
         }
 
         .saved-fit-images {
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .saved-fit-image {
             width: 100%;
             aspect-ratio: 1 / .8;
             background: #f7f7f7;
             border-radius: 11px;
             overflow: hidden;
-        }
-
-        .saved-fit-image {
-            position: absolute;
-            width: 35%;
-            height: 35%;
         }
 
         .saved-fit-image img {
@@ -484,6 +425,7 @@
             color: #999;
             padding: 25px 0;
         }
+
 
         /* =========================
            modal
@@ -572,6 +514,118 @@
             font-size: 18px;
         }
 
+
+        /* =========================
+           NEW FIT EDITOR
+        ========================= */
+
+        .editor-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .fit-editor {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .fit-canvas {
+            position: relative;
+            width: 100%;
+            min-height: 650px;
+            background:
+                linear-gradient(#eeeeee 1px, transparent 1px),
+                linear-gradient(90deg, #eeeeee 1px, transparent 1px),
+                #f7f7f7;
+            background-size: 30px 30px;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
+            overflow: hidden;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .canvas-empty {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .canvas-empty-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .canvas-empty-subtitle {
+            color: #999;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .editor-toolbar button {
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           canvas clothing item
+        ========================= */
+
+        .canvas-item {
+            position: absolute;
+            cursor: grab;
+            touch-action: none;
+            transform-origin: center center;
+        }
+
+        .canvas-item:active {
+            cursor: grabbing;
+        }
+
+        .canvas-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .canvas-item.selected {
+            outline: 2px solid #111;
+            outline-offset: 3px;
+        }
+
+        .resize-handle {
+            position: absolute;
+            right: -8px;
+            bottom: -8px;
+            width: 18px;
+            height: 18px;
+            background: #111;
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: nwse-resize;
+            touch-action: none;
+        }
+
+
         /* =========================
            loading
         ========================= */
@@ -581,6 +635,7 @@
             padding: 60px 20px;
             color: #888;
         }
+
 
         /* =========================
            toast
@@ -600,6 +655,7 @@
             max-width: calc(100vw - 30px);
             text-align: center;
         }
+
 
         /* =========================
            mobile
@@ -664,11 +720,6 @@
             .editor-toolbar button {
                 width: 100%;
             }
-
-            .canvas-item {
-                width: 145px;
-                height: 145px;
-            }
         }
 
         @media (max-width: 420px) {
@@ -681,10 +732,12 @@
                 font-size: 36px;
             }
         }
+
     </style>
 </head>
 
 <body>
+
 
     <!-- =========================
          login
@@ -816,6 +869,7 @@
 
 
         <main>
+
 
             <!-- =========================
                  wardrobe
@@ -1143,27 +1197,15 @@
 
         let savedFits = [];
 
-        /*
-         * Each canvas piece looks like:
-         *
-         * {
-         *     uid: "unique-local-id",
-         *     clothingId: 123,
-         *     x: 100,
-         *     y: 100,
-         *     width: 190,
-         *     height: 190,
-         *     zIndex: 1
-         * }
-         */
-
         let currentFit = [];
 
-        let selectedPieceUid = null;
+        let selectedCanvasItemId = null;
 
-        let zCounter = 1;
+        let currentPickerMode = "canvas";
 
         let authMode = "login";
+
+        let interaction = null;
 
 
         /* =====================================================
@@ -1179,9 +1221,7 @@
 
             toast.classList.remove("hidden");
 
-            clearTimeout(
-                window.toastTimeout
-            );
+            clearTimeout(window.toastTimeout);
 
             window.toastTimeout =
                 setTimeout(() => {
@@ -1228,27 +1268,6 @@
         }
 
 
-        function createPieceUid() {
-
-            return (
-                Date.now().toString(36) +
-                Math.random()
-                    .toString(36)
-                    .slice(2)
-            );
-        }
-
-
-        function getSelectedPiece() {
-
-            return currentFit.find(
-                piece =>
-                    piece.uid ===
-                    selectedPieceUid
-            ) || null;
-        }
-
-
         /* =====================================================
            TRANSPARENT IMAGE COMPRESSION
         ===================================================== */
@@ -1257,11 +1276,13 @@
 
             return new Promise((resolve, reject) => {
 
-                const reader = new FileReader();
+                const reader =
+                    new FileReader();
 
                 reader.onload = event => {
 
-                    const img = new Image();
+                    const img =
+                        new Image();
 
                     img.onload = () => {
 
@@ -1296,7 +1317,9 @@
                                     );
 
                                 height = maxSize;
+
                             }
+
                         }
 
                         const canvas =
@@ -1308,7 +1331,9 @@
                         canvas.height = height;
 
                         const context =
-                            canvas.getContext("2d");
+                            canvas.getContext(
+                                "2d"
+                            );
 
                         context.clearRect(
                             0,
@@ -1466,8 +1491,7 @@
                     let result;
 
                     if (
-                        authMode ===
-                        "login"
+                        authMode === "login"
                     ) {
 
                         result =
@@ -1487,6 +1511,7 @@
                                     email,
                                     password
                                 });
+
                     }
 
                     if (result.error) {
@@ -1498,27 +1523,17 @@
                     }
 
                     if (
-                        authMode ===
-                        "signup"
+                        authMode === "signup" &&
+                        !result.data.session
                     ) {
 
-                        if (
-                            !result.data.session
-                        ) {
-
-                            message.textContent =
-                                "account created. check your email to confirm your account.";
-
-                        } else {
-
-                            message.textContent =
-                                "";
-                        }
+                        message.textContent =
+                            "account created. check your email to confirm your account.";
 
                     } else {
 
-                        message.textContent =
-                            "";
+                        message.textContent = "";
+
                     }
 
                 }
@@ -1578,6 +1593,7 @@
                     .getElementById("app")
                     .classList
                     .add("hidden");
+
             }
         }
 
@@ -1599,8 +1615,7 @@
 
                     } else {
 
-                        currentUser =
-                            null;
+                        currentUser = null;
 
                         document
                             .getElementById("app")
@@ -1611,6 +1626,7 @@
                             .getElementById("auth-screen")
                             .classList
                             .remove("hidden");
+
                     }
 
                 }
@@ -1641,7 +1657,8 @@
 
             renderSavedFits();
 
-            renderCurrentFit();
+            renderCanvas();
+
         }
 
 
@@ -1680,8 +1697,8 @@
                 return;
             }
 
-            clothes =
-                data || [];
+            clothes = data || [];
+
         }
 
 
@@ -1720,8 +1737,8 @@
                 return;
             }
 
-            savedFits =
-                data || [];
+            savedFits = data || [];
+
         }
 
 
@@ -1774,12 +1791,15 @@
                             showToast(
                                 "couldn't process this photo"
                             );
+
                         }
+
                     }
 
                     await loadClothes();
 
                     renderWardrobe();
+
                 }
             );
 
@@ -1845,12 +1865,6 @@
                     const responseText =
                         await response.text();
 
-                    console.error(
-                        "Edge Function error:",
-                        response.status,
-                        responseText
-                    );
-
                     let errorMessage =
                         "background removal failed";
 
@@ -1877,6 +1891,7 @@
                             errorMessage =
                                 responseText;
                         }
+
                     }
 
                     throw new Error(
@@ -1892,6 +1907,7 @@
                     throw new Error(
                         "server returned an empty image"
                     );
+
                 }
 
                 showToast(
@@ -1952,10 +1968,8 @@
                         .insert({
                             user_id:
                                 currentUser.id,
-
                             image_url:
                                 imageUrl,
-
                             category:
                                 category
                         });
@@ -1970,6 +1984,7 @@
                         ]);
 
                     throw databaseError;
+
                 }
 
                 showToast(
@@ -1984,6 +1999,7 @@
                 );
 
                 throw error;
+
             }
         }
 
@@ -2032,8 +2048,8 @@
                     category
                 );
 
-                categoryResolve =
-                    null;
+                categoryResolve = null;
+
             }
         }
 
@@ -2154,7 +2170,7 @@
 
                                                     <img
                                                         src="${escapeHtml(item.image_url)}"
-                                                        alt="${escapeHtml(category)}"
+                                                        alt="${category}"
                                                         loading="lazy"
                                                     >
 
@@ -2188,8 +2204,10 @@
                     container.appendChild(
                         section
                     );
+
                 }
             );
+
 
             container
                 .querySelectorAll(
@@ -2213,6 +2231,7 @@
 
                     }
                 );
+
         }
 
 
@@ -2285,6 +2304,7 @@
                     .remove([
                         imagePath
                     ]);
+
             }
 
             clothes =
@@ -2296,31 +2316,38 @@
                         String(id)
                 );
 
-            /*
-             * Remove the clothing from the
-             * current canvas if it is there.
-             */
-
             currentFit =
                 currentFit.filter(
-                    piece =>
+                    item =>
                         String(
-                            piece.clothingId
+                            item.clothingId
                         ) !==
                         String(id)
                 );
 
-            selectedPieceUid = null;
+            if (
+                selectedCanvasItemId &&
+                !currentFit.some(
+                    item =>
+                        item.id ===
+                        selectedCanvasItemId
+                )
+            ) {
+
+                selectedCanvasItemId = null;
+
+            }
 
             renderWardrobe();
 
-            renderCurrentFit();
+            renderCanvas();
 
             renderSavedFits();
 
             showToast(
                 "clothing deleted"
             );
+
         }
 
 
@@ -2342,6 +2369,7 @@
                 ) {
 
                     return null;
+
                 }
 
                 return decodeURIComponent(
@@ -2354,6 +2382,7 @@
             } catch {
 
                 return null;
+
             }
         }
 
@@ -2405,7 +2434,9 @@
 
                                         navButton
                                             .classList
-                                            .remove("active");
+                                            .remove(
+                                                "active"
+                                            );
 
                                     }
                                 );
@@ -2431,7 +2462,620 @@
 
 
         /* =====================================================
-           NEW CANVAS EDITOR
+           CANVAS HELPERS
+        ===================================================== */
+
+        function getCanvas() {
+
+            return document.getElementById(
+                "fit-canvas"
+            );
+
+        }
+
+
+        function createCanvasItem(
+            clothing
+        ) {
+
+            const canvas =
+                getCanvas();
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+            const existingCount =
+                currentFit.length;
+
+            const width =
+                Math.min(
+                    220,
+                    Math.max(
+                        100,
+                        rect.width * 0.25
+                    )
+                );
+
+            const height =
+                width * 1.15;
+
+            const item = {
+
+                id:
+                    `${Date.now()}-${Math.random()
+                        .toString(36)
+                        .slice(2)}`,
+
+                clothingId:
+                    clothing.id,
+
+                image_url:
+                    clothing.image_url,
+
+                category:
+                    clothing.category,
+
+                x:
+                    Math.max(
+                        20,
+                        (rect.width - width) / 2 +
+                        existingCount * 15
+                    ),
+
+                y:
+                    Math.max(
+                        20,
+                        (rect.height - height) / 2 +
+                        existingCount * 15
+                    ),
+
+                width,
+
+                height,
+
+                zIndex:
+                    existingCount + 1
+
+            };
+
+            currentFit.push(item);
+
+            selectedCanvasItemId =
+                item.id;
+
+            renderCanvas();
+
+        }
+
+
+        function selectCanvasItem(id) {
+
+            selectedCanvasItemId = id;
+
+            renderCanvas();
+
+        }
+
+
+        function getSelectedCanvasItem() {
+
+            return currentFit.find(
+                item =>
+                    item.id ===
+                    selectedCanvasItemId
+            ) || null;
+
+        }
+
+
+        /* =====================================================
+           RENDER CANVAS
+        ===================================================== */
+
+        function renderCanvas() {
+
+            const canvas =
+                getCanvas();
+
+            if (!canvas) {
+                return;
+            }
+
+            canvas
+                .querySelectorAll(
+                    ".canvas-item"
+                )
+                .forEach(
+                    element =>
+                        element.remove()
+                );
+
+            const empty =
+                document.getElementById(
+                    "canvas-empty"
+                );
+
+            empty.classList.toggle(
+                "hidden",
+                currentFit.length > 0
+            );
+
+
+            currentFit
+                .sort(
+                    (a, b) =>
+                        a.zIndex -
+                        b.zIndex
+                )
+                .forEach(
+                    item => {
+
+                        const element =
+                            document.createElement(
+                                "div"
+                            );
+
+                        element.className =
+                            "canvas-item";
+
+                        if (
+                            item.id ===
+                            selectedCanvasItemId
+                        ) {
+
+                            element.classList
+                                .add(
+                                    "selected"
+                                );
+
+                        }
+
+                        element.dataset.itemId =
+                            item.id;
+
+                        element.style.left =
+                            `${item.x}px`;
+
+                        element.style.top =
+                            `${item.y}px`;
+
+                        element.style.width =
+                            `${item.width}px`;
+
+                        element.style.height =
+                            `${item.height}px`;
+
+                        element.style.zIndex =
+                            item.zIndex;
+
+                        element.innerHTML = `
+
+                            <img
+                                src="${escapeHtml(item.image_url)}"
+                                alt="${escapeHtml(item.category)}"
+                                draggable="false"
+                            >
+
+                            ${
+                                item.id ===
+                                selectedCanvasItemId
+                                    ?
+                                    `
+                                    <div
+                                        class="resize-handle"
+                                        data-resize-id="${item.id}"
+                                    ></div>
+                                    `
+                                    :
+                                    ""
+                            }
+
+                        `;
+
+                        canvas.appendChild(
+                            element
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+           CANVAS POINTER EVENTS
+        ===================================================== */
+
+        const canvas =
+            document.getElementById(
+                "fit-canvas"
+            );
+
+
+        canvas.addEventListener(
+            "pointerdown",
+            event => {
+
+                const resizeHandle =
+                    event.target.closest(
+                        ".resize-handle"
+                    );
+
+                if (resizeHandle) {
+
+                    const item =
+                        currentFit.find(
+                            current =>
+                                current.id ===
+                                resizeHandle.dataset
+                                    .resizeId
+                        );
+
+                    if (!item) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    selectedCanvasItemId =
+                        item.id;
+
+                    interaction = {
+
+                        type:
+                            "resize",
+
+                        itemId:
+                            item.id,
+
+                        startX:
+                            event.clientX,
+
+                        startY:
+                            event.clientY,
+
+                        startWidth:
+                            item.width,
+
+                        startHeight:
+                            item.height
+
+                    };
+
+                    canvas.setPointerCapture(
+                        event.pointerId
+                    );
+
+                    return;
+
+                }
+
+
+                const canvasElement =
+                    event.target.closest(
+                        ".canvas-item"
+                    );
+
+                if (canvasElement) {
+
+                    const item =
+                        currentFit.find(
+                            current =>
+                                current.id ===
+                                canvasElement.dataset
+                                    .itemId
+                        );
+
+                    if (!item) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    selectedCanvasItemId =
+                        item.id;
+
+                    interaction = {
+
+                        type:
+                            "drag",
+
+                        itemId:
+                            item.id,
+
+                        startX:
+                            event.clientX,
+
+                        startY:
+                            event.clientY,
+
+                        startItemX:
+                            item.x,
+
+                        startItemY:
+                            item.y
+
+                    };
+
+                    canvas.setPointerCapture(
+                        event.pointerId
+                    );
+
+                    renderCanvas();
+
+                    return;
+
+                }
+
+
+                selectedCanvasItemId =
+                    null;
+
+                renderCanvas();
+
+            }
+        );
+
+
+        canvas.addEventListener(
+            "pointermove",
+            event => {
+
+                if (!interaction) {
+                    return;
+                }
+
+                const item =
+                    currentFit.find(
+                        current =>
+                            current.id ===
+                            interaction.itemId
+                    );
+
+                if (!item) {
+                    return;
+                }
+
+                const canvasRect =
+                    canvas.getBoundingClientRect();
+
+
+                if (
+                    interaction.type ===
+                    "drag"
+                ) {
+
+                    const dx =
+                        event.clientX -
+                        interaction.startX;
+
+                    const dy =
+                        event.clientY -
+                        interaction.startY;
+
+                    item.x =
+                        interaction.startItemX +
+                        dx;
+
+                    item.y =
+                        interaction.startItemY +
+                        dy;
+
+                    const maxX =
+                        Math.max(
+                            0,
+                            canvasRect.width -
+                            item.width
+                        );
+
+                    const maxY =
+                        Math.max(
+                            0,
+                            canvasRect.height -
+                            item.height
+                        );
+
+                    item.x =
+                        Math.max(
+                            0,
+                            Math.min(
+                                item.x,
+                                maxX
+                            )
+                        );
+
+                    item.y =
+                        Math.max(
+                            0,
+                            Math.min(
+                                item.y,
+                                maxY
+                            )
+                        );
+
+                    updateCanvasItemPosition(
+                        item
+                    );
+
+                }
+
+
+                if (
+                    interaction.type ===
+                    "resize"
+                ) {
+
+                    const dx =
+                        event.clientX -
+                        interaction.startX;
+
+                    const dy =
+                        event.clientY -
+                        interaction.startY;
+
+                    const aspect =
+                        interaction.startHeight /
+                        interaction.startWidth;
+
+                    let newWidth =
+                        interaction.startWidth +
+                        dx;
+
+                    let newHeight =
+                        newWidth *
+                        aspect;
+
+                    const minimum =
+                        50;
+
+                    newWidth =
+                        Math.max(
+                            minimum,
+                            newWidth
+                        );
+
+                    newHeight =
+                        Math.max(
+                            minimum,
+                            newHeight
+                        );
+
+                    if (
+                        item.x +
+                        newWidth >
+                        canvasRect.width
+                    ) {
+
+                        newWidth =
+                            canvasRect.width -
+                            item.x;
+
+                        newHeight =
+                            newWidth *
+                            aspect;
+
+                    }
+
+                    if (
+                        item.y +
+                        newHeight >
+                        canvasRect.height
+                    ) {
+
+                        newHeight =
+                            canvasRect.height -
+                            item.y;
+
+                        newWidth =
+                            newHeight /
+                            aspect;
+
+                    }
+
+                    item.width =
+                        Math.max(
+                            minimum,
+                            newWidth
+                        );
+
+                    item.height =
+                        Math.max(
+                            minimum,
+                            newHeight
+                        );
+
+                    updateCanvasItemSize(
+                        item
+                    );
+
+                }
+
+            }
+        );
+
+
+        canvas.addEventListener(
+            "pointerup",
+            event => {
+
+                if (!interaction) {
+                    return;
+                }
+
+                interaction = null;
+
+                try {
+
+                    canvas.releasePointerCapture(
+                        event.pointerId
+                    );
+
+                } catch {
+
+                }
+
+                renderCanvas();
+
+            }
+        );
+
+
+        canvas.addEventListener(
+            "pointercancel",
+            () => {
+
+                interaction = null;
+
+            }
+        );
+
+
+        function updateCanvasItemPosition(
+            item
+        ) {
+
+            const element =
+                canvas.querySelector(
+                    `[data-item-id="${item.id}"]`
+                );
+
+            if (!element) {
+                return;
+            }
+
+            element.style.left =
+                `${item.x}px`;
+
+            element.style.top =
+                `${item.y}px`;
+
+        }
+
+
+        function updateCanvasItemSize(
+            item
+        ) {
+
+            const element =
+                canvas.querySelector(
+                    `[data-item-id="${item.id}"]`
+                );
+
+            if (!element) {
+                return;
+            }
+
+            element.style.width =
+                `${item.width}px`;
+
+            element.style.height =
+                `${item.height}px`;
+
+        }
+
+
+        /* =====================================================
+           ADD CLOTHING
         ===================================================== */
 
         document
@@ -2442,20 +3086,14 @@
                 "click",
                 () => {
 
+                    currentPickerMode =
+                        "canvas";
+
                     openPicker();
 
                 }
             );
 
-
-        /*
-         * Open the clothing picker.
-         *
-         * Unlike the old version, this does NOT
-         * ask for a specific slot. The user can
-         * add any category and as many pieces as
-         * they want.
-         */
 
         function openPicker() {
 
@@ -2482,17 +3120,20 @@
                 content.innerHTML = `
 
                     <p class="empty-message">
-                        you don't have any clothing yet.
+                        you don't have any clothing
+                        yet. add some in your wardrobe first.
                     </p>
 
                 `;
 
-                modal
-                    .classList
-                    .remove("hidden");
+                modal.classList.remove(
+                    "hidden"
+                );
 
                 return;
+
             }
+
 
             const categories = [
                 "top",
@@ -2501,62 +3142,76 @@
                 "outer"
             ];
 
-            content.innerHTML = categories
-                .map(
-                    category => {
 
-                        const items =
-                            clothes.filter(
-                                item =>
-                                    item.category ===
-                                    category
-                            );
+            content.innerHTML = `
 
-                        if (!items.length) {
-                            return "";
-                        }
+                ${
+                    categories
+                        .map(
+                            category => {
 
-                        return `
+                                const items =
+                                    clothes.filter(
+                                        item =>
+                                            item.category ===
+                                            category
+                                    );
 
-                            <div class="category-section">
+                                if (!items.length) {
+                                    return "";
+                                }
 
-                                <h3 class="category-title">
-                                    ${getCategoryName(category)}
-                                </h3>
+                                return `
 
-                                <div class="picker-grid">
+                                    <div
+                                        class="piece-picker"
+                                    >
 
-                                    ${
-                                        items
-                                            .map(
-                                                item => `
+                                        <h3
+                                            class="category-title"
+                                        >
+                                            ${getCategoryName(category)}
+                                        </h3>
 
-                                                <button
-                                                    class="picker-item"
-                                                    data-id="${item.id}"
-                                                >
+                                        <div
+                                            class="picker-grid"
+                                        >
 
-                                                    <img
-                                                        src="${escapeHtml(item.image_url)}"
-                                                        alt="${escapeHtml(category)}"
-                                                    >
+                                            ${
+                                                items
+                                                    .map(
+                                                        item => `
 
-                                                </button>
+                                                        <button
+                                                            class="picker-item"
+                                                            data-id="${item.id}"
+                                                        >
 
-                                            `
-                                            )
-                                            .join("")
-                                    }
+                                                            <img
+                                                                src="${escapeHtml(item.image_url)}"
+                                                                alt="${escapeHtml(category)}"
+                                                            >
 
-                                </div>
+                                                        </button>
 
-                            </div>
+                                                    `
+                                                    )
+                                                    .join("")
+                                            }
 
-                        `;
+                                        </div>
 
-                    }
-                )
-                .join("");
+                                    </div>
+
+                                `;
+
+                            }
+                        )
+                        .join("")
+                }
+
+            `;
+
 
             content
                 .querySelectorAll(
@@ -2584,9 +3239,16 @@
                                     return;
                                 }
 
-                                addPieceToCanvas(
-                                    item
-                                );
+                                if (
+                                    currentPickerMode ===
+                                    "canvas"
+                                ) {
+
+                                    createCanvasItem(
+                                        item
+                                    );
+
+                                }
 
                                 closePicker();
 
@@ -2596,9 +3258,11 @@
                     }
                 );
 
-            modal
-                .classList
-                .remove("hidden");
+
+            modal.classList.remove(
+                "hidden"
+            );
+
         }
 
 
@@ -2610,6 +3274,7 @@
                 )
                 .classList
                 .add("hidden");
+
         }
 
 
@@ -2645,397 +3310,6 @@
 
 
         /* =====================================================
-           ADD PIECE TO CANVAS
-        ===================================================== */
-
-        function addPieceToCanvas(item) {
-
-            const canvas =
-                document.getElementById(
-                    "fit-canvas"
-                );
-
-            const canvasWidth =
-                canvas.clientWidth;
-
-            const canvasHeight =
-                canvas.clientHeight;
-
-            const itemSize =
-                window.innerWidth <= 750
-                    ? 145
-                    : 190;
-
-            const piece = {
-
-                uid:
-                    createPieceUid(),
-
-                clothingId:
-                    item.id,
-
-                x:
-                    Math.max(
-                        10,
-                        (canvasWidth -
-                            itemSize) /
-                            2 +
-                            (currentFit.length % 3) *
-                            25
-                    ),
-
-                y:
-                    Math.max(
-                        10,
-                        (canvasHeight -
-                            itemSize) /
-                            2 +
-                            (currentFit.length % 3) *
-                            25
-                    ),
-
-                width:
-                    itemSize,
-
-                height:
-                    itemSize,
-
-                zIndex:
-                    zCounter++
-
-            };
-
-            currentFit.push(
-                piece
-            );
-
-            selectedPieceUid =
-                piece.uid;
-
-            renderCurrentFit();
-        }
-
-
-        /* =====================================================
-           RENDER CANVAS
-        ===================================================== */
-
-        function renderCurrentFit() {
-
-            const canvas =
-                document.getElementById(
-                    "fit-canvas"
-                );
-
-            const empty =
-                document.getElementById(
-                    "canvas-empty"
-                );
-
-            /*
-             * Remove old canvas items.
-             */
-
-            canvas
-                .querySelectorAll(
-                    ".canvas-item"
-                )
-                .forEach(
-                    element => element.remove()
-                );
-
-            if (!currentFit.length) {
-
-                empty.classList
-                    .remove("hidden");
-
-                return;
-            }
-
-            empty.classList
-                .add("hidden");
-
-            /*
-             * Make sure pieces are rendered
-             * from lowest to highest z-index.
-             */
-
-            const pieces =
-                [...currentFit]
-                    .sort(
-                        (a, b) =>
-                            a.zIndex -
-                            b.zIndex
-                    );
-
-            pieces.forEach(
-                piece => {
-
-                    const clothing =
-                        clothes.find(
-                            item =>
-                                String(
-                                    item.id
-                                ) ===
-                                String(
-                                    piece.clothingId
-                                )
-                        );
-
-                    if (!clothing) {
-                        return;
-                    }
-
-                    const element =
-                        document.createElement(
-                            "div"
-                        );
-
-                    element.className =
-                        "canvas-item";
-
-                    if (
-                        piece.uid ===
-                        selectedPieceUid
-                    ) {
-
-                        element.classList
-                            .add("selected");
-                    }
-
-                    element.dataset.uid =
-                        piece.uid;
-
-                    element.style.left =
-                        `${piece.x}px`;
-
-                    element.style.top =
-                        `${piece.y}px`;
-
-                    element.style.width =
-                        `${piece.width}px`;
-
-                    element.style.height =
-                        `${piece.height}px`;
-
-                    element.style.zIndex =
-                        piece.zIndex;
-
-                    element.innerHTML = `
-
-                        <img
-                            src="${escapeHtml(clothing.image_url)}"
-                            alt="${escapeHtml(clothing.category)}"
-                            draggable="false"
-                        >
-
-                    `;
-
-                    canvas.appendChild(
-                        element
-                    );
-
-                    attachCanvasDrag(
-                        element,
-                        piece
-                    );
-
-                }
-            );
-        }
-
-
-        /* =====================================================
-           DRAGGING
-        ===================================================== */
-
-        function attachCanvasDrag(
-            element,
-            piece
-        ) {
-
-            let dragging = false;
-
-            let startPointerX = 0;
-
-            let startPointerY = 0;
-
-            let startX = 0;
-
-            let startY = 0;
-
-
-            element.addEventListener(
-                "pointerdown",
-                event => {
-
-                    event.preventDefault();
-
-                    event.stopPropagation();
-
-                    selectedPieceUid =
-                        piece.uid;
-
-                    renderCurrentFit();
-
-                    /*
-                     * Find the freshly rendered
-                     * selected element because
-                     * renderCurrentFit() replaced it.
-                     */
-
-                    const freshElement =
-                        document.querySelector(
-                            `.canvas-item[data-uid="${piece.uid}"]`
-                        );
-
-                    if (!freshElement) {
-                        return;
-                    }
-
-                    dragging = true;
-
-                    startPointerX =
-                        event.clientX;
-
-                    startPointerY =
-                        event.clientY;
-
-                    startX =
-                        piece.x;
-
-                    startY =
-                        piece.y;
-
-                    freshElement.setPointerCapture(
-                        event.pointerId
-                    );
-
-                    const moveHandler =
-                        moveEvent => {
-
-                            if (!dragging) {
-                                return;
-                            }
-
-                            const dx =
-                                moveEvent.clientX -
-                                startPointerX;
-
-                            const dy =
-                                moveEvent.clientY -
-                                startPointerY;
-
-                            const canvas =
-                                document.getElementById(
-                                    "fit-canvas"
-                                );
-
-                            const maxX =
-                                Math.max(
-                                    0,
-                                    canvas.clientWidth -
-                                    piece.width
-                                );
-
-                            const maxY =
-                                Math.max(
-                                    0,
-                                    canvas.clientHeight -
-                                    piece.height
-                                );
-
-                            piece.x =
-                                Math.min(
-                                    maxX,
-                                    Math.max(
-                                        0,
-                                        startX + dx
-                                    )
-                                );
-
-                            piece.y =
-                                Math.min(
-                                    maxY,
-                                    Math.max(
-                                        0,
-                                        startY + dy
-                                    )
-                                );
-
-                            freshElement.style.left =
-                                `${piece.x}px`;
-
-                            freshElement.style.top =
-                                `${piece.y}px`;
-                        };
-
-
-                    const upHandler =
-                        () => {
-
-                            dragging = false;
-
-                            document
-                                .removeEventListener(
-                                    "pointermove",
-                                    moveHandler
-                                );
-
-                            document
-                                .removeEventListener(
-                                    "pointerup",
-                                    upHandler
-                                );
-                        };
-
-
-                    document
-                        .addEventListener(
-                            "pointermove",
-                            moveHandler
-                        );
-
-                    document
-                        .addEventListener(
-                            "pointerup",
-                            upHandler
-                        );
-
-                }
-            );
-        }
-
-
-        /* =====================================================
-           CLICK EMPTY CANVAS
-        ===================================================== */
-
-        document
-            .getElementById(
-                "fit-canvas"
-            )
-            .addEventListener(
-                "pointerdown",
-                event => {
-
-                    if (
-                        event.target.id ===
-                        "fit-canvas"
-                    ) {
-
-                        selectedPieceUid =
-                            null;
-
-                        renderCurrentFit();
-
-                    }
-
-                }
-            );
-
-
-        /* =====================================================
            DELETE SELECTED
         ===================================================== */
 
@@ -3047,26 +3321,29 @@
                 "click",
                 () => {
 
-                    if (!selectedPieceUid) {
+                    if (
+                        !selectedCanvasItemId
+                    ) {
 
                         showToast(
                             "select something first"
                         );
 
                         return;
+
                     }
 
                     currentFit =
                         currentFit.filter(
-                            piece =>
-                                piece.uid !==
-                                selectedPieceUid
+                            item =>
+                                item.id !==
+                                selectedCanvasItemId
                         );
 
-                    selectedPieceUid =
+                    selectedCanvasItemId =
                         null;
 
-                    renderCurrentFit();
+                    renderCanvas();
 
                 }
             );
@@ -3085,7 +3362,7 @@
                 () => {
 
                     const selected =
-                        getSelectedPiece();
+                        getSelectedCanvasItem();
 
                     if (!selected) {
 
@@ -3094,23 +3371,22 @@
                         );
 
                         return;
+
                     }
 
                     const maxZ =
                         Math.max(
                             ...currentFit.map(
-                                piece =>
-                                    piece.zIndex
-                            )
+                                item =>
+                                    item.zIndex
+                            ),
+                            0
                         );
 
                     selected.zIndex =
                         maxZ + 1;
 
-                    zCounter =
-                        selected.zIndex + 1;
-
-                    renderCurrentFit();
+                    renderCanvas();
 
                 }
             );
@@ -3129,7 +3405,7 @@
                 () => {
 
                     const selected =
-                        getSelectedPiece();
+                        getSelectedCanvasItem();
 
                     if (!selected) {
 
@@ -3138,20 +3414,22 @@
                         );
 
                         return;
+
                     }
 
                     const minZ =
                         Math.min(
                             ...currentFit.map(
-                                piece =>
-                                    piece.zIndex
-                            )
+                                item =>
+                                    item.zIndex
+                            ),
+                            1
                         );
 
                     selected.zIndex =
                         minZ - 1;
 
-                    renderCurrentFit();
+                    renderCanvas();
 
                 }
             );
@@ -3169,18 +3447,29 @@
                 "click",
                 () => {
 
-                    if (!currentFit.length) {
+                    if (
+                        !currentFit.length
+                    ) {
+
+                        return;
+
+                    }
+
+                    const confirmed =
+                        confirm(
+                            "clear this outfit?"
+                        );
+
+                    if (!confirmed) {
                         return;
                     }
 
                     currentFit = [];
 
-                    selectedPieceUid =
+                    selectedCanvasItemId =
                         null;
 
-                    zCounter = 1;
-
-                    renderCurrentFit();
+                    renderCanvas();
 
                 }
             );
@@ -3198,51 +3487,82 @@
                 "click",
                 async () => {
 
-                    if (!currentFit.length) {
+                    if (
+                        !currentFit.length
+                    ) {
 
                         showToast(
                             "add some clothing first"
                         );
 
                         return;
+
                     }
 
+
                     /*
-                     * Only store the information
-                     * needed to reconstruct the
-                     * canvas later.
+                     * Keep the original fit_data structure
+                     * so existing saved fits continue working.
                      */
 
                     const fitData = {
 
-                        version: 2,
+                        top:
+                            getFirstCanvasPiece(
+                                "top"
+                            ),
 
-                        pieces:
-                            currentFit.map(
-                                piece => ({
+                        bottom:
+                            getFirstCanvasPiece(
+                                "bottom"
+                            ),
 
-                                    clothingId:
-                                        piece.clothingId,
+                        shoes:
+                            getFirstCanvasPiece(
+                                "shoes"
+                            ),
 
-                                    x:
-                                        piece.x,
-
-                                    y:
-                                        piece.y,
-
-                                    width:
-                                        piece.width,
-
-                                    height:
-                                        piece.height,
-
-                                    zIndex:
-                                        piece.zIndex
-
-                                })
+                        outer:
+                            getFirstCanvasPiece(
+                                "outer"
                             )
 
                     };
+
+
+                    /*
+                     * editor_data stores the actual
+                     * canvas layout, positions, sizes
+                     * and layering.
+                     */
+
+                    const editorData =
+                        currentFit.map(
+                            item => ({
+
+                                id:
+                                    item.id,
+
+                                clothingId:
+                                    item.clothingId,
+
+                                x:
+                                    item.x,
+
+                                y:
+                                    item.y,
+
+                                width:
+                                    item.width,
+
+                                height:
+                                    item.height,
+
+                                zIndex:
+                                    item.zIndex
+
+                            })
+                        );
 
 
                     const {
@@ -3257,12 +3577,22 @@
                                     currentUser.id,
 
                                 fit_data:
-                                    fitData
+                                    fitData,
+
+                                editor_data:
+                                    editorData
 
                             })
                             .select()
                             .single();
 
+
+                    /*
+                     * If the database doesn't have
+                     * editor_data yet, fall back to the
+                     * old save format instead of breaking
+                     * the whole app.
+                     */
 
                     if (error) {
 
@@ -3270,195 +3600,82 @@
                             error
                         );
 
-                        showToast(
-                            "couldn't save fit"
+                        /*
+                         * Try the original schema.
+                         */
+
+                        const fallback =
+                            await supabaseClient
+                                .from("fits")
+                                .insert({
+
+                                    user_id:
+                                        currentUser.id,
+
+                                    fit_data:
+                                        fitData
+
+                                })
+                                .select()
+                                .single();
+
+                        if (fallback.error) {
+
+                            console.error(
+                                fallback.error
+                            );
+
+                            showToast(
+                                "couldn't save fit"
+                            );
+
+                            return;
+
+                        }
+
+                        savedFits.unshift(
+                            fallback.data
                         );
 
-                        return;
+                    } else {
+
+                        savedFits.unshift(
+                            data
+                        );
+
                     }
-
-
-                    savedFits.unshift(
-                        data
-                    );
 
 
                     showToast(
                         "fit saved"
                     );
 
-
                     currentFit = [];
 
-                    selectedPieceUid =
+                    selectedCanvasItemId =
                         null;
 
-                    zCounter = 1;
-
-                    renderCurrentFit();
+                    renderCanvas();
 
                 }
             );
 
 
-        /* =====================================================
-           LOAD A SAVED FIT INTO THE EDITOR
-        ===================================================== */
-
-        function loadFitIntoEditor(
-            fit
+        function getFirstCanvasPiece(
+            category
         ) {
 
-            const data =
-                fit.fit_data || {};
+            const item =
+                currentFit.find(
+                    piece =>
+                        piece.category ===
+                        category
+                );
 
+            return item
+                ? item.clothingId
+                : null;
 
-            /*
-             * New format.
-             */
-
-            if (
-                data.version === 2 &&
-                Array.isArray(
-                    data.pieces
-                )
-            ) {
-
-                currentFit =
-                    data.pieces
-                        .map(
-                            piece => ({
-
-                                uid:
-                                    createPieceUid(),
-
-                                clothingId:
-                                    piece.clothingId,
-
-                                x:
-                                    Number(
-                                        piece.x
-                                    ) || 0,
-
-                                y:
-                                    Number(
-                                        piece.y
-                                    ) || 0,
-
-                                width:
-                                    Number(
-                                        piece.width
-                                    ) || 190,
-
-                                height:
-                                    Number(
-                                        piece.height
-                                    ) || 190,
-
-                                zIndex:
-                                    Number(
-                                        piece.zIndex
-                                    ) || 1
-
-                            })
-                        );
-
-                zCounter =
-                    Math.max(
-                        0,
-                        ...currentFit.map(
-                            piece =>
-                                piece.zIndex
-                        )
-                    ) + 1;
-
-                selectedPieceUid =
-                    null;
-
-                renderCurrentFit();
-
-                return;
-            }
-
-
-            /*
-             * Backwards compatibility with
-             * your old four-slot fits.
-             */
-
-            const oldCategories = [
-                "top",
-                "bottom",
-                "shoes",
-                "outer"
-            ];
-
-            currentFit = [];
-
-            oldCategories.forEach(
-                (category, index) => {
-
-                    const id =
-                        data[category];
-
-                    if (!id) {
-                        return;
-                    }
-
-                    const item =
-                        clothes.find(
-                            clothing =>
-                                String(
-                                    clothing.id
-                                ) ===
-                                String(id)
-                        );
-
-                    if (!item) {
-                        return;
-                    }
-
-                    currentFit.push({
-
-                        uid:
-                            createPieceUid(),
-
-                        clothingId:
-                            item.id,
-
-                        x:
-                            100 +
-                            (index % 2) *
-                            300,
-
-                        y:
-                            100 +
-                            Math.floor(
-                                index / 2
-                            ) *
-                            250,
-
-                        width:
-                            190,
-
-                        height:
-                            190,
-
-                        zIndex:
-                            index + 1
-
-                    });
-
-                }
-            );
-
-            zCounter =
-                currentFit.length + 1;
-
-            selectedPieceUid =
-                null;
-
-            renderCurrentFit();
         }
 
 
@@ -3473,7 +3690,6 @@
                     "saved-fits"
                 );
 
-
             if (!savedFits.length) {
 
                 container.innerHTML = `
@@ -3485,6 +3701,7 @@
                 `;
 
                 return;
+
             }
 
 
@@ -3496,28 +3713,6 @@
                             const data =
                                 fit.fit_data ||
                                 {};
-
-
-                            /*
-                             * New canvas format.
-                             */
-
-                            if (
-                                data.version === 2 &&
-                                Array.isArray(
-                                    data.pieces
-                                )
-                            ) {
-
-                                return renderNewSavedFit(
-                                    fit
-                                );
-                            }
-
-
-                            /*
-                             * Old four-slot format.
-                             */
 
                             const pieces = [
 
@@ -3538,7 +3733,9 @@
                                                 String(
                                                     item.id
                                                 ) ===
-                                                String(id)
+                                                String(
+                                                    id
+                                                )
                                         )
                                 )
                                 .filter(Boolean);
@@ -3559,22 +3756,10 @@
                                                 ?
                                                 pieces
                                                     .map(
-                                                        (piece, index) => `
+                                                        piece => `
 
                                                         <div
                                                             class="saved-fit-image"
-                                                            style="
-                                                                left: ${
-                                                                    index % 2 === 0
-                                                                        ? "10%"
-                                                                        : "55%"
-                                                                };
-                                                                top: ${
-                                                                    index < 2
-                                                                        ? "5%"
-                                                                        : "55%"
-                                                                };
-                                                            "
                                                         >
 
                                                             <img
@@ -3600,6 +3785,7 @@
 
                                     </div>
 
+
                                     <div
                                         class="saved-fit-footer"
                                     >
@@ -3611,6 +3797,7 @@
                                                 fit.created_at
                                             )}
                                         </span>
+
 
                                         <button
                                             class="delete-fit"
@@ -3630,202 +3817,7 @@
                     .join("");
 
 
-            attachSavedFitDeleteButtons();
-        }
-
-
-        function renderNewSavedFit(fit) {
-
-            const data =
-                fit.fit_data || {};
-
-            const pieces =
-                Array.isArray(data.pieces)
-                    ? data.pieces
-                    : [];
-
-
-            const validPieces =
-                pieces
-                    .map(
-                        piece => {
-
-                            const item =
-                                clothes.find(
-                                    clothing =>
-                                        String(
-                                            clothing.id
-                                        ) ===
-                                        String(
-                                            piece.clothingId
-                                        )
-                                );
-
-                            if (!item) {
-                                return null;
-                            }
-
-                            return {
-                                piece,
-                                item
-                            };
-
-                        }
-                    )
-                    .filter(Boolean);
-
-
-            return `
-
-                <article class="saved-fit">
-
-                    <div
-                        class="saved-fit-images"
-                    >
-
-                        ${
-                            validPieces.length
-                                ?
-                                validPieces
-                                    .map(
-                                        ({ piece, item }) => {
-
-                                            /*
-                                             * Normalize the saved
-                                             * canvas coordinates into
-                                             * percentages so the preview
-                                             * scales nicely.
-                                             */
-
-                                            const left =
-                                                Math.max(
-                                                    0,
-                                                    Math.min(
-                                                        80,
-                                                        (
-                                                            Number(
-                                                                piece.x
-                                                            ) /
-                                                            900
-                                                        ) *
-                                                        100
-                                                    )
-                                                );
-
-                                            const top =
-                                                Math.max(
-                                                    0,
-                                                    Math.min(
-                                                        65,
-                                                        (
-                                                            Number(
-                                                                piece.y
-                                                            ) /
-                                                            650
-                                                        ) *
-                                                        100
-                                                    )
-                                                );
-
-                                            const width =
-                                                Math.max(
-                                                    15,
-                                                    Math.min(
-                                                        45,
-                                                        (
-                                                            Number(
-                                                                piece.width
-                                                            ) /
-                                                            900
-                                                        ) *
-                                                        100
-                                                    )
-                                                );
-
-                                            return `
-
-                                                <div
-                                                    class="saved-fit-image"
-                                                    style="
-                                                        left: ${left}%;
-                                                        top: ${top}%;
-                                                        width: ${width}%;
-                                                        height: ${width}%;
-                                                        z-index: ${Number(piece.zIndex) || 1};
-                                                    "
-                                                >
-
-                                                    <img
-                                                        src="${escapeHtml(item.image_url)}"
-                                                        alt="${escapeHtml(item.category)}"
-                                                        loading="lazy"
-                                                    >
-
-                                                </div>
-
-                                            `;
-
-                                        }
-                                    )
-                                    .join("")
-                                :
-                                `
-                                <div class="empty-message">
-                                    some items from this
-                                    fit are no longer
-                                    in your wardrobe.
-                                </div>
-                                `
-                        }
-
-                    </div>
-
-                    <div
-                        class="saved-fit-footer"
-                    >
-
-                        <span
-                            class="fit-date"
-                        >
-                            ${formatDate(
-                                fit.created_at
-                            )}
-                        </span>
-
-                        <div
-                            style="
-                                display:flex;
-                                gap:6px;
-                            "
-                        >
-
-                            <button
-                                class="delete-fit"
-                                data-load-fit-id="${fit.id}"
-                            >
-                                edit
-                            </button>
-
-                            <button
-                                class="delete-fit"
-                                data-fit-id="${fit.id}"
-                            >
-                                delete
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            `;
-        }
-
-
-        function attachSavedFitDeleteButtons() {
-
-            document
+            container
                 .querySelectorAll(
                     ".delete-fit"
                 )
@@ -3836,40 +3828,6 @@
                             "click",
                             async () => {
 
-                                if (
-                                    button.dataset
-                                        .loadFitId
-                                ) {
-
-                                    const fit =
-                                        savedFits.find(
-                                            savedFit =>
-                                                String(
-                                                    savedFit.id
-                                                ) ===
-                                                String(
-                                                    button.dataset
-                                                        .loadFitId
-                                                )
-                                        );
-
-                                    if (fit) {
-
-                                        loadFitIntoEditor(
-                                            fit
-                                        );
-
-                                        document
-                                            .querySelector(
-                                                '[data-page="builder-page"]'
-                                            )
-                                            .click();
-
-                                    }
-
-                                    return;
-                                }
-
                                 await deleteFit(
                                     button.dataset.fitId
                                 );
@@ -3879,6 +3837,7 @@
 
                     }
                 );
+
         }
 
 
@@ -3894,6 +3853,7 @@
                     year: "numeric"
                 }
             );
+
         }
 
 
@@ -3938,6 +3898,7 @@
                 );
 
                 return;
+
             }
 
             savedFits =
@@ -3954,6 +3915,7 @@
             showToast(
                 "fit deleted"
             );
+
         }
 
 
